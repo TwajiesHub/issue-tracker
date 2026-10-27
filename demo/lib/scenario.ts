@@ -2,6 +2,7 @@ import type { Delegation, Finding, LimitKind } from "./guard";
 import type { ProtectedArea } from "./guard/types";
 import { appendEntry, type Chained } from "./chain";
 import type { SimResult } from "./simulate";
+import { plainFinding } from "./plain";
 
 export type ItemKind = "paused" | "proposal" | "question" | "design" | "idea";
 export type Tier = "needs" | "wait" | "done";
@@ -178,8 +179,9 @@ export function groupFindings(findings: Finding[]): FindingGroup[] {
 /** A paused change, built from what the engine found. */
 export function pausedItem(sim: SimResult, ageMin: number): Item {
   const attack = sim.kind === "attack";
-  const n = groupFindings(sim.findings).length;
-  const limit = sim.findings.find((f) => f.code === "broke_limit");
+  const findings = sim.findings.map(plainFinding);
+  const n = groupFindings(findings).length;
+  const limit = findings.find((f) => f.code === "broke_limit");
   const branches = sim.branches === 1 ? "1 branch" : `${sim.branches} branches`;
   return {
     id: attack ? INCIDENT_ID : KITE_BREAK_ID, kind: "paused", tier: "needs", agent: sim.agentName,
@@ -195,7 +197,7 @@ export function pausedItem(sim: SimResult, ageMin: number): Item {
       promised: sim.claim,
       scope: sim.scope,
       agentSaid: sim.claim,
-      findings: sim.findings,
+      findings,
       branches: sim.branches,
       restorePoint: sim.restorePoint,
       note: !sim.matchesPromise ? `Doesn't match what ${sim.agentName} promised.` : limit ? limit.title : "Needs your decision.",

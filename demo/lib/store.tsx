@@ -3,6 +3,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useReducer, useRef, useState, type ReactNode } from "react";
 import type { Delegation, LimitKind } from "./guard";
 import { sha256 } from "./chain";
+import { LIMIT_PHRASES } from "./plain";
 import {
   INCIDENT_ID, KITE_BREAK_ID, PROPOSAL_ID, initialState, nextLog, pausedItem,
   type Item, type State, type WorkKind,
@@ -193,7 +194,7 @@ function reducer(s: State, a: Action): State {
       return {
         ...s,
         agents: { ...s.agents, [ag.id]: { ...ag, limits: ag.limits.filter((l) => l !== a.limit) } },
-        log: log(s, a.at, "You", `Removed a limit from ${ag.name}: ${a.limit.replace(/_/g, " ")}`),
+        log: log(s, a.at, "You", `Removed a limit from ${ag.name}: ${LIMIT_PHRASES[a.limit]}`),
         status: "Limit removed.",
       };
     }

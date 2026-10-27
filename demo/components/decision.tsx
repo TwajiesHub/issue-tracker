@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useStore } from "@/lib/store";
 import { LIMIT_LABELS, groupFindings, type Item } from "@/lib/scenario";
+import { plainFinding, plainText } from "@/lib/plain";
 import type { LimitKind } from "@/lib/guard";
 import { Dialog, HoldButton, PrimaryButton, TextButton, focus } from "./ui";
 
@@ -73,7 +74,7 @@ function PausedDecision({ item, stopOpen, setStopOpen }: { item: Item; stopOpen:
   const [quick, setQuick] = useState<string | null>(null);
   const [note, setNote] = useState("");
   const opened = state.opened[item.id] ?? [];
-  const groups = groupFindings(p.findings);
+  const groups = groupFindings(p.findings.map(plainFinding));
   const total = groups.length;
   const allOpened = opened.length >= total;
   const branches = p.branches === 1 ? "1 branch" : `${p.branches} branches`;
@@ -131,7 +132,7 @@ function PausedDecision({ item, stopOpen, setStopOpen }: { item: Item; stopOpen:
         </section>
       </div>
 
-      <p className="text-[15px] font-bold text-zk-bad-fg">{p.note}</p>
+      <p className="text-[15px] font-bold text-zk-bad-fg">{plainText(p.note)}</p>
 
       <div>
         <TextButton aria-expanded={showChanges} aria-controls={`changes-${item.id}`} onClick={() => setShowChanges((v) => !v)}>
