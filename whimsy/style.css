@@ -605,3 +605,41 @@ footer {
 @media(prefers-reduced-motion:reduce) {
  .walking .body-bob,.last-wave .wave { animation:none!important; }
 }
+/* A patient agent and a hinge, kept below the controls in a fixed lane. */
+.issue { height:242px; min-height:242px; padding-bottom:78px; }
+.card-bottom { margin-right:52px; }
+.door-scene { position:absolute; inset:0; pointer-events:none; }
+.door-zone { position:absolute; right:0; bottom:3px; width:44px; height:44px; pointer-events:auto; }
+.door-frame { position:absolute; right:7px; bottom:6px; width:26px; height:34px; border:2px solid var(--zk-border); border-radius:3px 3px 0 0; z-index:4; }
+.door-panel { position:absolute; inset:0; background:var(--zk-surface); border:1px solid var(--zk-border); transform-origin:right center; }
+.door-panel i { position:absolute; width:3px; height:3px; border-radius:50%; background:var(--zk-muted); left:3px; top:15px; }
+.robot { position:absolute; width:30px; height:36px; right:30px; bottom:38px; z-index:3; }
+.robot svg { display:block; overflow:visible; }
+.robot-arm,.robot-foot { fill:none; stroke:var(--zk-accent); stroke-width:2.6; stroke-linecap:round; }
+.capsule { fill:var(--zk-accent); }
+.visor { fill:#15121f; }
+.robot-eyes { fill:#f5f7fc; animation:glance 9s ease-in-out infinite; }
+.robot-head { transform-origin:17px 19px; }
+.tap-foot { transform-origin:22px 31px; animation:tap 5.8s ease-in-out infinite; }
+.issue:nth-child(2) .tap-foot,.issue:nth-child(2) .robot-eyes { animation-delay:-1.9s; }
+.issue:nth-child(3) .tap-foot,.issue:nth-child(3) .robot-eyes { animation-delay:-3.8s; }
+.agent-noticed .robot-shell { animation:hello .4s ease-out 1; }
+.agent-noticed .robot-eyes,.agent-asking .robot-eyes { animation:none; transform:translate(-1px,-2px); }
+.agent-busy .tap-foot,.agent-busy .robot-eyes { animation:none; }
+.agent-busy .robot-eyes { transform:translate(-1px,1px); }
+.holding-door .door-arm { transform-origin:27px 21px; transform:rotate(30deg); }
+.handoff { position:absolute; left:0; top:0; z-index:5; pointer-events:none; opacity:0; overflow:visible; }
+/* Each wave is a single greeting: first to the agent, then to you. */
+.waving .wave { animation:goodbye .42s ease-in-out 1!important; }
+@keyframes tap { 0%,78%,86%,94%,100% { transform:none; } 82%,90% { transform:translateY(-2px) rotate(-10deg); } }
+@keyframes glance { 0%,70%,86%,100% { transform:none; } 76%,82% { transform:translate(-1.5px,-1px); } }
+@keyframes hello { 0%,100% { transform:none; } 45% { transform:translateY(-3px); } }
+@media(max-width:960px) {
+ .issue { height:222px; min-height:222px; padding-bottom:74px; }
+ .card-bottom { margin-right:48px; }
+}
+@media(prefers-reduced-motion:reduce) {
+ .tap-foot,.robot-eyes,.agent-noticed .robot-shell { animation:none!important; }
+}
+.robot { bottom:32px; }
+.door-frame::before { content:""; position:absolute; inset:0; background:var(--zk-chip); }
