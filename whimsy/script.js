@@ -161,7 +161,13 @@
       b.el.classList.remove('last-wave');
       if (!await walk(b, right ? b.width + b.size : -b.size * 2, b.lane, 550, true)) return;
     }
-    b.state = 'gone'; b.el.style.opacity = '0'; b.el.classList.remove('walking');
+    b.state = 'gone'; b.el.style.opacity = '0'; b.el.hidden = true;
+    b.el.classList.remove('walking');
+    // A completed goodbye leaves a clean card, including delayed final steps.
+    b.card.querySelectorAll('.footprint').forEach(dot => {
+      dot.getAnimations().forEach(a => a.cancel());
+      dot.remove();
+    });
     b.card.classList.add('resolved');
     const wasFocused = b.hadFocus;
     b.button.disabled = true;
@@ -177,7 +183,7 @@
     const b = bugs[0];
     if (b.state !== 'gone') return;
     main.classList.remove('all-left'); empty.inert = true; empty.setAttribute('aria-hidden', 'true');
-    stop(b); b.state = 'entering'; b.el.classList.remove('packed'); b.el.style.opacity = '1';
+    b.el.hidden = false; stop(b); b.state = 'entering'; b.el.classList.remove('packed'); b.el.style.opacity = '1';
     b.card.classList.remove('resolved', 'approving'); b.status.textContent = 'Fix ready · Nova';
     b.button.textContent = 'Approve fix'; b.button.disabled = false; b.button.removeAttribute('aria-disabled'); b.button.removeAttribute('aria-label');
     b.button.focus({ preventScroll: true });
