@@ -10,6 +10,7 @@ import { DEFAULT_CONFIG, FINDING_CODES, type Category, type ChangeInput, type Fi
 export function runGuard(input: ChangeInput, config: Partial<GuardConfig> = {}): GuardResult {
   const settings = {...DEFAULT_CONFIG, ...config};
   for (const value of Object.values(settings)) if (!Number.isFinite(value) || value <= 0) throw new RangeError("Guard thresholds must be positive and finite");
+  if (settings.entropyMaxWhitespaceRatio > 1) throw new RangeError("Whitespace ratio must not exceed one");
   const findings: Finding[] = [], fileCategories: Category[][] = [];
   let addedDependencies = false;
   input.files.forEach(file => {
