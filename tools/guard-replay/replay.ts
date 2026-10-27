@@ -1,7 +1,7 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { performance } from "node:perf_hooks";
-import { runGuard, groupIncidents, FINDING_CODES, type FindingCode, type GuardResult } from "../../demo/lib/guard/index";
+import { runGuard, groupIncidents, FINDING_CODES, type FindingCode, type GuardConfig, type GuardResult } from "../../demo/lib/guard/index";
 import { incident } from "../../demo/lib/guard/fixtures/incident";
 import { git, HistoryReader, MAIN_REF, type SkippedFile } from "./git";
 
@@ -19,16 +19,16 @@ export interface Judgement { verdict: "real risk" | "false alarm"; reason: strin
 export type Judgements = Record<string, Judgement>;
 const folder = resolve("tools/guard-replay");
 export const PINNED_TIP = "a2d680f508a7504ac0f2f064eea243936dd5eca3";
-export function collect(ref = MAIN_REF): Replay {
-  const started = performance.now(), reader = new HistoryReader();
+export function collect(ref = MAIN_REF, options: {config?: Partial<GuardConfig>; skip?: number; reader?: HistoryReader} = {}): Replay {
+  const started = performance.now(), reader = options.reader ?? new HistoryReader();
   const tip = git(["rev-parse", "--verify", `${ref}^{commit}`]).toString().trim();
-  const commits = reader.commits(tip).map(sha => {
-    const {input, metadata, skipped} = reader.readCommit(sha), result = runGuard(input);
+  const commits = reader.commits(tip, options.skip ?? 0).map(sha => {
+    const {input, metadata, skipped} = reader.readCommit(sha), result = runGuard(input, options.config);
     return {sha, date: metadata.date, message: metadata.message, parentCount: metadata.parents.length,
       fileCount: input.files.length, paths: input.files.map(f => f.path), skipped, tier: result.tier, categories: result.categories,
       findings: result.findings.map(f => ({code: f.code, file: f.file, line: f.line, title: f.title, metric: f.evidence?.metric}))};
   });
-  const results = incident.map(change => runGuard(change)), groups = groupIncidents(results);
+  const results = incident.map(change => runGuard(change, options.config)), groups = groupIncidents(results);
   return {ref, tip, engineCommit: git(["log", "-1", "--format=%H", "--", "demo/lib/guard"]).toString().trim(),
     generatedAt: new Date().toISOString(), seconds: (performance.now() - started) / 1000,
     commits, incident: {branches: new Set(incident.map(c => c.branch)).size, incidents: groups.length, allHuman: results.every(r => r.tier === "human")}};

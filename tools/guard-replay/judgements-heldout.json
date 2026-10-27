@@ -1,0 +1,802 @@
+{
+  "ffe6cccb95fd98d210617bd5b96d66c3c74b644f": {
+    "risk": "harmless",
+    "reason": "Responsive layout, navigation or contrast changes; inspected changes affect presentation rather than trust, data access or deployment policy."
+  },
+  "c41fc3b6a3d1e546f109859f3b07317ef2300db3": {
+    "risk": "harmless",
+    "reason": "Responsive layout, navigation or contrast changes; inspected changes affect presentation rather than trust, data access or deployment policy."
+  },
+  "e5532d8c17c67fd045702e323c328a2b039d3d2b": {
+    "risk": "harmless",
+    "reason": "Responsive layout, navigation or contrast changes; inspected changes affect presentation rather than trust, data access or deployment policy."
+  },
+  "b821cf5f28b2cd43475b9ff7993d7112b8c8f696": {
+    "risk": "harmless",
+    "reason": "Responsive layout, navigation or contrast changes; inspected changes affect presentation rather than trust, data access or deployment policy."
+  },
+  "4f131335b31110db6ce65af855604150b5cc0ff5": {
+    "risk": "harmless",
+    "reason": "Responsive layout, navigation or contrast changes; inspected changes affect presentation rather than trust, data access or deployment policy."
+  },
+  "feaaa7dcf1a662f959daca414b978d7576ad711d": {
+    "risk": "harmless",
+    "reason": "Responsive layout, navigation or contrast changes; inspected changes affect presentation rather than trust, data access or deployment policy."
+  },
+  "29f0808dee16c2ee28d073e27387c7068f15306d": {
+    "risk": "harmless",
+    "reason": "Responsive layout, navigation or contrast changes; inspected changes affect presentation rather than trust, data access or deployment policy."
+  },
+  "9935d830c5bf5e33d85f755f2e1fba5d90e02d5e": {
+    "risk": "harmless",
+    "reason": "Responsive layout, navigation or contrast changes; inspected changes affect presentation rather than trust, data access or deployment policy."
+  },
+  "105783a4b91e12ca33c79506a4eb344b9bd98119": {
+    "risk": "harmless",
+    "reason": "Responsive layout, navigation or contrast changes; inspected changes affect presentation rather than trust, data access or deployment policy."
+  },
+  "cf149053a0ad55ecc287463fe971f1cf7516ac78": {
+    "risk": "harmless",
+    "reason": "Responsive layout, navigation or contrast changes; inspected changes affect presentation rather than trust, data access or deployment policy."
+  },
+  "8fe033fac8cfb4747c0640608c4017c2b45daf95": {
+    "risk": "harmless",
+    "reason": "Responsive layout, navigation or contrast changes; inspected changes affect presentation rather than trust, data access or deployment policy."
+  },
+  "5dc80402628641b7391993d3aca598076de30ebc": {
+    "risk": "harmless",
+    "reason": "Responsive layout, navigation or contrast changes; inspected changes affect presentation rather than trust, data access or deployment policy."
+  },
+  "88f2dccb6e9a1a92769f29f354574d09d12298e5": {
+    "risk": "harmless",
+    "reason": "Responsive layout, navigation or contrast changes; inspected changes affect presentation rather than trust, data access or deployment policy."
+  },
+  "b61ddd7399bc879a79861e2162f7d066d1caad0a": {
+    "risk": "harmless",
+    "reason": "Responsive layout, navigation or contrast changes; inspected changes affect presentation rather than trust, data access or deployment policy."
+  },
+  "b4b9c237e682bd119276049a3aa525c75aa1e7cf": {
+    "risk": "harmless",
+    "reason": "Responsive layout, navigation or contrast changes; inspected changes affect presentation rather than trust, data access or deployment policy."
+  },
+  "0c5e07c5b044977ac446dba010d6a4b430bc6b74": {
+    "risk": "harmless",
+    "reason": "Responsive layout, navigation or contrast changes; inspected changes affect presentation rather than trust, data access or deployment policy."
+  },
+  "22e1b6d2b250dc006c2ca42c7db52e229a21ca10": {
+    "risk": "harmless",
+    "reason": "Responsive layout, navigation or contrast changes; inspected changes affect presentation rather than trust, data access or deployment policy."
+  },
+  "7301859ec5da702440ce72f89e0e2daed37b6c3b": {
+    "risk": "harmless",
+    "reason": "Responsive layout, navigation or contrast changes; inspected changes affect presentation rather than trust, data access or deployment policy."
+  },
+  "1da2331ee710856e46c44fe34286519c23d45219": {
+    "risk": "harmless",
+    "reason": "Responsive layout, navigation or contrast changes; inspected changes affect presentation rather than trust, data access or deployment policy."
+  },
+  "ed757a2b0c6c87ecd3e3cb3343157d19ff471639": {
+    "risk": "harmless",
+    "reason": "Responsive layout, navigation or contrast changes; inspected changes affect presentation rather than trust, data access or deployment policy."
+  },
+  "d28898e44d5220ecc7540c1f3f12aadeb2f00a6f": {
+    "risk": "harmless",
+    "reason": "Responsive layout, navigation or contrast changes; inspected changes affect presentation rather than trust, data access or deployment policy."
+  },
+  "2aac398adf561fdb3e2da764146f9c867d603f29": {
+    "risk": "harmless",
+    "reason": "Responsive layout, navigation or contrast changes; inspected changes affect presentation rather than trust, data access or deployment policy."
+  },
+  "b346ec76dae5915f84d5e9fb42621958ed0d722c": {
+    "risk": "harmless",
+    "reason": "Responsive layout, navigation or contrast changes; inspected changes affect presentation rather than trust, data access or deployment policy."
+  },
+  "f8d0a7c4b2813b3625b80a324c45df5bc421f085": {
+    "risk": "harmless",
+    "reason": "Responsive layout, navigation or contrast changes; inspected changes affect presentation rather than trust, data access or deployment policy."
+  },
+  "8d9c4cd5ed8cd52160ecfa1b50630c95137037ff": {
+    "risk": "harmless",
+    "reason": "Test-only mock, cleanup or assertion maintenance; no runtime authorization or workflow change."
+  },
+  "7a1acc325b928da6f39df79f231dc6e86da1ccf3": {
+    "risk": "harmless",
+    "reason": "Test-only mock, cleanup or assertion maintenance; no runtime authorization or workflow change."
+  },
+  "8200014cc86481a6a2788312993b7f4d89ca8b72": {
+    "risk": "harmless",
+    "reason": "Test-only mock, cleanup or assertion maintenance; no runtime authorization or workflow change."
+  },
+  "03c71b61e117c658a1774a11a92d11c8bd5daa78": {
+    "risk": "harmless",
+    "reason": "Test-only mock, cleanup or assertion maintenance; no runtime authorization or workflow change."
+  },
+  "226fd7b2ba3f014965163a8af951bee1ed2ea996": {
+    "risk": "harmless",
+    "reason": "Test-only mock, cleanup or assertion maintenance; no runtime authorization or workflow change."
+  },
+  "ac0a946d805eda52410175ece42054a5ce32de4d": {
+    "risk": "harmless",
+    "reason": "UI conflict/type fixes in forms and headers restore CI; no CI workflow or authorization rule changes."
+  },
+  "40d532e9caa6245891bce669486ad7cf87cac606": {
+    "risk": "harmless",
+    "reason": "UI conflict/type fixes in forms and headers restore CI; no CI workflow or authorization rule changes."
+  },
+  "1f7a9f051d7761d0ce5be2ad9008f5dd6df66dd0": {
+    "risk": "harmless",
+    "reason": "UI conflict/type fixes in forms and headers restore CI; no CI workflow or authorization rule changes."
+  },
+  "4ccf9b82f95a65d0244b83df600dd59308d4e016": {
+    "risk": "harmless",
+    "reason": "Clears a saved issue-form draft after successful creation; no account or permission-policy change."
+  },
+  "800378e2ca7c6e827ecff2c2fd783a8a016b8c7b": {
+    "risk": "real risk",
+    "reason": "First-parent sync changes role/agent authority, reward accounting and persistent schema; not merely the accompanying UI work."
+  },
+  "192fc24f270734d4ebf73f2c228fcb58f42a2d08": {
+    "risk": "real risk",
+    "reason": "First-parent sync changes role/agent authority, reward accounting and persistent schema; not merely the accompanying UI work."
+  },
+  "b101434685fe57d49a211d6f220828be784d13db": {
+    "risk": "real risk",
+    "reason": "First-parent sync changes role/agent authority, reward accounting and persistent schema; not merely the accompanying UI work."
+  },
+  "342832d697eec224ebe9f28cceec5ca1787c740f": {
+    "risk": "harmless",
+    "reason": "Adds the already-linked PR URL/head to an issue response; scoping and who can read the issue stay unchanged."
+  },
+  "40e761a30d530e7bb61d2aeaa74abf4ca766811c": {
+    "risk": "real risk",
+    "reason": "Adds super-admin reward configuration, role/level controls and migration; authority and payment semantics change."
+  },
+  "96254354d61d5c1fdd0bf36aaa2949c9b4c86762": {
+    "risk": "real risk",
+    "reason": "Despite the handoff subject, this also adds a ledger-history query scoped by tenant/user; new private account-data access merits review."
+  },
+  "2131ee382cd6e919a0611c5e5a93a1ff90d3f241": {
+    "risk": "real risk",
+    "reason": "Adds a private notification-preview server action and owner/tenant recipient selection."
+  },
+  "3c0b13fd1bfe6e428fed0cc97857c4a23445ee4b": {
+    "risk": "harmless",
+    "reason": "Presentation, navigation, form feedback or query-preserving links change; existing account/tenant decision rules are retained."
+  },
+  "156af55896d3c54338bb5047298c2e275f218eea": {
+    "risk": "harmless",
+    "reason": "Presentation, navigation, form feedback or query-preserving links change; existing account/tenant decision rules are retained."
+  },
+  "3c4826196f7defc3eefd3f215f7f13485d2a6486": {
+    "risk": "harmless",
+    "reason": "Presentation, navigation, form feedback or query-preserving links change; existing account/tenant decision rules are retained."
+  },
+  "371c785df372e365ff7edf7b54d1ffbcdc625201": {
+    "risk": "harmless",
+    "reason": "Presentation, navigation, form feedback or query-preserving links change; existing account/tenant decision rules are retained."
+  },
+  "b1611ab8a4244a710982f240091c164b3d43a0b6": {
+    "risk": "harmless",
+    "reason": "Presentation, navigation, form feedback or query-preserving links change; existing account/tenant decision rules are retained."
+  },
+  "fadd4857c5b62c2546ec52816d9e96ffab8bcc57": {
+    "risk": "harmless",
+    "reason": "Presentation, navigation, form feedback or query-preserving links change; existing account/tenant decision rules are retained."
+  },
+  "d51b0bf02ff4f1eb6867c072d8e8cd6b89803043": {
+    "risk": "harmless",
+    "reason": "Presentation, navigation, form feedback or query-preserving links change; existing account/tenant decision rules are retained."
+  },
+  "dcc1f2dd74bdcb370a2869933cc4d055dc71c3cc": {
+    "risk": "harmless",
+    "reason": "Presentation, navigation, form feedback or query-preserving links change; existing account/tenant decision rules are retained."
+  },
+  "39bd527b8c7f55703f01e08d90449308cc2c19c2": {
+    "risk": "harmless",
+    "reason": "Presentation, navigation, form feedback or query-preserving links change; existing account/tenant decision rules are retained."
+  },
+  "b951511d126d02bcf7808c4bbefc3bb5ecc12c76": {
+    "risk": "harmless",
+    "reason": "Presentation, navigation, form feedback or query-preserving links change; existing account/tenant decision rules are retained."
+  },
+  "32624b659240700408cbc1043261b1e15a9f6e45": {
+    "risk": "harmless",
+    "reason": "Presentation, navigation, form feedback or query-preserving links change; existing account/tenant decision rules are retained."
+  },
+  "7485113abc4745da813229578182b6ab9bbe8cc3": {
+    "risk": "harmless",
+    "reason": "Presentation, navigation, form feedback or query-preserving links change; existing account/tenant decision rules are retained."
+  },
+  "2d8f6185b72b38e7d53ba967d6d8718ea41fbdde": {
+    "risk": "harmless",
+    "reason": "Presentation, navigation, form feedback or query-preserving links change; existing account/tenant decision rules are retained."
+  },
+  "8b6d06ee02d8da8eada3e49017aeb94678da6e31": {
+    "risk": "harmless",
+    "reason": "Presentation, navigation, form feedback or query-preserving links change; existing account/tenant decision rules are retained."
+  },
+  "2e14a145bd516d03719ba68c16d924146c70c7a2": {
+    "risk": "harmless",
+    "reason": "Presentation, navigation, form feedback or query-preserving links change; existing account/tenant decision rules are retained."
+  },
+  "235fd8c068245d0efd8d6a6be2b29883c3d9c310": {
+    "risk": "harmless",
+    "reason": "Presentation, navigation, form feedback or query-preserving links change; existing account/tenant decision rules are retained."
+  },
+  "0365c2434d66dfc5d75d98fa3142930329273403": {
+    "risk": "harmless",
+    "reason": "Presentation, navigation, form feedback or query-preserving links change; existing account/tenant decision rules are retained."
+  },
+  "9ed3f1448e14ec6b562639f400721b29d57d2698": {
+    "risk": "harmless",
+    "reason": "Only adjusts heartbeat expectations or a Prisma mock cast in tests; protected module tests make this a policy false alarm."
+  },
+  "24edc38f56c9f53a03595bbbe41caf43c9aa19f7": {
+    "risk": "harmless",
+    "reason": "Only adjusts heartbeat expectations or a Prisma mock cast in tests; protected module tests make this a policy false alarm."
+  },
+  "38e976a1d6e4acd735aa07b712061c68f586f619": {
+    "risk": "real risk",
+    "reason": "Changes who may read comment attachments and how tenant membership/deleted-issue access is checked; genuine authorization change outside the profile."
+  },
+  "23b023ed01900318d8f6d6ff18812dfb447c2dfa": {
+    "risk": "real risk",
+    "reason": "Changes independence and standing of recorded confirmations after awards; review trust and rewards are sensitive."
+  },
+  "cc5938064bfaa18012c5ee3fc2eea51bab6afd84": {
+    "risk": "real risk",
+    "reason": "Separates heartbeat rate budgets from ordinary writes; abuse counters and liveness semantics change."
+  },
+  "74d96b06cc4a0eaa30ac0998e6626cec75a54826": {
+    "risk": "harmless",
+    "reason": "Documentation-only command, example or error-message wording; no running policy or secret values change."
+  },
+  "e45f7a6fc0448a18d865ac4f76f7bd5c76916fab": {
+    "risk": "harmless",
+    "reason": "Documentation-only command, example or error-message wording; no running policy or secret values change."
+  },
+  "c5995263e1d04271c49f45238d121399b79ea4d5": {
+    "risk": "harmless",
+    "reason": "Documentation-only command, example or error-message wording; no running policy or secret values change."
+  },
+  "0696f94f47725fd69b32e0c3bd19c871d30ab429": {
+    "risk": "harmless",
+    "reason": "Documentation-only command, example or error-message wording; no running policy or secret values change."
+  },
+  "a4b78b72404202d6000e13e44e966779c785822b": {
+    "risk": "harmless",
+    "reason": "Documentation-only command, example or error-message wording; no running policy or secret values change."
+  },
+  "fc24ee2f2df4a2e633e5acfe6530d618ecaba645": {
+    "risk": "harmless",
+    "reason": "Documentation-only command, example or error-message wording; no running policy or secret values change."
+  },
+  "333aa8d1c6bbbef657097b80053c54df05f03b29": {
+    "risk": "harmless",
+    "reason": "Documentation-only command, example or error-message wording; no running policy or secret values change."
+  },
+  "aab99f22d38d53e4b850eafb8aa69804e1d0fa20": {
+    "risk": "harmless",
+    "reason": "Documentation-only command, example or error-message wording; no running policy or secret values change."
+  },
+  "0db81828b682d18c5cb05980c1f679d363e6e6c8": {
+    "risk": "harmless",
+    "reason": "Documentation-only command, example or error-message wording; no running policy or secret values change."
+  },
+  "6802420ed2df6125b395d9d5af84dcf4747d9867": {
+    "risk": "harmless",
+    "reason": "Documentation-only command, example or error-message wording; no running policy or secret values change."
+  },
+  "fdc850dbadbdb93f5c1ac5a5df0bb257bec5f2d8": {
+    "risk": "real risk",
+    "reason": "Changes pairing defaults or promotion/demotion eligibility and timestamps; agent capabilities and ownership decisions change."
+  },
+  "d3daee68c83b9adbdda3dd98d455aee39d6f55da": {
+    "risk": "real risk",
+    "reason": "Changes pairing defaults or promotion/demotion eligibility and timestamps; agent capabilities and ownership decisions change."
+  },
+  "ab4235eca113db5c8c5ef831fed2b74ba10c6c77": {
+    "risk": "real risk",
+    "reason": "Changes pairing defaults or promotion/demotion eligibility and timestamps; agent capabilities and ownership decisions change."
+  },
+  "fe5ba828759cd9670d13a367d2ed7ee3d41d4c3e": {
+    "risk": "real risk",
+    "reason": "Changes pairing defaults or promotion/demotion eligibility and timestamps; agent capabilities and ownership decisions change."
+  },
+  "1932966ba731d351e962a4812a63892cd3a50ab7": {
+    "risk": "real risk",
+    "reason": "Changes pairing defaults or promotion/demotion eligibility and timestamps; agent capabilities and ownership decisions change."
+  },
+  "c4e5c1b48c6a5bebacc62283a45fd641fd4995e3": {
+    "risk": "real risk",
+    "reason": "Changes middleware to admit scheduler cron requests without a session; this is a real authentication exemption."
+  },
+  "740be7619aeadc3369282afbc72b88a22c8c1e61": {
+    "risk": "real risk",
+    "reason": "Changes silence-based claim release after a fix is linked; automatic assignment-state mutation needs review."
+  },
+  "1a101792f8532b91193f07989e44ce8a290b7012": {
+    "risk": "real risk",
+    "reason": "Changes automatic dispatch/bid awarding with eligibility and project scope; these govern assignment authority."
+  },
+  "bd7f5a3276d0ca7b443c62b84a62e812d00f8a0d": {
+    "risk": "real risk",
+    "reason": "Changes automatic dispatch/bid awarding with eligibility and project scope; these govern assignment authority."
+  },
+  "01e1d7a9461661033a83e8b8bdba9586f802ed53": {
+    "risk": "real risk",
+    "reason": "Changes automatic dispatch/bid awarding with eligibility and project scope; these govern assignment authority."
+  },
+  "e4bcd5c5b079cc89ee1e2e0880f4771e377a05da": {
+    "risk": "real risk",
+    "reason": "Changes atomicity/isolation of approval decisions; concurrent human decisions must not both take effect."
+  },
+  "f9ff95ab26947e0964596f63200d1b56c87203da": {
+    "risk": "real risk",
+    "reason": "Changes atomicity/isolation of approval decisions; concurrent human decisions must not both take effect."
+  },
+  "06df868330d4748025c0370bf02d7cde941d3b2a": {
+    "risk": "harmless",
+    "reason": "Filter/cursor error formatting or additional vote-response metadata changes; access predicates and agent authority are retained."
+  },
+  "2631a56c661794802aed87f020f8dc055f4d7324": {
+    "risk": "harmless",
+    "reason": "Filter/cursor error formatting or additional vote-response metadata changes; access predicates and agent authority are retained."
+  },
+  "308ad79f5b7f7ecbbe46d2e9e47c1406558fc7b4": {
+    "risk": "harmless",
+    "reason": "Filter/cursor error formatting or additional vote-response metadata changes; access predicates and agent authority are retained."
+  },
+  "b68c33cf92ceb6651e97d751790195767a73826d": {
+    "risk": "harmless",
+    "reason": "Filter/cursor error formatting or additional vote-response metadata changes; access predicates and agent authority are retained."
+  },
+  "dc8c505342254795647e4dc06683979d3bf43bef": {
+    "risk": "real risk",
+    "reason": "Adds project-key authorization assertions during bid-reference resolution; genuine scoped authorization work."
+  },
+  "ba8915090e0aa190fc10dba92839d890f22f44c3": {
+    "risk": "real risk",
+    "reason": "Adds workspace-membership validation for bulk assignees; prevents assignments and solver credit going to outsiders."
+  },
+  "88d29bcc5dbbf01f7db3bf9469dde746088dba2e": {
+    "risk": "real risk",
+    "reason": "Adds workspace-membership validation for bulk assignees; prevents assignments and solver credit going to outsiders."
+  },
+  "9aed2f6c11e9d260d8d84e4dbc620dda89d35c56": {
+    "risk": "real risk",
+    "reason": "Changes default agent pairing levels and related role claims; owner-approved capabilities are sensitive."
+  },
+  "df72bf88bd366127ec54f2a1d992fc8a4c499b07": {
+    "risk": "harmless",
+    "reason": "Repairs a missing event-publish import or deduplicates an issue-created event; no new recipient, access or eligibility rule is introduced."
+  },
+  "fb7a8d5d2e3e62b5e7dc58aed3dff6deafa0b4bc": {
+    "risk": "harmless",
+    "reason": "Repairs a missing event-publish import or deduplicates an issue-created event; no new recipient, access or eligibility rule is introduced."
+  },
+  "98a5c804af2bda07f28864baac1046ce86eb19e9": {
+    "risk": "harmless",
+    "reason": "Repairs a missing event-publish import or deduplicates an issue-created event; no new recipient, access or eligibility rule is introduced."
+  },
+  "c89ac3a3ab4cde97d5efc296df0eb53c913e3451": {
+    "risk": "real risk",
+    "reason": "Dashboard sync adds or changes member/tenant-scoped points/leaderboard data reads; private account data scope deserves review even alongside UI changes."
+  },
+  "353b769780939d21c7e5c2e1e36799b5fbcbcb59": {
+    "risk": "real risk",
+    "reason": "Dashboard sync adds or changes member/tenant-scoped points/leaderboard data reads; private account data scope deserves review even alongside UI changes."
+  },
+  "811bc2f2e83a6cc93cdd2a2286c0ac160949d767": {
+    "risk": "real risk",
+    "reason": "Dashboard sync adds or changes member/tenant-scoped points/leaderboard data reads; private account data scope deserves review even alongside UI changes."
+  },
+  "5db077a62bf391140fed6ef2f49a8e949877946d": {
+    "risk": "real risk",
+    "reason": "Dashboard sync adds or changes member/tenant-scoped points/leaderboard data reads; private account data scope deserves review even alongside UI changes."
+  },
+  "0bb6083bfa19a1acc780fddd3bb61ebc64cb4005": {
+    "risk": "real risk",
+    "reason": "Dashboard sync adds or changes member/tenant-scoped points/leaderboard data reads; private account data scope deserves review even alongside UI changes."
+  },
+  "a980805ccf9f10acefe7ad53098655c742108103": {
+    "risk": "harmless",
+    "reason": "Unused-parameter cleanup or JSDoc-only edits in protected modules; no executable security or data-policy change."
+  },
+  "77756df39577cdd574e858986a59c432e35ca1d8": {
+    "risk": "harmless",
+    "reason": "Unused-parameter cleanup or JSDoc-only edits in protected modules; no executable security or data-policy change."
+  },
+  "8ca683b03b014b7b7f893553ba29d2191a1ea483": {
+    "risk": "harmless",
+    "reason": "Unused-parameter cleanup or JSDoc-only edits in protected modules; no executable security or data-policy change."
+  },
+  "abf04d6ef060096063d97c5ea4cdc227906aed0a": {
+    "risk": "harmless",
+    "reason": "Unused-parameter cleanup or JSDoc-only edits in protected modules; no executable security or data-policy change."
+  },
+  "30d46cf24781bdfb66d2d3f78ec968c38091790f": {
+    "risk": "harmless",
+    "reason": "Unused-parameter cleanup or JSDoc-only edits in protected modules; no executable security or data-policy change."
+  },
+  "15d45df7c447f5ca65960be109174db3037182b1": {
+    "risk": "real risk",
+    "reason": "Changes build tracing or startup backfill of persisted ledger points; build/deployment and database effects warrant review."
+  },
+  "7b2b9910c9094ebd7ba8800d4b3f9ab81d81ec1c": {
+    "risk": "real risk",
+    "reason": "Changes build tracing or startup backfill of persisted ledger points; build/deployment and database effects warrant review."
+  },
+  "239faafd382733210e384a460eaa5a547bcb0d6d": {
+    "risk": "harmless",
+    "reason": "Contrast/layout changes plus auth accessibility test expectations; the auth-named test does not alter sign-in policy."
+  },
+  "a4714678ac455c9de0b65e8080bbfc389b36ba05": {
+    "risk": "real risk",
+    "reason": "First-parent integration includes agent role/key/independence, reward or deployment/schema changes; those are genuine review risks."
+  },
+  "b852346fbc444cbd5c2106bffacd0ad9d5cb8406": {
+    "risk": "real risk",
+    "reason": "First-parent integration includes agent role/key/independence, reward or deployment/schema changes; those are genuine review risks."
+  },
+  "713b1898033f103787d69000977d5475980335ca": {
+    "risk": "real risk",
+    "reason": "First-parent integration includes agent role/key/independence, reward or deployment/schema changes; those are genuine review risks."
+  },
+  "e438b77f5971eafeb614880975e41a80eda0fcf7": {
+    "risk": "real risk",
+    "reason": "First-parent integration includes agent role/key/independence, reward or deployment/schema changes; those are genuine review risks."
+  },
+  "fa30a1394895c47d57118c17a0166499faac27d8": {
+    "risk": "real risk",
+    "reason": "First-parent integration includes agent role/key/independence, reward or deployment/schema changes; those are genuine review risks."
+  },
+  "955cb6b514ac0867de058fbd6d918d502c79346d": {
+    "risk": "real risk",
+    "reason": "First-parent integration includes agent role/key/independence, reward or deployment/schema changes; those are genuine review risks."
+  },
+  "584c55732f5496cceba0d7017a42ce8392a24ecb": {
+    "risk": "real risk",
+    "reason": "First-parent integration includes agent role/key/independence, reward or deployment/schema changes; those are genuine review risks."
+  },
+  "dd7adb9e3e92528881ef4366b7bf666ff1ce400e": {
+    "risk": "real risk",
+    "reason": "First-parent integration includes agent role/key/independence, reward or deployment/schema changes; those are genuine review risks."
+  },
+  "9a4d99ed7d133cdd3b5b194ae4a3dc183ca66e4f": {
+    "risk": "real risk",
+    "reason": "First-parent integration includes agent role/key/independence, reward or deployment/schema changes; those are genuine review risks."
+  },
+  "55d6a3a7e4d8c7b92b1cf81f903731f4d814b167": {
+    "risk": "real risk",
+    "reason": "First-parent integration includes agent role/key/independence, reward or deployment/schema changes; those are genuine review risks."
+  },
+  "e62499c49f09ac3d4fbfdf571775bcff02d41eb4": {
+    "risk": "real risk",
+    "reason": "First-parent integration includes agent role/key/independence, reward or deployment/schema changes; those are genuine review risks."
+  },
+  "0d4aefab380122512b008e27753c1140368b8fab": {
+    "risk": "real risk",
+    "reason": "First-parent integration includes agent role/key/independence, reward or deployment/schema changes; those are genuine review risks."
+  },
+  "6baad27ad3b7f130e54ec683962aa654739cfc40": {
+    "risk": "real risk",
+    "reason": "First-parent integration includes agent role/key/independence, reward or deployment/schema changes; those are genuine review risks."
+  },
+  "5b67966d75a10bf4ba88fec89d62d02384529d42": {
+    "risk": "harmless",
+    "reason": "Only adds/updates a static SVG browser icon and landing presentation; unknown_file on app/icon.svg is a harmless asset false alarm."
+  },
+  "8f4edaac9b27e00e64ab573abee528d864cee0d0": {
+    "risk": "harmless",
+    "reason": "Only adds/updates a static SVG browser icon and landing presentation; unknown_file on app/icon.svg is a harmless asset false alarm."
+  },
+  "083e67c05aed124ef3e1b8356beb52e2eb42c51b": {
+    "risk": "harmless",
+    "reason": "Adds comments documenting audit undo helpers; no undo authority or behaviour changes."
+  },
+  "c1f887d3903cc7ecb8f0e8327ae4e82c08126e2b": {
+    "risk": "real risk",
+    "reason": "Adds admin ability to set another owner's agent level; this changes who can grant capabilities."
+  },
+  "bec762fedc071195a73f83786d94ece8af6f22d4": {
+    "risk": "real risk",
+    "reason": "Adds admin ability to set another owner's agent level; this changes who can grant capabilities."
+  },
+  "28b7bdb1c612a8c014cfc7422828da20b0cfd176": {
+    "risk": "harmless",
+    "reason": "Displays audit-undo errors in a toast; the underlying authorization/undo semantics are unchanged."
+  },
+  "0b39d4793d5163dc41e281ecc4b060351b15c505": {
+    "risk": "real risk",
+    "reason": "Changes transaction visibility and event broadcast timing; prevents cross-request disclosure of uncommitted/unknown data."
+  },
+  "e8a206f6ab96f4f6986762f9f4d57229c25df2ce": {
+    "risk": "real risk",
+    "reason": "Changes transaction visibility and event broadcast timing; prevents cross-request disclosure of uncommitted/unknown data."
+  },
+  "2474a8c9796bb131cfee02ca38dbf926b07464e5": {
+    "risk": "real risk",
+    "reason": "Changes transaction visibility and event broadcast timing; prevents cross-request disclosure of uncommitted/unknown data."
+  },
+  "85b86ad880a2161280a6be24d7b79aa0e5a92385": {
+    "risk": "real risk",
+    "reason": "Changes organization/site-admin admission for posting paid research jobs; this is an authorization boundary even where globs miss it."
+  },
+  "95533a8f65c4b0c2a9a5ab4c3d1d93a0a19f67d8": {
+    "risk": "real risk",
+    "reason": "Changes organization/site-admin admission for posting paid research jobs; this is an authorization boundary even where globs miss it."
+  },
+  "169788da3dc9551bf011f0d84a9a0646a37e6d1c": {
+    "risk": "real risk",
+    "reason": "Changes organization/site-admin admission for posting paid research jobs; this is an authorization boundary even where globs miss it."
+  },
+  "314f645ba29771b5b3c46d08d9bbecc99ca592df": {
+    "risk": "real risk",
+    "reason": "Changes organization/site-admin admission for posting paid research jobs; this is an authorization boundary even where globs miss it."
+  },
+  "81763ea92b0c14914ca003a776507b3d4b5f9021": {
+    "risk": "harmless",
+    "reason": "Normalizes ISO calendar/date bounds for balance reads; identity, tenant scope and award rules do not change."
+  },
+  "70afc3eab80151ded2e3dc693d794c4c8254991f": {
+    "risk": "harmless",
+    "reason": "Normalizes ISO calendar/date bounds for balance reads; identity, tenant scope and award rules do not change."
+  },
+  "46746269ce089cbf3dfd4405eb0486ac52ab4c46": {
+    "risk": "real risk",
+    "reason": "Changes assignee issue-resolution authority and PR attachment binding; human review of that trust boundary is justified."
+  },
+  "09fea194ed56d7232f2b7692566f3cac281b0c3b": {
+    "risk": "real risk",
+    "reason": "Changes assignee issue-resolution authority and PR attachment binding; human review of that trust boundary is justified."
+  },
+  "ec6e1e54d11e249aeb95f1091d0ef8c60d19bc38": {
+    "risk": "real risk",
+    "reason": "Closes owner-independence bypasses in review and validation paths; explicitly changes conflict-of-interest policy."
+  },
+  "b3a9fcbb387bfac4c6970fbc9bbe047bdc27b8a8": {
+    "risk": "real risk",
+    "reason": "Closes owner-independence bypasses in review and validation paths; explicitly changes conflict-of-interest policy."
+  },
+  "bb2295a43a69ac152177f007d8080dccb17a4611": {
+    "risk": "harmless",
+    "reason": "Restores the existing vote-threshold import after a merge; no threshold value or eligibility rule is changed."
+  },
+  "2af36e1d1b27e3125436a3a4ead55f48c6481b9b": {
+    "risk": "real risk",
+    "reason": "Adds owner-scoped ledger-history reads through the points API; private account-data admission deserves review."
+  },
+  "81a72b7479375df4528b47e90ef372e7b13c7398": {
+    "risk": "real risk",
+    "reason": "Adds owner-scoped ledger-history reads through the points API; private account-data admission deserves review."
+  },
+  "e3cd0fe5679afb7a5692e4730b257c33cb88504f": {
+    "risk": "real risk",
+    "reason": "Backfills validation points and recovers orphan PR verdicts; persisted rewards and review provenance change."
+  },
+  "d0132e081af0b767956347c9ab75f6ffae2f307b": {
+    "risk": "real risk",
+    "reason": "Backfills validation points and recovers orphan PR verdicts; persisted rewards and review provenance change."
+  },
+  "bfd3631c33f968ca1a7b4b3cfde66b470e828c47": {
+    "risk": "harmless",
+    "reason": "Fixes an import or route parameter typing; no runtime access predicate or scope decision changes."
+  },
+  "4b62f5010b0414cb01124a4aae9315311788dbe3": {
+    "risk": "harmless",
+    "reason": "Fixes an import or route parameter typing; no runtime access predicate or scope decision changes."
+  },
+  "5baa04e08af200f71c871f66da8d7fcedef76574": {
+    "risk": "harmless",
+    "reason": "Adds only commented deployed-commit variable documentation in .env.example; no secret value or operational auth setting changes."
+  },
+  "48b61a60506af967e863a3229031aa4deda384ec": {
+    "risk": "real risk",
+    "reason": "Persists owner-approved agent standing instructions during pairing and changes schema; explicit owner/agent boundary data."
+  },
+  "bf251d404076a913928a5ef39e0153d8031653df": {
+    "risk": "real risk",
+    "reason": "Persists owner-approved agent standing instructions during pairing and changes schema; explicit owner/agent boundary data."
+  },
+  "2e2e142e2adfac6d6a3f457b03a0d4e5312a15b6": {
+    "risk": "real risk",
+    "reason": "Changes event/bug lookup project and tenant filters; event confidentiality must be reviewed."
+  },
+  "0010ba4e43ec3a2d650d1a500e77e0052938aac0": {
+    "risk": "real risk",
+    "reason": "Changes event/bug lookup project and tenant filters; event confidentiality must be reviewed."
+  },
+  "fbeabd7de9dd1d75ac11d7645fd76b78f6c93132": {
+    "risk": "real risk",
+    "reason": "Changes event/bug lookup project and tenant filters; event confidentiality must be reviewed."
+  },
+  "100ce6adfbc0621a73be6f2babe3eb184ac745a1": {
+    "risk": "real risk",
+    "reason": "Changes Google sign-in password removal and two-factor cleanup/fail-closed behaviour; credential lifecycle risk."
+  },
+  "e5006c6ec230bff8fe23d3b0ce983bfa57024b0c": {
+    "risk": "real risk",
+    "reason": "Changes Google sign-in password removal and two-factor cleanup/fail-closed behaviour; credential lifecycle risk."
+  },
+  "0b6df9412af8f6b3856464ae8a11601b82a0e008": {
+    "risk": "real risk",
+    "reason": "Changes Google sign-in password removal and two-factor cleanup/fail-closed behaviour; credential lifecycle risk."
+  },
+  "92ddd22da32c5b7e546c33698a6acb36e9802cb3": {
+    "risk": "real risk",
+    "reason": "Replaces stale validations while preserving undo/audit semantics; review trust and reward eligibility change."
+  },
+  "af00419f3379c509492c4277580687403c4ebf4f": {
+    "risk": "real risk",
+    "reason": "Replaces stale validations while preserving undo/audit semantics; review trust and reward eligibility change."
+  },
+  "557decad196f01a8b8e9be6665e0658d5c1e25e9": {
+    "risk": "harmless",
+    "reason": "Adds a plain audit/thread comment after an existing merger acceptance; acceptance authority and payment rules are unchanged."
+  },
+  "97138966d0ece4ed12cd5a0e19f5f59f3b231e00": {
+    "risk": "harmless",
+    "reason": "Adds a plain audit/thread comment after an existing merger acceptance; acceptance authority and payment rules are unchanged."
+  },
+  "d957741ef297841c1d1493d4aeacc873aeaf21b7": {
+    "risk": "harmless",
+    "reason": "The first-parent merge diff has no changed files; this entry introduces no additional inspected change."
+  },
+  "c4ea0bcf4a5d698da4d43c02243f5bd6759dec44": {
+    "risk": "real risk",
+    "reason": "Changes resolving/reopening authority and verifies the linked PR before applying a resolution; genuine merge/claim trust boundary."
+  },
+  "243b3f19acf6d610e6f0efcfe12c6b3c94268d21": {
+    "risk": "real risk",
+    "reason": "Changes resolving/reopening authority and verifies the linked PR before applying a resolution; genuine merge/claim trust boundary."
+  },
+  "6c08c2d5308406fb66aacee2c839546ef8920c4f": {
+    "risk": "real risk",
+    "reason": "Changes resolving/reopening authority and verifies the linked PR before applying a resolution; genuine merge/claim trust boundary."
+  },
+  "19210c6dab8e593cf043e5e1d8d6e7ba2a8e54b8": {
+    "risk": "real risk",
+    "reason": "Changes resolving/reopening authority and verifies the linked PR before applying a resolution; genuine merge/claim trust boundary."
+  },
+  "4434921a06a8297b422df089f2401404d2c57aad": {
+    "risk": "real risk",
+    "reason": "Changes resolving/reopening authority and verifies the linked PR before applying a resolution; genuine merge/claim trust boundary."
+  },
+  "501ed8830b38effb3e6b8b844d7c8e32db97376d": {
+    "risk": "harmless",
+    "reason": "Unifies explanatory pairing-link text in prompts/API; the owner still approves while signed in and authentication checks are unchanged."
+  },
+  "491ef5d02deddc5979778ec85ea5dceb12006dca": {
+    "risk": "harmless",
+    "reason": "Unifies explanatory pairing-link text in prompts/API; the owner still approves while signed in and authentication checks are unchanged."
+  },
+  "5c5cd5e3b0bcf27cd80c8e4adb6fd4ddd6404d40": {
+    "risk": "real risk",
+    "reason": "Adds dispatcher completion payments, PR auto-linking and migrations; persisted rewards and delivery provenance change."
+  },
+  "d56036ef4415c4871a91556b68bc790ca493b7a1": {
+    "risk": "real risk",
+    "reason": "Adds dispatcher completion payments, PR auto-linking and migrations; persisted rewards and delivery provenance change."
+  },
+  "abc7f12a83711d6efc0d8bf3760fe03ee09c1066": {
+    "risk": "real risk",
+    "reason": "Adds dispatcher completion payments, PR auto-linking and migrations; persisted rewards and delivery provenance change."
+  },
+  "48a3d587d09245fd9b8e8ab729f094dad0f426ad": {
+    "risk": "real risk",
+    "reason": "Adds dispatcher completion payments, PR auto-linking and migrations; persisted rewards and delivery provenance change."
+  },
+  "537eb0d21235153167fec75c6c526c9e0cdb0d39": {
+    "risk": "real risk",
+    "reason": "First-parent sync includes viewer-private draft isolation, agent key authentication or PR/role workflow changes; not just formatting."
+  },
+  "7171e9b66322eb5e690acbdc8d5886b2d1f3de2b": {
+    "risk": "real risk",
+    "reason": "First-parent sync includes viewer-private draft isolation, agent key authentication or PR/role workflow changes; not just formatting."
+  },
+  "1d58c30651b6a93e55a2b8f21df662babded2683": {
+    "risk": "real risk",
+    "reason": "First-parent sync includes viewer-private draft isolation, agent key authentication or PR/role workflow changes; not just formatting."
+  },
+  "533f031ce136f0fda48574f17cce2148d34b3659": {
+    "risk": "real risk",
+    "reason": "First-parent sync includes viewer-private draft isolation, agent key authentication or PR/role workflow changes; not just formatting."
+  },
+  "a21838a1d42eb40a47083f75bbebc5ca09edab9d": {
+    "risk": "real risk",
+    "reason": "First-parent sync includes viewer-private draft isolation, agent key authentication or PR/role workflow changes; not just formatting."
+  },
+  "53369f9bce3182adbf7cdd65310e7e3e7e82faad": {
+    "risk": "real risk",
+    "reason": "Changes CodeRabbit tool/review configuration as well as docs; automated review execution policy is owner-sensitive."
+  },
+  "91796c3841335cc354c9222a2c586e1455327098": {
+    "risk": "real risk",
+    "reason": "Changes CodeRabbit tool/review configuration as well as docs; automated review execution policy is owner-sensitive."
+  },
+  "44c11c8102f0abbb6b1c4322ac1ba76b3e2ba30a": {
+    "risk": "harmless",
+    "reason": "Agent API documentation/drift tests or level-table assertions change without runtime policy changes; module-wide globs over-alert."
+  },
+  "f1033415ec13b9b1fd3731d7ec993601b5a15659": {
+    "risk": "harmless",
+    "reason": "Agent API documentation/drift tests or level-table assertions change without runtime policy changes; module-wide globs over-alert."
+  },
+  "24a46c8f9e1baddcc59d5b5f708de2fe76dab2f5": {
+    "risk": "harmless",
+    "reason": "Agent API documentation/drift tests or level-table assertions change without runtime policy changes; module-wide globs over-alert."
+  },
+  "336cfb399b2674dac66269b9d1164d345eae174b": {
+    "risk": "harmless",
+    "reason": "Agent API documentation/drift tests or level-table assertions change without runtime policy changes; module-wide globs over-alert."
+  },
+  "2ab17271567af4d69fcae89996963192900cc577": {
+    "risk": "harmless",
+    "reason": "Agent API documentation/drift tests or level-table assertions change without runtime policy changes; module-wide globs over-alert."
+  },
+  "447819f614d33a7a91257dd17152ad34b3a51bf5": {
+    "risk": "real risk",
+    "reason": "Introduces numeric-reference resolution across issue actions and API reads; broad identity/lookup changes at scoped data boundaries warrant review."
+  },
+  "5ab9db190a9584998339a903105a9101436bca37": {
+    "risk": "real risk",
+    "reason": "Introduces numeric-reference resolution across issue actions and API reads; broad identity/lookup changes at scoped data boundaries warrant review."
+  },
+  "3410ef8cba59447904649fdec554c0aaf92ba553": {
+    "risk": "harmless",
+    "reason": "Escalation navigation and redesign type presentation, with related tests; no human decision authority or access rules change."
+  },
+  "f3b6d8a40971d95504b608aacbbfe86a2074fb51": {
+    "risk": "harmless",
+    "reason": "Escalation navigation and redesign type presentation, with related tests; no human decision authority or access rules change."
+  },
+  "912dddd71d8c8d9ea43fa3a60dc443ce0b4c96e2": {
+    "risk": "harmless",
+    "reason": "Escalation navigation and redesign type presentation, with related tests; no human decision authority or access rules change."
+  },
+  "01394039c4276ebebcf8a0a661b3b541690b4485": {
+    "risk": "harmless",
+    "reason": "Standardizes JSON 404/405/HEAD or cursor-format errors; no authenticated data admission or authorization rule changes."
+  },
+  "2603499ed714175775690516f6acab68704d693e": {
+    "risk": "harmless",
+    "reason": "Standardizes JSON 404/405/HEAD or cursor-format errors; no authenticated data admission or authorization rule changes."
+  },
+  "e751d12b95cb05a50b429c57663eef6ecea1e64d": {
+    "risk": "harmless",
+    "reason": "Standardizes JSON 404/405/HEAD or cursor-format errors; no authenticated data admission or authorization rule changes."
+  },
+  "314f3495500c5588309227c09a577292b373f91a": {
+    "risk": "harmless",
+    "reason": "Standardizes JSON 404/405/HEAD or cursor-format errors; no authenticated data admission or authorization rule changes."
+  },
+  "564c25f54d090c0ef3f9f2c4bc0216da1f9dd975": {
+    "risk": "real risk",
+    "reason": "Changes shared-browser private draft isolation and logout cleanup by viewer; account-confidentiality behaviour is sensitive and outside the profile."
+  },
+  "4a1cea694d9e2b1ed8d302b99ccbb59e6b1c3fe2": {
+    "risk": "harmless",
+    "reason": "Feed pagination/default-project compatibility changes retain existing tenant/project data predicates; no new admission rule."
+  },
+  "92fe9c576ff913fdbe66c1ae30da580c8176bc1a": {
+    "risk": "harmless",
+    "reason": "Feed pagination/default-project compatibility changes retain existing tenant/project data predicates; no new admission rule."
+  },
+  "e0cee973e642b2abadfa99bdb947cf5aa4a9cbb9": {
+    "risk": "real risk",
+    "reason": "Changes API-key validation and missing-versus-invalid credential handling; authentication parsing is security-sensitive."
+  },
+  "375b094b83a69c32988574025b90fe52bcb019ba": {
+    "risk": "real risk",
+    "reason": "Adds streaming multipart limits to stop undeclared/chunked uploads exhausting memory; genuine abuse/resource-protection logic outside the profile."
+  },
+  "97f78dab8c9d595808727a54d67a7e6298f951f1": {
+    "risk": "harmless",
+    "reason": "Adds upvote-only counts for delete/restore messages; deletion authority and visibility rules are unchanged."
+  },
+  "30625c5c60b2f855faacdfa47429a77ef1ce80fc": {
+    "risk": "harmless",
+    "reason": "Adds area filtering to an already workspace-scoped team directory; no expansion of membership or access authority."
+  }
+}

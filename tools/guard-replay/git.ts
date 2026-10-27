@@ -44,9 +44,10 @@ export function parseMetadata(buffer: Buffer): Metadata {
 export class HistoryReader {
   private blobs = new Map<string, {text: string | null; reason?: SkippedFile["reason"]}>();
   constructor(private readonly read: Git = git) {}
-  commits(ref = MAIN_REF): string[] {
+  commits(ref = MAIN_REF, skip = 0): string[] {
+    if (!Number.isSafeInteger(skip) || skip < 0) throw new RangeError("Invalid history offset");
     const tip = this.read(["rev-parse", "--verify", `${ref}^{commit}`]).toString().trim();
-    return this.read(["log", "-n", "200", "--format=%H", tip, "--"]).toString().trim().split("\n").filter(Boolean);
+    return this.read(["log", "-n", "200", "--format=%H", ...(skip ? [`--skip=${skip}`] : []), tip, "--"]).toString().trim().split("\n").filter(Boolean);
   }
   private blob(oid: string): {text: string | null; reason?: SkippedFile["reason"]} {
     if (/^0+$/.test(oid)) return {text: null};

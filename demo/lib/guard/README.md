@@ -25,3 +25,5 @@ pnpm exec vitest run demo/lib/guard
 ```
 
 `fixtures/readable-replay.json` contains inert copied text from historical replay false alarms: a readable work-count test, SVG-in-JSX agent artwork and a JSX status component. It also includes a standalone SVG control from a false-alarm commit (the icon itself was not previously flagged). Source paths and exact commits are recorded; none of this text is executed.
+
+Projects can opt into `runGuard(input, {protectedAreas: [{label: "Rewards", globs: ["lib/points/**"]}]})`. The default is empty, preserving content-only behaviour. A match emits one human-tier `protected_path` finding per area, listing all matched files, regardless of delegation. Several areas may overlap. These matches also enforce `no_protected_files`; they do not invent a claim mismatch or a new category.

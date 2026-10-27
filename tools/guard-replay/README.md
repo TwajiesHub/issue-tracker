@@ -29,3 +29,18 @@ Files with either side over 500,000 bytes, binary numstat markers, NUL bytes or 
 The v2 engine adds a strict entropy whitespace ceiling (5%) and skips SVG for entropy only. Other thresholds and triggers are unchanged. This branch was created from the locally fetched `feat/ziki-guard` tip and merged `codex/guard-replay` first.
 
 The normal command also renders the before/after comparison. `results-before.json` and `judgements-before.json` preserve the prior measurement. `tier-changes.json` contains an explicit correctness judgement for every tier change. Comparison rejects a different tip, ordered commit sample, or inspected/skipped file coverage; it never silently compares different histories. Original manual risk labels remain unchanged even when the new detector stops alerting. For another historical sample, update the pinned tip, collect and review fresh evidence, and supply a corresponding baseline before producing comparisons.
+
+## Owner-protected profile and held-out evaluation
+
+The v3 report command is:
+
+```sh
+pnpm exec tsx tools/guard-replay/owner-replay.ts
+pnpm exec vitest run demo/lib/guard tools/guard-replay
+```
+
+It evaluates the first 200 and next 200 entries of `git log` at the pinned main tip. `ziki-profile.ts` was committed before inspecting the older history and is frozen: collection checks its committed source before running. No glob was adjusted after viewing held-out results. `owner-results.json` stores the exact profile, hash, commit and both measurements. Blob caching is shared across the two samples.
+
+Use `--collect-only` to refresh evidence without rendering, or `--render-only` to format the already saved measurements after manual review. Every held-out commit, including non-alerted commits, must have an explicit `real risk`/`harmless` label in `judgements-heldout.json`. Primary alerts use `judgements-protected.json`, which preserves all 77 original labels and adds newly human-tier cases. All held-out misses and false alarms are listed in REPORT.md. The profile intentionally includes tests inside protected modules and can over-alert on harmless test or doc edits. It is an owner policy, not a malware classifier.
+
+The commit-keyed JSON labels are explicit manual assessments, not guesses derived from the new tier or from profile matches. The legacy `replay.ts` command still produces the entropy-only comparison and overwrites REPORT.md; use the owner command to restore the full three-version/held-out report. No engine-wide default profile is applied.
