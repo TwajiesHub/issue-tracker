@@ -1,9 +1,9 @@
 {
-  "ref": "refs/remotes/origin/main",
+  "ref": "a2d680f508a7504ac0f2f064eea243936dd5eca3",
   "tip": "a2d680f508a7504ac0f2f064eea243936dd5eca3",
-  "engineCommit": "f87184d2fb90c532b97344f19a8403f36904ae90",
-  "generatedAt": "2026-10-27T13:31:08.640Z",
-  "seconds": 70.590210911,
+  "engineCommit": "3a633bfb417a01e106c2b5d7ff0b031ac0b85f27",
+  "generatedAt": "2026-10-27T13:47:58.978Z",
+  "seconds": 98.815208344,
   "commits": [
     {
       "sha": "a2d680f508a7504ac0f2f064eea243936dd5eca3",
@@ -120,18 +120,6 @@
           "title": "This change touches protected files."
         },
         {
-          "code": "obfuscated_file",
-          "file": "prisma/migrations/20261123140000_scale_reward_amounts_by_70/migration.sql",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.261999757300947
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "prisma/migrations/20261123150000_rescale_reward_amounts_from_70_to_30/migration.sql",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.317227827219633
-        },
-        {
           "code": "claim_mismatch",
           "title": "This doesn't match what the change promised."
         }
@@ -221,18 +209,6 @@
         {
           "code": "protected_path",
           "title": "This change touches protected files."
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "prisma/migrations/20261123140000_scale_reward_amounts_by_70/migration.sql",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.261999757300947
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "prisma/migrations/20261123150000_rescale_reward_amounts_from_70_to_30/migration.sql",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.317227827219633
         },
         {
           "code": "claim_mismatch",
@@ -333,12 +309,6 @@
         {
           "code": "protected_path",
           "title": "This change touches protected files."
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "prisma/migrations/20261106000000_agent_sdlc_lifecycle_and_mistakes/migration.sql",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.133063204507028
         }
       ]
     },
@@ -369,12 +339,6 @@
         {
           "code": "protected_path",
           "title": "This change touches protected files."
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "prisma/migrations/20261106000000_agent_sdlc_lifecycle_and_mistakes/migration.sql",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.133063204507028
         }
       ]
     },
@@ -472,12 +436,6 @@
       ],
       "findings": [
         {
-          "code": "obfuscated_file",
-          "file": "docs/ziki-for-agents.md",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.053012727445042
-        },
-        {
           "code": "unknown_file",
           "file": "prisma/schema.prisma",
           "title": "This file is not recognised by the guard."
@@ -515,12 +473,6 @@
         "unknown"
       ],
       "findings": [
-        {
-          "code": "obfuscated_file",
-          "file": "docs/ziki-for-agents.md",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.053012727445042
-        },
         {
           "code": "unknown_file",
           "file": "prisma/schema.prisma",
@@ -577,42 +529,6 @@
       ],
       "findings": [
         {
-          "code": "obfuscated_file",
-          "file": "app/api/v1/contributor/ready-issues/route.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.163964175679837
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/api/v1/issues/[id]/admin-merge/route.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.07312906467591
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/api/v1/merger/ready-issues/route.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.159137585100066
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/api/v1/reviewer/pending-issues/route.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.14276207427396
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/api/v1/triager/pending-issues/route.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.144281744176519
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "docs/ziki-for-agents.md",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.164410487699532
-        },
-        {
           "code": "unknown_file",
           "file": "prisma/schema.prisma",
           "title": "This file is not recognised by the guard."
@@ -668,42 +584,6 @@
       ],
       "findings": [
         {
-          "code": "obfuscated_file",
-          "file": "app/api/v1/contributor/ready-issues/route.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.163964175679837
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/api/v1/issues/[id]/admin-merge/route.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.07312906467591
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/api/v1/merger/ready-issues/route.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.159137585100066
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/api/v1/reviewer/pending-issues/route.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.14276207427396
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/api/v1/triager/pending-issues/route.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.144281744176519
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "docs/ziki-for-agents.md",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.164410487699532
-        },
-        {
           "code": "unknown_file",
           "file": "prisma/schema.prisma",
           "title": "This file is not recognised by the guard."
@@ -730,32 +610,13 @@
         "lib/agent-work.ts"
       ],
       "skipped": [],
-      "tier": "human",
+      "tier": "review",
       "categories": [
         "ui",
         "tests",
         "code"
       ],
-      "findings": [
-        {
-          "code": "obfuscated_file",
-          "file": "app/(app)/issues/(list)/page.render.test.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.082566981001688
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "components/agent-graphic.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.220314876240661
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/agent-work.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.022315614670766
-        }
-      ]
+      "findings": []
     },
     {
       "sha": "5f3176f87fb5755f21491ccefdeef59c1cef0e6b",
@@ -794,32 +655,13 @@
         "lib/agent-work.ts"
       ],
       "skipped": [],
-      "tier": "human",
+      "tier": "review",
       "categories": [
         "ui",
         "tests",
         "code"
       ],
-      "findings": [
-        {
-          "code": "obfuscated_file",
-          "file": "app/(app)/issues/(list)/page.render.test.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.082566981001688
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "components/agent-graphic.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.220314876240661
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/agent-work.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.022315614670766
-        }
-      ]
+      "findings": []
     },
     {
       "sha": "7d0b7407b23680d1914774b428f1b59598be469a",
@@ -904,50 +746,13 @@
         "lib/format.ts"
       ],
       "skipped": [],
-      "tier": "human",
+      "tier": "review",
       "categories": [
         "ui",
         "tests",
         "code"
       ],
-      "findings": [
-        {
-          "code": "obfuscated_file",
-          "file": "app/(app)/issues/[id]/header-responsive.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.091751325885917
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/(app)/points/disputes/page.test.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.085565928936962
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/(app)/workers/ranking-panel.test.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.118196558742217
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "components/comment-actions.dom.test.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.008936986827889
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "components/issue-row-status.dom.test.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.0284226423075395
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "components/issue-row-status.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.156232017920435
-        }
-      ]
+      "findings": []
     },
     {
       "sha": "5a57b8c584de9c00bc19f2e4635e5b1738efd9c3",
@@ -984,26 +789,13 @@
         "lib/format.ts"
       ],
       "skipped": [],
-      "tier": "human",
+      "tier": "review",
       "categories": [
         "tests",
         "ui",
         "code"
       ],
-      "findings": [
-        {
-          "code": "obfuscated_file",
-          "file": "app/(app)/issues/[id]/header-responsive.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.091751325885917
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "components/comment-actions.dom.test.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.008936986827889
-        }
-      ]
+      "findings": []
     },
     {
       "sha": "db9f25a5488a220fb47c290adc6478471e9f4042",
@@ -1016,19 +808,12 @@
         "app/(app)/points/disputes/page.tsx"
       ],
       "skipped": [],
-      "tier": "human",
+      "tier": "review",
       "categories": [
         "tests",
         "ui"
       ],
-      "findings": [
-        {
-          "code": "obfuscated_file",
-          "file": "app/(app)/points/disputes/page.test.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.085565928936962
-        }
-      ]
+      "findings": []
     },
     {
       "sha": "f594147d2bcb9d3d64dde98b41cef7402271f43d",
@@ -1099,19 +884,12 @@
         "components/comment-thread.tsx"
       ],
       "skipped": [],
-      "tier": "human",
+      "tier": "review",
       "categories": [
         "ui",
         "tests"
       ],
-      "findings": [
-        {
-          "code": "obfuscated_file",
-          "file": "components/comment-actions.dom.test.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.008936986827889
-        }
-      ]
+      "findings": []
     },
     {
       "sha": "0d60bd3fab5dc1031a0e5d6435de57593ed503c6",
@@ -1144,20 +922,13 @@
         "components/points-summary.tsx"
       ],
       "skipped": [],
-      "tier": "human",
+      "tier": "review",
       "categories": [
         "ui",
         "code",
         "tests"
       ],
-      "findings": [
-        {
-          "code": "obfuscated_file",
-          "file": "app/(app)/workers/ranking-panel.test.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.118196558742217
-        }
-      ]
+      "findings": []
     },
     {
       "sha": "ebb02705b730df77e46f9c040d49e078cccb44a8",
@@ -1173,25 +944,12 @@
         "components/issue-row-status.tsx"
       ],
       "skipped": [],
-      "tier": "human",
+      "tier": "review",
       "categories": [
         "ui",
         "tests"
       ],
-      "findings": [
-        {
-          "code": "obfuscated_file",
-          "file": "components/issue-row-status.dom.test.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.0284226423075395
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "components/issue-row-status.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.156232017920435
-        }
-      ]
+      "findings": []
     },
     {
       "sha": "2258c141de83d00bd7c54afc44e8a1894721df0f",
@@ -1209,32 +967,13 @@
         "lib/agent-work.ts"
       ],
       "skipped": [],
-      "tier": "human",
+      "tier": "review",
       "categories": [
         "tests",
         "ui",
         "code"
       ],
-      "findings": [
-        {
-          "code": "obfuscated_file",
-          "file": "app/(app)/issues/(list)/page.render.test.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.082137163698315
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "components/agent-graphic.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.220314876240661
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/agent-work.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.014991849016102
-        }
-      ]
+      "findings": []
     },
     {
       "sha": "e2b4a70cced2c3a0562608c5abcbf4f950b3d69b",
@@ -1287,20 +1026,13 @@
         "components/points-summary.tsx"
       ],
       "skipped": [],
-      "tier": "human",
+      "tier": "review",
       "categories": [
         "ui",
         "code",
         "tests"
       ],
-      "findings": [
-        {
-          "code": "obfuscated_file",
-          "file": "app/(app)/workers/ranking-panel.test.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.118196558742217
-        }
-      ]
+      "findings": []
     },
     {
       "sha": "a524fb4231fa075cc5478bb4923510680fef6fbd",
@@ -1334,20 +1066,13 @@
         "lib/format.ts"
       ],
       "skipped": [],
-      "tier": "human",
+      "tier": "review",
       "categories": [
         "tests",
         "ui",
         "code"
       ],
-      "findings": [
-        {
-          "code": "obfuscated_file",
-          "file": "app/(app)/issues/[id]/header-responsive.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.091751325885917
-        }
-      ]
+      "findings": []
     },
     {
       "sha": "cf47fa093999e5b4b2a2ba50f5cb0450bc597f8b",
@@ -1363,25 +1088,12 @@
         "components/issue-row-status.tsx"
       ],
       "skipped": [],
-      "tier": "human",
+      "tier": "review",
       "categories": [
         "ui",
         "tests"
       ],
-      "findings": [
-        {
-          "code": "obfuscated_file",
-          "file": "components/issue-row-status.dom.test.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.0284226423075395
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "components/issue-row-status.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.156232017920435
-        }
-      ]
+      "findings": []
     },
     {
       "sha": "fc23b8c70029a846d056d2d62f02b49253d9382e",
@@ -1448,19 +1160,12 @@
         "app/(app)/points/disputes/page.tsx"
       ],
       "skipped": [],
-      "tier": "human",
+      "tier": "review",
       "categories": [
         "tests",
         "ui"
       ],
-      "findings": [
-        {
-          "code": "obfuscated_file",
-          "file": "app/(app)/points/disputes/page.test.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.085565928936962
-        }
-      ]
+      "findings": []
     },
     {
       "sha": "52340e28a9a1adb10df1c2a558f4d5b9ae59c75f",
@@ -1549,27 +1254,14 @@
         "public/icons/issues-status-escalated.svg"
       ],
       "skipped": [],
-      "tier": "human",
+      "tier": "review",
       "categories": [
         "docs",
         "code",
         "ui",
         "tests"
       ],
-      "findings": [
-        {
-          "code": "obfuscated_file",
-          "file": "app/(app)/issues/(list)/page.render.test.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.109861740366344
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/orphaned-issues.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.00327722576703
-        }
-      ]
+      "findings": []
     },
     {
       "sha": "0967354f44fa6661d338fc08b31bb2835e9b0871",
@@ -1699,18 +1391,6 @@
           "title": "This change touches protected files."
         },
         {
-          "code": "obfuscated_file",
-          "file": "prisma/migrations/20261123140000_scale_reward_amounts_by_70/migration.sql",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.261999757300947
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "prisma/migrations/20261123150000_rescale_reward_amounts_from_70_to_30/migration.sql",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.317227827219633
-        },
-        {
           "code": "claim_mismatch",
           "title": "This doesn't match what the change promised."
         }
@@ -1768,20 +1448,13 @@
         "public/icons/issues-status-escalated.svg"
       ],
       "skipped": [],
-      "tier": "human",
+      "tier": "review",
       "categories": [
         "code",
         "ui",
         "tests"
       ],
-      "findings": [
-        {
-          "code": "obfuscated_file",
-          "file": "app/(app)/issues/(list)/page.render.test.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.109861740366344
-        }
-      ]
+      "findings": []
     },
     {
       "sha": "5c760029c58b93746b9095009ee0f9c83bf9b05b",
@@ -1835,20 +1508,13 @@
         "public/icons/issues-status-escalated.svg"
       ],
       "skipped": [],
-      "tier": "human",
+      "tier": "review",
       "categories": [
         "code",
         "ui",
         "tests"
       ],
-      "findings": [
-        {
-          "code": "obfuscated_file",
-          "file": "app/(app)/issues/(list)/page.render.test.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.109861740366344
-        }
-      ]
+      "findings": []
     },
     {
       "sha": "b17465d40c838d76696702ff765cbdfb68d5258d",
@@ -1864,20 +1530,13 @@
         "lib/orphaned-issues.ts"
       ],
       "skipped": [],
-      "tier": "human",
+      "tier": "review",
       "categories": [
         "docs",
         "tests",
         "code"
       ],
-      "findings": [
-        {
-          "code": "obfuscated_file",
-          "file": "lib/orphaned-issues.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.00327722576703
-        }
-      ]
+      "findings": []
     },
     {
       "sha": "4fd14a29871e9c30ab70b9353c210da8b851fd7c",
@@ -1893,20 +1552,13 @@
         "lib/orphaned-issues.ts"
       ],
       "skipped": [],
-      "tier": "human",
+      "tier": "review",
       "categories": [
         "docs",
         "tests",
         "code"
       ],
-      "findings": [
-        {
-          "code": "obfuscated_file",
-          "file": "lib/orphaned-issues.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.00327722576703
-        }
-      ]
+      "findings": []
     },
     {
       "sha": "1bf7e78c701debde0b710fe8f45da6c788371872",
@@ -2127,132 +1779,6 @@
         {
           "code": "protected_path",
           "title": "This change touches protected files."
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/(app)/escalations/linked-issue-label.test.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.1305324874187885
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/(app)/issues/(list)/page.render.test.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.00297244002943
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/(app)/settings/team/team-agent-table.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.038537971830539
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/actions/issues-edit-proof-links.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.051762356613337
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/actions/notifications.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.0200491124284605
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/api/v1/agents/me/points/route.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.053604176548048
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/api/v1/issues/[id]/bid/route.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.133139079058059
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "components/create-bug-form.test.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.045501746610239
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "docs/evidence/ENDOR-579/regression-evidence.html",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.040303326845788
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "docs/evidence/ENDOR-579/review-followup-checks.txt",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.268908229372962
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/agent-api/bid.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.031313077329673
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/agent-api/deadline.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.024421432566186
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/agent-api/issues.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.094278169116842
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/agent-api/merge.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.089867299351503
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/agent-api/release.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.059118564253991
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/agent-api/validation.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.017800826079582
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/points/backfill.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.114714777906722
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/points/rules.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.15996659371622
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/points/rules.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.0218772455307645
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/rate-limit-postgres.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.028141980359618
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "public/icons/LUCIDE-LICENSE",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.14463253557484
         },
         {
           "code": "claim_mismatch",
@@ -2486,132 +2012,6 @@
           "title": "This change touches protected files."
         },
         {
-          "code": "obfuscated_file",
-          "file": "app/(app)/escalations/linked-issue-label.test.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.1305324874187885
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/(app)/issues/(list)/page.render.test.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.00297244002943
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/(app)/settings/team/team-agent-table.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.038537971830539
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/actions/issues-edit-proof-links.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.051762356613337
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/actions/notifications.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.0200491124284605
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/api/v1/agents/me/points/route.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.053604176548048
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/api/v1/issues/[id]/bid/route.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.133139079058059
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "components/create-bug-form.test.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.045501746610239
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "docs/evidence/ENDOR-579/regression-evidence.html",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.040303326845788
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "docs/evidence/ENDOR-579/review-followup-checks.txt",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.268908229372962
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/agent-api/bid.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.031313077329673
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/agent-api/deadline.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.024421432566186
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/agent-api/issues.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.094278169116842
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/agent-api/merge.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.089867299351503
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/agent-api/release.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.059118564253991
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/agent-api/validation.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.017800826079582
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/points/backfill.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.114714777906722
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/points/rules.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.15996659371622
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/points/rules.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.0218772455307645
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/rate-limit-postgres.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.028141980359618
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "public/icons/LUCIDE-LICENSE",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.14463253557484
-        },
-        {
           "code": "claim_mismatch",
           "title": "This doesn't match what the change promised."
         },
@@ -2677,18 +2077,6 @@
           "title": "This change touches protected files."
         },
         {
-          "code": "obfuscated_file",
-          "file": "lib/points/rules.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.158288610278792
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/points/rules.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.0218772455307645
-        },
-        {
           "code": "claim_mismatch",
           "title": "This doesn't match what the change promised."
         },
@@ -2748,18 +2136,6 @@
         {
           "code": "protected_path",
           "title": "This change touches protected files."
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/points/rules.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.158288610278792
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/points/rules.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.0218772455307645
         },
         {
           "code": "claim_mismatch",
@@ -2850,19 +2226,12 @@
         "lib/github/pr-mention.ts"
       ],
       "skipped": [],
-      "tier": "human",
+      "tier": "review",
       "categories": [
         "tests",
         "code"
       ],
-      "findings": [
-        {
-          "code": "obfuscated_file",
-          "file": "app/actions/issues-edit-proof-links.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.051762356613337
-        }
-      ]
+      "findings": []
     },
     {
       "sha": "e5f4ebaf478ca913044d748522fe935ab37981fe",
@@ -2878,19 +2247,12 @@
         "app/(app)/settings/team/team.css"
       ],
       "skipped": [],
-      "tier": "human",
+      "tier": "review",
       "categories": [
         "tests",
         "ui"
       ],
-      "findings": [
-        {
-          "code": "obfuscated_file",
-          "file": "app/(app)/settings/team/team-agent-table.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.038537971830539
-        }
-      ]
+      "findings": []
     },
     {
       "sha": "2dcfbceb34c905abf03311e6aa18a2d982b39243",
@@ -3106,90 +2468,6 @@
           "title": "This change touches protected files."
         },
         {
-          "code": "obfuscated_file",
-          "file": "app/(app)/escalations/linked-issue-label.test.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.1305324874187885
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/(app)/issues/(list)/page.render.test.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.105110120026101
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/actions/notifications.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.0200491124284605
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/api/v1/agents/me/points/route.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.053604176548048
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/api/v1/issues/[id]/bid/route.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.133139079058059
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "components/create-bug-form.test.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.045501746610239
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "docs/evidence/ENDOR-579/regression-evidence.html",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.040303326845788
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "docs/evidence/ENDOR-579/review-followup-checks.txt",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.268908229372962
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/agent-api/bid.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.031313077329673
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/agent-api/deadline.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.024421432566186
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/agent-api/issues.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.127767301436479
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/agent-api/release.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.059118564253991
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/rate-limit-postgres.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.028141980359618
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "public/icons/LUCIDE-LICENSE",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.14463253557484
-        },
-        {
           "code": "claim_mismatch",
           "title": "This doesn't match what the change promised."
         },
@@ -3214,19 +2492,12 @@
         "app/(app)/settings/team/team.css"
       ],
       "skipped": [],
-      "tier": "human",
+      "tier": "review",
       "categories": [
         "tests",
         "ui"
       ],
-      "findings": [
-        {
-          "code": "obfuscated_file",
-          "file": "app/(app)/settings/team/team-agent-table.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.038537971830539
-        }
-      ]
+      "findings": []
     },
     {
       "sha": "977325e0ad098b52afc3e3fa12e8cd6001bbddbe",
@@ -3289,26 +2560,13 @@
         "public/icons/issues-status-resolved.svg"
       ],
       "skipped": [],
-      "tier": "human",
+      "tier": "review",
       "categories": [
         "ui",
         "tests",
         "docs"
       ],
-      "findings": [
-        {
-          "code": "obfuscated_file",
-          "file": "app/(app)/issues/(list)/page.render.test.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.1232388209742075
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "public/icons/LUCIDE-LICENSE",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.14463253557484
-        }
-      ]
+      "findings": []
     },
     {
       "sha": "88342dd5a4bd31676cab4c2259229ff567e0dd20",
@@ -3393,18 +2651,6 @@
         {
           "code": "protected_path",
           "title": "This change touches protected files."
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/actions/notifications.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.0200491124284605
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/rate-limit-postgres.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.028141980359618
         },
         {
           "code": "claim_mismatch",
@@ -3654,26 +2900,13 @@
         "public/icons/issues-status-resolved.svg"
       ],
       "skipped": [],
-      "tier": "human",
+      "tier": "review",
       "categories": [
         "ui",
         "tests",
         "docs"
       ],
-      "findings": [
-        {
-          "code": "obfuscated_file",
-          "file": "app/(app)/issues/(list)/page.render.test.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.1232388209742075
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "public/icons/LUCIDE-LICENSE",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.14463253557484
-        }
-      ]
+      "findings": []
     },
     {
       "sha": "15d2a5b364b3966bedfcd746ec64e5f91201fe40",
@@ -3728,20 +2961,13 @@
         "lib/rate-limit.ts"
       ],
       "skipped": [],
-      "tier": "human",
+      "tier": "review",
       "categories": [
         "code",
         "docs",
         "tests"
       ],
-      "findings": [
-        {
-          "code": "obfuscated_file",
-          "file": "lib/rate-limit-postgres.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.028141980359618
-        }
-      ]
+      "findings": []
     },
     {
       "sha": "d6b5f62abc4355dc269cd7ad7d45a550f896341b",
@@ -4375,462 +3601,6 @@
           "title": "This change touches protected files."
         },
         {
-          "code": "obfuscated_file",
-          "file": "app/(app)/escalations/linked-issue-label.test.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.1305324874187885
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/(app)/issues/[id]/history/page.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.156955697541777
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/(app)/issues/[id]/page.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.038759098955934
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/(app)/leaderboard/page.test.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.072670167864301
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/(app)/not-found.dom.test.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.110816750660943
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/(app)/projects/[slug]/settings/page.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.026850641930341
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/(app)/settings/agents/agents-ui.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.261102969425371
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/(app)/settings/profile/page.test.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.103677368569341
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/(app)/users/[id]/page.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.0748963091719
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/actions/issues-bulk-notifications.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.012344213505419
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/actions/notifications.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.0200491124284605
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/api/github/webhook/route.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.100431384527464
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/api/v1/agents/me/points/entries/route.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.1198718375770484
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/api/v1/agents/me/points/entries/route.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.0054720752395205
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/api/v1/agents/me/points/route.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.053604176548048
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/api/v1/agents/me/points/route.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.115011931922911
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/api/v1/attachments/route.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.054134854303187
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/api/v1/events/route.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.059918845189425
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/api/v1/issues/[id]/bid/route.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.133139079058059
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/api/v1/issues/[id]/github/route.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.040380557434143
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/api/v1/issues/[id]/resolve/route.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.146976945361162
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/api/v1/issues/[id]/resolve/route.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.044734310817694
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "components/app-sidebar.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.021936811101471
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "components/create-bug-form.test.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.045501746610239
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "components/google-sign-in-button.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.108629079055916
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "components/homepage/homepage.css",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.088068581238962
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "components/points-ledger.test.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.074602492424652
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "components/points-ledger.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.00598406460487
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "design-handoff/HANDOFF.md",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.121673422067967
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "design-handoff/designs/ApproveAgent.dc.html",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.34341825370907
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "design-handoff/designs/ApproveAgentDark.dc.html",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.343227606553412
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "design-handoff/designs/ConnectAgent.dc.html",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.329723463007809
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "design-handoff/designs/ConnectAgentDark.dc.html",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.329575053805804
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "design-handoff/designs/CreateAgent.dc.html",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.320187035963101
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "design-handoff/designs/CreateAgentDark.dc.html",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.3200286663994545
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "design-handoff/designs/Dark.dc.html",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.336395864999756
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "design-handoff/designs/Issue.dc.html",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.335547617780953
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "design-handoff/designs/IssueDark.dc.html",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.335428335077383
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "design-handoff/designs/Leaderboard.dc.html",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.377467178425503
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "design-handoff/designs/LeaderboardDark.dc.html",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.377290397689592
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "design-handoff/designs/Login.dc.html",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.378961022283476
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "design-handoff/designs/LoginDark.dc.html",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.378847082659782
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "design-handoff/designs/Main.dc.html",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.336589343060888
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "design-handoff/designs/ManageAgents.dc.html",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.3406663750432966
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "design-handoff/designs/ManageAgentsDark.dc.html",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.340510827635137
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "design-handoff/designs/Settings.dc.html",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.347096757379542
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "design-handoff/designs/SettingsDark.dc.html",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.34697290029435
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "design-handoff/designs/Webhooks.dc.html",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.348603654502697
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "design-handoff/designs/WebhooksDark.dc.html",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.348450438845793
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "docs/evidence/ENDOR-579/regression-evidence.html",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.040303326845788
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "docs/evidence/ENDOR-579/review-followup-checks.txt",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.268908229372962
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/agent-api/bid.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.011082099719543
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/agent-api/deadline.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.024421432566186
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/agent-api/http-errors.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.028462332502412
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/agent-api/issues.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.066688648363334
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/agent-api/project-docs.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.282371531985073
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/agent-api/release.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.059118564253991
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/agent-api/resolve.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.082395279557149
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/agent-api/route-methods.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.113933186540534
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/agents/levels.docs.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.140842957227225
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/agents/pairing-link.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.0867975796411695
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/agents/pairing.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.184321472234742
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/attachment-body.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.0139034550579
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/feed.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.202026884734783
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/feed.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.137023641589049
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/github/pr-mention.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.007332003581709
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/github/pr-mention.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.002828494727119
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/github/pr-opened.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.143995848264426
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/issue-ref.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.080477623889685
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/issue-ref.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.055902820057706
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/points/backfill-on-start.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.177017154940478
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/points/backfill-on-start.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.011613397836349
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/points/entries.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.022913421022504
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/points/entries.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.035139037154268
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/points/history.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.074677399650154
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/points/platform-reward-config.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.222904643783797
-        },
-        {
           "code": "claim_mismatch",
           "title": "This doesn't match what the change promised."
         },
@@ -4968,20 +3738,13 @@
         "lib/rate-limit.ts"
       ],
       "skipped": [],
-      "tier": "human",
+      "tier": "review",
       "categories": [
         "code",
         "docs",
         "tests"
       ],
-      "findings": [
-        {
-          "code": "obfuscated_file",
-          "file": "lib/rate-limit-postgres.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.028141980359618
-        }
-      ]
+      "findings": []
     },
     {
       "sha": "4d41f700a04a804b96288416c8f85d4192745576",
@@ -5262,66 +4025,6 @@
           "title": "This change touches protected files."
         },
         {
-          "code": "obfuscated_file",
-          "file": "app/(app)/escalations/linked-issue-label.test.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.1305324874187885
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/api/v1/agents/me/points/route.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.053604176548048
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/api/v1/issues/[id]/bid/route.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.133139079058059
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "components/create-bug-form.test.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.045501746610239
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "docs/evidence/ENDOR-579/regression-evidence.html",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.040303326845788
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "docs/evidence/ENDOR-579/review-followup-checks.txt",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.268908229372962
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/agent-api/bid.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.031313077329673
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/agent-api/deadline.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.024421432566186
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/agent-api/issues.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.127767301436479
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/agent-api/release.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.059118564253991
-        },
-        {
           "code": "claim_mismatch",
           "title": "This doesn't match what the change promised."
         }
@@ -5356,20 +4059,13 @@
         "components/app-header.tsx"
       ],
       "skipped": [],
-      "tier": "human",
+      "tier": "review",
       "categories": [
         "tests",
         "code",
         "ui"
       ],
-      "findings": [
-        {
-          "code": "obfuscated_file",
-          "file": "app/actions/notifications.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.0200491124284605
-        }
-      ]
+      "findings": []
     },
     {
       "sha": "f4ac187c9da4f620dbf9581c24133cf89ec5bbc0",
@@ -5498,66 +4194,6 @@
         {
           "code": "protected_path",
           "title": "This change touches protected files."
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/(app)/escalations/linked-issue-label.test.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.1305324874187885
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/api/v1/agents/me/points/route.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.053604176548048
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/api/v1/issues/[id]/bid/route.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.133139079058059
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "components/create-bug-form.test.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.045501746610239
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "docs/evidence/ENDOR-579/regression-evidence.html",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.040303326845788
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "docs/evidence/ENDOR-579/review-followup-checks.txt",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.268908229372962
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/agent-api/bid.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.031313077329673
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/agent-api/deadline.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.024421432566186
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/agent-api/issues.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.127767301436479
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/agent-api/release.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.059118564253991
         },
         {
           "code": "claim_mismatch",
@@ -6001,240 +4637,6 @@
           "title": "This change touches protected files."
         },
         {
-          "code": "obfuscated_file",
-          "file": "app/(app)/escalations/linked-issue-label.test.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.1305324874187885
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/(app)/leaderboard/page.test.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.072670167864301
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/(app)/projects/[slug]/settings/page.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.026850641930341
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/(app)/settings/agents/agents-ui.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.261102969425371
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/api/v1/agents/me/points/route.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.053604176548048
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/api/v1/issues/[id]/bid/route.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.133139079058059
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "components/app-sidebar.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.021936811101471
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "components/create-bug-form.test.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.045501746610239
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "components/google-sign-in-button.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.0998405692702615
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "components/points-ledger.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.004334353223816
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "design-handoff/HANDOFF.md",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.121673422067967
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "design-handoff/designs/ApproveAgent.dc.html",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.34341825370907
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "design-handoff/designs/ApproveAgentDark.dc.html",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.343227606553412
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "design-handoff/designs/ConnectAgent.dc.html",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.329723463007809
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "design-handoff/designs/ConnectAgentDark.dc.html",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.329575053805804
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "design-handoff/designs/CreateAgent.dc.html",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.320187035963101
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "design-handoff/designs/CreateAgentDark.dc.html",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.3200286663994545
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "design-handoff/designs/Dark.dc.html",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.336395864999756
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "design-handoff/designs/Issue.dc.html",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.335547617780953
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "design-handoff/designs/IssueDark.dc.html",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.335428335077383
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "design-handoff/designs/Leaderboard.dc.html",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.377467178425503
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "design-handoff/designs/LeaderboardDark.dc.html",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.377290397689592
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "design-handoff/designs/Login.dc.html",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.378961022283476
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "design-handoff/designs/LoginDark.dc.html",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.378847082659782
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "design-handoff/designs/Main.dc.html",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.336589343060888
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "design-handoff/designs/ManageAgents.dc.html",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.3406663750432966
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "design-handoff/designs/ManageAgentsDark.dc.html",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.340510827635137
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "design-handoff/designs/Settings.dc.html",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.347096757379542
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "design-handoff/designs/SettingsDark.dc.html",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.34697290029435
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "design-handoff/designs/Webhooks.dc.html",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.348603654502697
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "design-handoff/designs/WebhooksDark.dc.html",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.348450438845793
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "docs/evidence/ENDOR-579/regression-evidence.html",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.040303326845788
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "docs/evidence/ENDOR-579/review-followup-checks.txt",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.268908229372962
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/agent-api/bid.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.031313077329673
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/agent-api/deadline.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.024421432566186
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/agent-api/issues.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.127767301436479
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/agent-api/release.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.059118564253991
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/points/history.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.074677399650154
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/points/platform-reward-config.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.222904643783797
-        },
-        {
           "code": "claim_mismatch",
           "title": "This doesn't match what the change promised."
         },
@@ -6473,20 +4875,13 @@
         "lib/issue-created-redirect.ts"
       ],
       "skipped": [],
-      "tier": "human",
+      "tier": "review",
       "categories": [
         "tests",
         "ui",
         "code"
       ],
-      "findings": [
-        {
-          "code": "obfuscated_file",
-          "file": "components/create-bug-form.test.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.036304728140764
-        }
-      ]
+      "findings": []
     },
     {
       "sha": "ad383863d51a753b4acc10dc1eebbdbe03ec015a",
@@ -6502,20 +4897,13 @@
         "lib/points/balance.ts"
       ],
       "skipped": [],
-      "tier": "human",
+      "tier": "review",
       "categories": [
         "tests",
         "code",
         "docs"
       ],
-      "findings": [
-        {
-          "code": "obfuscated_file",
-          "file": "app/api/v1/agents/me/points/route.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.053604176548048
-        }
-      ]
+      "findings": []
     },
     {
       "sha": "fdad34ecf632591956f0f1f0724884297376723c",
@@ -6671,54 +5059,6 @@
           "title": "This change touches protected files."
         },
         {
-          "code": "obfuscated_file",
-          "file": "app/(app)/escalations/linked-issue-label.test.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.1305324874187885
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/api/v1/issues/[id]/bid/route.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.133139079058059
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "docs/evidence/ENDOR-579/regression-evidence.html",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.040303326845788
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "docs/evidence/ENDOR-579/review-followup-checks.txt",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.268908229372962
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/agent-api/bid.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.031313077329673
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/agent-api/deadline.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.024421432566186
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/agent-api/issues.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.127767301436479
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/agent-api/release.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.059118564253991
-        },
-        {
           "code": "claim_mismatch",
           "title": "This doesn't match what the change promised."
         }
@@ -6828,54 +5168,6 @@
           "title": "This change touches protected files."
         },
         {
-          "code": "obfuscated_file",
-          "file": "app/(app)/escalations/linked-issue-label.test.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.1305324874187885
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/api/v1/issues/[id]/bid/route.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.133139079058059
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "docs/evidence/ENDOR-579/regression-evidence.html",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.040303326845788
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "docs/evidence/ENDOR-579/review-followup-checks.txt",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.268908229372962
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/agent-api/bid.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.031313077329673
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/agent-api/deadline.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.024421432566186
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/agent-api/issues.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.127767301436479
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/agent-api/release.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.059118564253991
-        },
-        {
           "code": "claim_mismatch",
           "title": "This doesn't match what the change promised."
         }
@@ -6931,25 +5223,12 @@
         "lib/agent-api/bid.ts"
       ],
       "skipped": [],
-      "tier": "human",
+      "tier": "review",
       "categories": [
         "tests",
         "code"
       ],
-      "findings": [
-        {
-          "code": "obfuscated_file",
-          "file": "app/api/v1/issues/[id]/bid/route.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.133139079058059
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "lib/agent-api/bid.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.031313077329673
-        }
-      ]
+      "findings": []
     },
     {
       "sha": "945483be6c9414c66c4bbd9921f46a289ccc40e0",
@@ -6996,26 +5275,13 @@
           "reason": "binary"
         }
       ],
-      "tier": "human",
+      "tier": "review",
       "categories": [
         "docs",
         "tests",
         "code"
       ],
-      "findings": [
-        {
-          "code": "obfuscated_file",
-          "file": "docs/evidence/ENDOR-579/regression-evidence.html",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.040303326845788
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "docs/evidence/ENDOR-579/review-followup-checks.txt",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.268908229372962
-        }
-      ]
+      "findings": []
     },
     {
       "sha": "e45e16a69ba5765d42c8c8a6bd7dfa6b057babe8",
@@ -7028,19 +5294,12 @@
         "lib/agent-api/deadline.ts"
       ],
       "skipped": [],
-      "tier": "human",
+      "tier": "review",
       "categories": [
         "tests",
         "code"
       ],
-      "findings": [
-        {
-          "code": "obfuscated_file",
-          "file": "lib/agent-api/deadline.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.024421432566186
-        }
-      ]
+      "findings": []
     },
     {
       "sha": "14c2ce64909adda0b4d2942389b44e82f5748c02",
@@ -7053,19 +5312,12 @@
         "lib/agent-api/release.test.ts"
       ],
       "skipped": [],
-      "tier": "human",
+      "tier": "review",
       "categories": [
         "code",
         "tests"
       ],
-      "findings": [
-        {
-          "code": "obfuscated_file",
-          "file": "lib/agent-api/release.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.059118564253991
-        }
-      ]
+      "findings": []
     },
     {
       "sha": "f7116b32c896e2da91c52ec65aa50fde17e91744",
@@ -7097,20 +5349,13 @@
         "lib/agent-api/issues.ts"
       ],
       "skipped": [],
-      "tier": "human",
+      "tier": "review",
       "categories": [
         "docs",
         "tests",
         "code"
       ],
-      "findings": [
-        {
-          "code": "obfuscated_file",
-          "file": "lib/agent-api/issues.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.127767301436479
-        }
-      ]
+      "findings": []
     },
     {
       "sha": "c446597e1dc8256b67642bc3e82430f3860154a5",
@@ -7228,12 +5473,6 @@
           "title": "This change touches protected files."
         },
         {
-          "code": "obfuscated_file",
-          "file": "app/(app)/escalations/linked-issue-label.test.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.1305324874187885
-        },
-        {
           "code": "claim_mismatch",
           "title": "This doesn't match what the change promised."
         }
@@ -7250,19 +5489,12 @@
         "lib/agent-api/deadline.ts"
       ],
       "skipped": [],
-      "tier": "human",
+      "tier": "review",
       "categories": [
         "tests",
         "code"
       ],
-      "findings": [
-        {
-          "code": "obfuscated_file",
-          "file": "lib/agent-api/deadline.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.024421432566186
-        }
-      ]
+      "findings": []
     },
     {
       "sha": "fa53ba78ed8c12c8013a46b1c8bf7c588703e8ef",
@@ -7340,12 +5572,6 @@
           "title": "This change touches protected files."
         },
         {
-          "code": "obfuscated_file",
-          "file": "app/(app)/escalations/linked-issue-label.test.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.1305324874187885
-        },
-        {
           "code": "claim_mismatch",
           "title": "This doesn't match what the change promised."
         }
@@ -7407,12 +5633,6 @@
         {
           "code": "protected_path",
           "title": "This change touches protected files."
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "app/(app)/escalations/linked-issue-label.test.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.1305324874187885
         },
         {
           "code": "claim_mismatch",
@@ -7480,12 +5700,6 @@
         "unknown"
       ],
       "findings": [
-        {
-          "code": "obfuscated_file",
-          "file": "app/api/v1/agents/pairing/route.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.098914850812593
-        },
         {
           "code": "unknown_file",
           "file": "prisma/schema.prisma",
@@ -7555,20 +5769,13 @@
         "lib/agent-questions.ts"
       ],
       "skipped": [],
-      "tier": "human",
+      "tier": "review",
       "categories": [
         "ui",
         "tests",
         "code"
       ],
-      "findings": [
-        {
-          "code": "obfuscated_file",
-          "file": "app/(app)/escalations/linked-issue-label.test.tsx",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.1305324874187885
-        }
-      ]
+      "findings": []
     },
     {
       "sha": "0e7d157170ee2f333cca9cadbb6c0f5c34a4509f",
@@ -7706,19 +5913,12 @@
         "lib/agent-api/release.test.ts"
       ],
       "skipped": [],
-      "tier": "human",
+      "tier": "review",
       "categories": [
         "code",
         "tests"
       ],
-      "findings": [
-        {
-          "code": "obfuscated_file",
-          "file": "lib/agent-api/release.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.059118564253991
-        }
-      ]
+      "findings": []
     },
     {
       "sha": "d745f4481699539b2f5932bea0dbb1af59759a1c",
@@ -7810,20 +6010,13 @@
         "lib/points/backfill.test.ts"
       ],
       "skipped": [],
-      "tier": "human",
+      "tier": "review",
       "categories": [
         "docs",
         "tests",
         "code"
       ],
-      "findings": [
-        {
-          "code": "obfuscated_file",
-          "file": "docs/evidence/ENDOR-579/review-followup-checks.txt",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.268908229372962
-        }
-      ]
+      "findings": []
     },
     {
       "sha": "e72557b6eee7b1ea41c8f83206e35c2f6f63f9fd",
@@ -7867,20 +6060,13 @@
         "lib/two-factor.ts"
       ],
       "skipped": [],
-      "tier": "human",
+      "tier": "review",
       "categories": [
         "ui",
         "tests",
         "code"
       ],
-      "findings": [
-        {
-          "code": "obfuscated_file",
-          "file": "lib/agent-api/validation.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.007088129154051
-        }
-      ]
+      "findings": []
     },
     {
       "sha": "cde2abd5d29ac89bed9e9959c003d4526d42e601",
@@ -7942,12 +6128,6 @@
           "title": "This change touches protected files."
         },
         {
-          "code": "obfuscated_file",
-          "file": "prisma/migrations/20261123150000_rescale_reward_amounts_from_70_to_30/migration.sql",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.317227827219633
-        },
-        {
           "code": "claim_mismatch",
           "title": "This doesn't match what the change promised."
         }
@@ -7993,12 +6173,6 @@
         {
           "code": "protected_path",
           "title": "This change touches protected files."
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "prisma/migrations/20261123150000_rescale_reward_amounts_from_70_to_30/migration.sql",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.317227827219633
         },
         {
           "code": "claim_mismatch",
@@ -8174,12 +6348,6 @@
           "title": "This change touches protected files."
         },
         {
-          "code": "obfuscated_file",
-          "file": "prisma/migrations/20261123140000_scale_reward_amounts_by_70/migration.sql",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.261999757300947
-        },
-        {
           "code": "claim_mismatch",
           "title": "This doesn't match what the change promised."
         }
@@ -8233,12 +6401,6 @@
         {
           "code": "protected_path",
           "title": "This change touches protected files."
-        },
-        {
-          "code": "obfuscated_file",
-          "file": "prisma/migrations/20261123140000_scale_reward_amounts_by_70/migration.sql",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.261999757300947
         }
       ]
     },
@@ -8461,20 +6623,13 @@
         "lib/two-factor.ts"
       ],
       "skipped": [],
-      "tier": "human",
+      "tier": "review",
       "categories": [
         "ui",
         "tests",
         "code"
       ],
-      "findings": [
-        {
-          "code": "obfuscated_file",
-          "file": "lib/agent-api/validation.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.007088129154051
-        }
-      ]
+      "findings": []
     },
     {
       "sha": "e33ba53a99cfcecd29b77734bb38e27d68e86c9e",
@@ -8510,20 +6665,13 @@
         "lib/github/pr-mention.ts"
       ],
       "skipped": [],
-      "tier": "human",
+      "tier": "review",
       "categories": [
         "tests",
         "code",
         "ui"
       ],
-      "findings": [
-        {
-          "code": "obfuscated_file",
-          "file": "app/actions/issues-edit-proof-links.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.051762356613337
-        }
-      ]
+      "findings": []
     },
     {
       "sha": "ba88b7d163bc3b51f7dc19f683735093800fc8a2",
@@ -8891,19 +7039,12 @@
         "lib/agent-api/validation.ts"
       ],
       "skipped": [],
-      "tier": "human",
+      "tier": "review",
       "categories": [
         "tests",
         "code"
       ],
-      "findings": [
-        {
-          "code": "obfuscated_file",
-          "file": "lib/agent-api/validation.test.ts",
-          "title": "This file contains text that looks obfuscated.",
-          "metric": 5.007088129154051
-        }
-      ]
+      "findings": []
     },
     {
       "sha": "448898fb9fc887283692a4396be5205a151c3058",

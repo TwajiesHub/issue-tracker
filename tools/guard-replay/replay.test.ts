@@ -1,6 +1,7 @@
+import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { binaryPaths, HistoryReader, MAX_FILE_BYTES, parseMetadata, parseRawDiff, type Git } from "./git";
-import { markdownCell, renderReport, statistics, type Replay } from "./replay";
+import { markdownCell, renderReport, renderComparison, statistics, type Comparison, type Judgements, type Replay } from "./replay";
 const sha = "a".repeat(40), parent = "b".repeat(40), blob = "c".repeat(40), oldBlob = "d".repeat(40), zero = "0".repeat(40);
 const metadata = (parents = parent) => Buffer.from(`${sha}\0${parents}\x002026-10-27T13:00:00+01:00\0Fictional Author\0author@example.invalid\0Commit subject\n\nFull body\n`);
 const raw = (status = "M", old = oldBlob, next = blob, path = "lib/a.ts") => Buffer.from(`:100644 100644 ${old} ${next} ${status}\0${path}\0`);
@@ -100,4 +101,39 @@ describe("honest report generation", () => {
   });
   it("reports empty denominators honestly", () => expect(renderReport({...sample(), commits: []}, {})).toContain("N/A (zero denominator)"));
   it("escapes Markdown and HTML in untrusted commit text", () => expect(markdownCell("<img> | `test`\nnext &" )).toBe("&lt;img&gt; &#124; &#96;test&#96; next &amp;"));
+});
+
+
+describe("before/after integrity", () => {
+  const labels: Judgements = {[sha]: {verdict: "real risk", reason: "Dependency change still merits review."}};
+  const changed = () => ({...sample(), commits: sample().commits.map((c, i) => i ? c : {...c, tier: "review" as const, findings: []})});
+  const comparison = (): Comparison => ({before: sample(), beforeJudgements: labels, changes: {[sha]: {correct: false, reason: "A real risk lost its human gate."}}});
+  it("reports lost real-risk coverage without relabelling it a false-alarm reduction", () => {
+    const report = renderComparison(changed(), labels, comparison());
+    expect(report).toContain("1 were previously judged real risks");
+    expect(report).toContain("no — review coverage lost");
+    expect(report).toContain("real risk");
+  });
+  it("requires explicit correctness judgements", () => expect(() => renderComparison(changed(), labels, {...comparison(), changes: {}})).toThrow("Missing tier-change judgement"));
+  it("rejects different tips, commit sets or ordering", () => {
+    expect(() => renderComparison({...changed(), tip: parent}, labels, comparison())).toThrow("exact same pinned tip");
+    expect(() => renderComparison({...changed(), commits: [...changed().commits].reverse()}, labels, comparison())).toThrow("ordered commits");
+  });
+  it("rejects changed file coverage", () => {
+    const after = changed(); after.commits[0] = {...after.commits[0], paths: []};
+    expect(() => renderComparison(after, labels, comparison())).toThrow("file coverage changed");
+  });
+  it("the saved replays use identical inputs and change no other finding codes", () => {
+    const before = JSON.parse(readFileSync("tools/guard-replay/results-before.json", "utf8")) as Replay;
+    const after = JSON.parse(readFileSync("tools/guard-replay/results.json", "utf8")) as Replay;
+    expect(after.tip).toBe("a2d680f508a7504ac0f2f064eea243936dd5eca3"); expect(after.tip).toBe(before.tip);
+    expect(after.commits).toHaveLength(200);
+    for (let i = 0; i < 200; i++) {
+      const a = after.commits[i], b = before.commits[i];
+      expect(a.sha).toBe(b.sha); expect(a.paths).toEqual(b.paths); expect(a.skipped).toEqual(b.skipped);
+      expect(a.findings.filter(f => f.code !== "obfuscated_file")).toEqual(b.findings.filter(f => f.code !== "obfuscated_file"));
+    }
+    expect(after.incident).toEqual({branches: 17, incidents: 1, allHuman: true});
+    expect(JSON.parse(readFileSync("tools/guard-replay/judgements.json", "utf8"))).toEqual(JSON.parse(readFileSync("tools/guard-replay/judgements-before.json", "utf8")));
+  });
 });

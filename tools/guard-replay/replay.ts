@@ -18,9 +18,10 @@ export interface Replay {
 export interface Judgement { verdict: "real risk" | "false alarm"; reason: string }
 export type Judgements = Record<string, Judgement>;
 const folder = resolve("tools/guard-replay");
-export function collect(): Replay {
+export const PINNED_TIP = "a2d680f508a7504ac0f2f064eea243936dd5eca3";
+export function collect(ref = MAIN_REF): Replay {
   const started = performance.now(), reader = new HistoryReader();
-  const tip = git(["rev-parse", "--verify", `${MAIN_REF}^{commit}`]).toString().trim();
+  const tip = git(["rev-parse", "--verify", `${ref}^{commit}`]).toString().trim();
   const commits = reader.commits(tip).map(sha => {
     const {input, metadata, skipped} = reader.readCommit(sha), result = runGuard(input);
     return {sha, date: metadata.date, message: metadata.message, parentCount: metadata.parents.length,
@@ -28,7 +29,7 @@ export function collect(): Replay {
       findings: result.findings.map(f => ({code: f.code, file: f.file, line: f.line, title: f.title, metric: f.evidence?.metric}))};
   });
   const results = incident.map(change => runGuard(change)), groups = groupIncidents(results);
-  return {ref: MAIN_REF, tip, engineCommit: git(["log", "-1", "--format=%H", "--", "demo/lib/guard"]).toString().trim(),
+  return {ref, tip, engineCommit: git(["log", "-1", "--format=%H", "--", "demo/lib/guard"]).toString().trim(),
     generatedAt: new Date().toISOString(), seconds: (performance.now() - started) / 1000,
     commits, incident: {branches: new Set(incident.map(c => c.branch)).size, incidents: groups.length, allHuman: results.every(r => r.tier === "human")}};
 }
@@ -46,7 +47,57 @@ export function statistics(replay: Replay) {
   }
   return {tiers, findings, affectedCommits};
 }
-export function renderReport(replay: Replay, judgements: Judgements): string {
+export interface TierChangeJudgement { correct: boolean; reason: string }
+export interface Comparison { before: Replay; beforeJudgements: Judgements; changes: Record<string, TierChangeJudgement> }
+export function renderComparison(after: Replay, judgements: Judgements, comparison: Comparison): string {
+  const {before, beforeJudgements, changes} = comparison;
+  if (before.tip !== after.tip || JSON.stringify(before.commits.map(c => c.sha)) !== JSON.stringify(after.commits.map(c => c.sha))) throw new Error("Comparison requires the exact same pinned tip and ordered commits");
+  for (let i = 0; i < before.commits.length; i++) {
+    if (JSON.stringify(before.commits[i].paths) !== JSON.stringify(after.commits[i].paths) || JSON.stringify(before.commits[i].skipped) !== JSON.stringify(after.commits[i].skipped)) throw new Error("Compared file coverage changed");
+  }
+  const changed = after.commits.filter((commit, i) => commit.tier !== before.commits[i].tier);
+  const previous = new Map(before.commits.map(c => [c.sha, c]));
+  for (const commit of changed) {
+    const judgement = changes[commit.sha];
+    if (!judgement || typeof judgement.correct !== "boolean" || !judgement.reason.trim()) throw new Error(`Missing tier-change judgement for ${commit.sha}`);
+  }
+  const summary = (data: Replay, labels: Judgements) => {
+    const tiers = statistics(data).tiers, human = data.commits.filter(c => c.tier === "human");
+    for (const c of human) if (!labels[c.sha]) throw new Error(`Missing judgement for ${c.sha}`);
+    const falseAlarms = human.filter(c => labels[c.sha].verdict === "false alarm").length;
+    return {tiers, falseAlarms, realRisks: human.length - falseAlarms};
+  };
+  const old = summary(before, beforeJudgements), current = summary(after, judgements);
+  const rate = (n: number, d: number) => d ? `${(100 * n / d).toFixed(2)}% (${n}/${d})` : "N/A (zero denominator)";
+  const lostRealRisks = changed.filter(c => previous.get(c.sha)!.tier === "human" && c.tier !== "human" && beforeJudgements[c.sha]?.verdict === "real risk").length;
+  return `
+## Before and after the fix
+
+Same pinned main tip: \`${after.tip}\`; exact same ${after.commits.length} ordered commits and inspected/skipped file coverage. Baseline engine: \`${before.engineCommit}\`; fixed engine: \`${after.engineCommit}\`. Baseline evidence and labels are preserved in results-before.json and judgements-before.json; manual risk labels have not been rewritten to improve the numbers.
+
+| Measure | Before | After |
+| --- | ---: | ---: |
+| Auto | ${old.tiers.auto} | ${current.tiers.auto} |
+| Review | ${old.tiers.review} | ${current.tiers.review} |
+| Human | ${old.tiers.human} | ${current.tiers.human} |
+| Human commits judged real risk | ${old.realRisks} | ${current.realRisks} |
+| Human false alarms | ${old.falseAlarms} | ${current.falseAlarms} |
+| False-alarm share of human queue | ${rate(old.falseAlarms, old.tiers.human)} | ${rate(current.falseAlarms, current.tiers.human)} |
+| False alarms / all commits | ${rate(old.falseAlarms, before.commits.length)} | ${rate(current.falseAlarms, after.commits.length)} |
+| Obfuscated-file findings | ${statistics(before).findings.obfuscated_file} | ${statistics(after).findings.obfuscated_file} |
+| Replay seconds | ${before.seconds.toFixed(3)} | ${after.seconds.toFixed(3)} |
+| Incident branches → incidents | ${before.incident.branches} → ${before.incident.incidents} | ${after.incident.branches} → ${after.incident.incidents} |
+
+${changed.length} commits changed tier. Of these, ${lostRealRisks} were previously judged real risks and now leave the human queue: this is a loss of useful review coverage, not a false-alarm reduction. Their obfuscation warnings were spurious, but credential/access/state-policy risk needs its own detector rather than an entropy heuristic. No risk label is inferred from the new tier. Review-tier still means a human can inspect later; it does not mean risk-free.
+
+### Every changed tier and assessment
+
+| SHA | Message | Tier before → after | Original risk judgement | Is the tier change correct? | Reason |
+| --- | --- | --- | --- | --- | --- |
+${changed.map(commit => `| ${commit.sha.slice(0, 10)} | ${markdownCell(commit.message.split("\n")[0])} | ${previous.get(commit.sha)!.tier} → ${commit.tier} | ${beforeJudgements[commit.sha]?.verdict ?? "not previously human"} | ${changes[commit.sha].correct ? "yes" : "no — review coverage lost"} | ${markdownCell(changes[commit.sha].reason)} |`).join("\n")}
+`;
+}
+export function renderReport(replay: Replay, judgements: Judgements, comparison?: Comparison): string {
   const {tiers, findings, affectedCommits} = statistics(replay), human = replay.commits.filter(c => c.tier === "human");
   for (const commit of human) {
     const judgement = judgements[commit.sha];
@@ -73,7 +124,7 @@ Generated: ${replay.generatedAt}
 ## Scope and method
 
 - Repository: TwajiesHub/issue-tracker; local ref: \`${replay.ref}\`; pinned tip: \`${replay.tip}\`.
-- Engine source commit: \`${replay.engineCommit}\`. Engine files and thresholds were not changed.
+- Engine source commit: \`${replay.engineCommit}\`. The existing thresholds are unchanged; entropy now additionally requires less than 5% whitespace and excludes SVG. Identifier and long-line triggers are unchanged.
 - Uses \`git log -n 200\` over all ancestors, in Git's default history order. Merge commits compare against their first parent (${replay.commits.filter(c => c.parentCount > 1).length} merges in this sample); root commits compare against the empty tree. The same underlying change can therefore be counted in a feature commit and in a later merge. Counts describe commits, not unique changes or deployments.
 - Read-only local Git object inspection, with external diffs, text conversion and lazy fetch disabled. No historical code is checked out or executed. No network is used by the tool. This local ref may lag the remote; no fetch was performed.
 - Full before/after UTF-8 text is supplied to the engine. Files with either side above **500,000 bytes** (decimal 500 KB), binary numstat markers, NUL bytes or invalid UTF-8 are skipped entirely. Submodule entries have no blob text and are skipped. Renames use the previous path for before text and the new path for categorization.
@@ -101,15 +152,20 @@ ${human.map(commit => `| ${commit.sha.slice(0, 10)} | ${commit.date.slice(0, 10)
 | Commit | File | Reason |
 | --- | --- | --- |
 ${replay.commits.flatMap(commit => commit.skipped.map(file => `| ${commit.sha.slice(0, 10)} | ${markdownCell(file.path)} | ${file.reason} |`)).join("\n") || "| — | None | — |"}
-`;
+${comparison ? renderComparison(replay, judgements, comparison) : ""}`;
 }
 export function main(args: string[]): void {
   if (args.some(arg => arg !== "--collect-only")) throw new Error("Usage: pnpm exec tsx tools/guard-replay/replay.ts [--collect-only]");
-  const replay = collect();
+  const replay = collect(PINNED_TIP);
   writeFileSync(resolve(folder, "results.json"), JSON.stringify(replay, null, 2) + "\n");
   if (!args.includes("--collect-only")) {
     const judgements = JSON.parse(readFileSync(resolve(folder, "judgements.json"), "utf8")) as Judgements;
-    writeFileSync(resolve(folder, "REPORT.md"), renderReport(replay, judgements));
+    const comparison: Comparison = {
+      before: JSON.parse(readFileSync(resolve(folder, "results-before.json"), "utf8")),
+      beforeJudgements: JSON.parse(readFileSync(resolve(folder, "judgements-before.json"), "utf8")),
+      changes: JSON.parse(readFileSync(resolve(folder, "tier-changes.json"), "utf8")),
+    };
+    writeFileSync(resolve(folder, "REPORT.md"), renderReport(replay, judgements, comparison));
   }
   console.log(JSON.stringify({commits: replay.commits.length, ...statistics(replay), incident: replay.incident, seconds: replay.seconds}, null, 2));
 }
