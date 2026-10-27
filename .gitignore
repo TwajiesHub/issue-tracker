@@ -54,3 +54,5 @@ next-env.d.ts
 
 # Ziki Guard screenshots (not committed)
 /screenshots/
+
+dev.log
