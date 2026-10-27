@@ -20,7 +20,7 @@
     if (document.hidden) a.pause();
     return a.finished.then(() => true, () => false).finally(() => b.animations.delete(a));
   }
-  function measure(b) { b.width = b.card.clientWidth; b.height = b.card.clientHeight; }
+  function measure(b) { b.width = b.card.clientWidth; b.height = b.card.clientHeight; b.size = b.el.offsetWidth; b.lane = b.height - b.el.offsetHeight - 5; }
   function place(b, x, y) { b.x = x; b.y = y; b.el.style.transform = `translate(${x}px,${y}px)`; }
   function stop(b) {
     const m = new DOMMatrixReadOnly(getComputedStyle(b.el).transform);
@@ -56,19 +56,20 @@
   async function wander(b) {
     if (reduced.matches || b.state !== 'open') return;
     const version = b.version;
-    if (!await rest(b, 300 + b.index * 530)) return;
-    let corner = b.y < 20 ? 0 : b.x > b.width - 50 ? 1 : b.y > b.height - 55 ? 2 : 3;
+    if (!await rest(b, 400 + b.index * 600)) return;
+    // The second beetle has a sheltered perch; the others share the bottom lane.
+    let right = b.index !== 2;
     while (b.state === 'open' && version === b.version && !reduced.matches) {
       measure(b);
-      const points = [[b.width - 39, 4], [b.width - 35, b.height - 38], [6, b.height - 38], [6, 4]];
-      const [x, y] = points[corner];
-      const distance = Math.hypot(x - b.x, y - b.y);
-      if (!await turn(b, Math.atan2(y - b.y, x - b.x) * 180 / Math.PI + 90)) return;
+      const perched = b.y < 30;
+      const x = perched ? b.width - b.size - (right ? 5 : 20) : (right ? b.width - b.size - 8 : 8);
+      const y = perched ? 6 : b.lane;
+      if (!await turn(b, x > b.x ? 90 : -90)) return;
       b.el.classList.add('walking');
-      if (!await move(b, x, y, Math.max(300, distance / 12 * 1000))) return;
+      if (!await move(b, x, y, Math.max(500, Math.abs(x - b.x) / 12 * 1000))) return;
       b.el.classList.remove('walking');
-      if (!await rest(b, 900 + b.index * 190)) return;
-      corner = (corner + 1) % 4;
+      if (!await rest(b, 1100 + b.index * 170)) return;
+      right = !right;
     }
   }
   async function shy(b, px, py) {
@@ -76,17 +77,18 @@
     b.cooldown = Date.now() + 3500;
     stop(b);
     const version = b.version;
-    const dx = px - b.x - 14, dy = py - b.y - 17;
+    const dx = px - b.x - b.size / 2, dy = py - b.y - b.el.offsetHeight / 2;
     b.el.classList.add('noticing');
     b.el.style.setProperty('--look', `${Math.max(-28, Math.min(28, dx / 3))}deg`);
     if (!await turn(b, Math.atan2(dy, dx) * 180 / Math.PI + 90, 160)) return;
     if (!await rest(b, 420)) return;
     b.el.classList.remove('noticing');
     measure(b);
-    // Stay on the current border lane rather than running across the copy.
-    const horizontal = b.y < 20 || b.y > b.height - 55;
-    const x = horizontal ? Math.max(6, Math.min(b.width - 36, b.x + (dx > 0 ? -48 : 48))) : b.x;
-    const y = horizontal ? b.y : Math.max(4, Math.min(b.height - 38, b.y + (dy > 0 ? -48 : 48)));
+    const perched = b.y < 30;
+    const x = perched
+      ? Math.max(b.width - b.size - 22, Math.min(b.width - b.size - 4, b.x + (dx > 0 ? -16 : 16)))
+      : Math.max(6, Math.min(b.width - b.size - 6, b.x + (dx > 0 ? -44 : 44)));
+    const y = perched ? 6 : b.lane;
     if (!await turn(b, Math.atan2(y - b.y, x - b.x) * 180 / Math.PI + 90)) return;
     b.el.classList.add('walking');
     if (!await move(b, x, y, 440)) return;
@@ -97,58 +99,94 @@
   function showEmpty() {
     if (!bugs.every(b => b.state === 'gone')) return;
     main.classList.add('all-left'); empty.inert = false; empty.removeAttribute('aria-hidden');
-    announce('Fixed. The bug packed up and left. No bugs live here anymore.');
+    announce('All fixes approved. The bugs packed up and left. No bugs live here anymore.');
     // Keep keyboard users at a useful next action when the last button disappears.
     if (bugs.some(b => b.button === document.activeElement)) report.focus({ preventScroll: true });
   }
-  function track(b) {
-    if (!document.hidden && !reduced.matches && b.state === 'leaving') {
-      const m = new DOMMatrixReadOnly(getComputedStyle(b.el).transform);
+  function footprints(b, x, y, duration) {
+    if (reduced.matches) return;
+    const distance = Math.abs(x - b.x), direction = x > b.x ? 1 : -1;
+    // Place pairs by distance, not frame rate. Delayed opacity animations share
+    // the walk's clock, so a hidden tab freezes both the beetle and its tracks.
+    for (let d = 12; d < distance; d += 14) {
       const dot = document.createElement('i');
       dot.className = 'footprint'; dot.setAttribute('aria-hidden', 'true');
-      dot.style.transform = `translate(${m.m41 + 12}px,${m.m42 + 22}px) rotate(${b.angle}deg)`;
-      b.card.append(dot); dot.addEventListener('animationend', () => dot.remove(), { once: true });
+      dot.style.opacity = '0';
+      dot.style.transform = `translate(${b.x + direction * d + b.size / 2}px,${y + b.el.offsetHeight / 2 + 4}px) rotate(${direction > 0 ? 0 : 180}deg)`;
+      b.card.append(dot);
+      const a = dot.animate([{ opacity: .55 }, { opacity: 0 }], {
+        duration: 2000, delay: d / distance * duration, fill: 'forwards'
+      });
+      b.animations.add(a); if (document.hidden) a.pause();
+      a.finished.catch(() => {}).finally(() => { b.animations.delete(a); dot.remove(); });
     }
+  }
+  async function walk(b, x, y, duration, tracks = false) {
+    if (!await turn(b, Math.atan2(y - b.y, x - b.x) * 180 / Math.PI + 90)) return false;
+    b.el.classList.add('walking');
+    if (tracks) footprints(b, x, y, duration);
+    const ok = await move(b, x, y, duration);
+    b.el.classList.remove('walking'); return ok;
   }
   async function fix(b) {
     if (b.state !== 'open') return;
+    b.hadFocus = b.button === document.activeElement;
     stop(b); b.state = 'packing'; b.button.setAttribute('aria-disabled', 'true');
-    b.status.textContent = `✓ Fixed by ${b.card.dataset.agent}`;
-    b.button.innerHTML = 'Fixed <span aria-hidden="true">✓</span>';
-    announce(`Fixed by ${b.card.dataset.agent}. The bug is packing up.`);
+    b.status.textContent = `Fixed by ${b.card.dataset.agent}`;
+    b.card.classList.add('approving');
+    // The real button remains in place for focus; its visible replacement is text.
+    b.button.setAttribute('aria-label', 'Approved just now');
+    announce(`You approved ${b.card.dataset.agent}’s fix. The bug is packing up.`);
     b.el.classList.add('packed');
     if (reduced.matches) {
       await animate(b, b.el, [{ opacity: 1 }, { opacity: 0 }], 450);
     } else {
       b.el.classList.add('waving');
-      if (!await rest(b, 1100)) return;
+      if (!await rest(b, 1050)) return;
       b.el.classList.remove('waving'); measure(b);
-      const exits = [[-40, b.y], [b.width + 15, b.y], [b.x, -48], [b.x, b.height + 15]];
-      const [x, y] = exits.sort((a, c) => Math.hypot(a[0] - b.x, a[1] - b.y) - Math.hypot(c[0] - b.x, c[1] - b.y))[0];
-      if (!await turn(b, Math.atan2(y - b.y, x - b.x) * 180 / Math.PI + 90)) return;
-      b.state = 'leaving'; b.el.classList.add('walking');
-      const tracks = setInterval(() => track(b), 140);
-      await move(b, x, y, Math.max(900, Math.hypot(x - b.x, y - b.y) / 45 * 1000));
-      clearInterval(tracks);
+      if (b.y < 30) {
+        // Descend the clear right rail, then join the bottom lane at a readable distance.
+        if (!await walk(b, b.width - b.size - 4, b.lane, 650)) return;
+        if (!await walk(b, b.width * .56, b.lane, 500, true)) return;
+      }
+      b.state = 'leaving';
+      const right = b.x + b.size / 2 >= b.width / 2;
+      const edge = right ? b.width - b.size + 5 : -5;
+      const duration = 1600 + b.index * 250;
+      if (!await walk(b, edge, b.lane, duration, true)) return;
+      if (!await rest(b, 180)) return;
+      if (!await turn(b, right ? -90 : 90, 250)) return;
+      b.el.classList.add('last-wave');
+      if (!await rest(b, 450)) return;
+      b.el.classList.remove('last-wave');
+      if (!await walk(b, right ? b.width + b.size : -b.size * 2, b.lane, 550, true)) return;
     }
     b.state = 'gone'; b.el.style.opacity = '0'; b.el.classList.remove('walking');
     b.card.classList.add('resolved');
-    announce(`Fixed by ${b.card.dataset.agent}. The bug packed up and left.`); showEmpty();
+    const wasFocused = b.hadFocus;
+    b.button.disabled = true;
+    if (wasFocused) {
+      const next = bugs.find(bug => bug.state === 'open');
+      if (next) next.button.focus({ preventScroll: true });
+    }
+    announce(`Fix approved. Fixed by ${b.card.dataset.agent}. The bug packed up and left.`);
+    showEmpty();
+    if (wasFocused && bugs.every(bug => bug.state === 'gone')) report.focus({ preventScroll: true });
   }
   report.addEventListener('click', async () => {
     const b = bugs[0];
     if (b.state !== 'gone') return;
     main.classList.remove('all-left'); empty.inert = true; empty.setAttribute('aria-hidden', 'true');
     stop(b); b.state = 'entering'; b.el.classList.remove('packed'); b.el.style.opacity = '1';
-    b.card.classList.remove('resolved'); b.status.textContent = 'Open';
-    b.button.innerHTML = 'Mark as fixed <span class="arrow" aria-hidden="true"></span>'; b.button.removeAttribute('aria-disabled');
+    b.card.classList.remove('resolved', 'approving'); b.status.textContent = 'Fix ready · Nova';
+    b.button.textContent = 'Approve fix'; b.button.disabled = false; b.button.removeAttribute('aria-disabled'); b.button.removeAttribute('aria-label');
     b.button.focus({ preventScroll: true });
     b.card.querySelectorAll('.footprint').forEach(dot => dot.remove());
-    measure(b); place(b, -35, 4); b.bearing.style.transform = 'rotate(90deg)';
-    if (!reduced.matches) { b.el.classList.add('walking'); await move(b, 25, 4, 1300); }
-    else place(b, 25, 4);
+    measure(b); place(b, -b.size * 2, b.lane); b.bearing.style.transform = 'rotate(90deg)';
+    if (!reduced.matches) { b.el.classList.add('walking'); await move(b, 65, b.lane, 1300); }
+    else place(b, 65, b.lane);
     b.el.classList.remove('walking'); b.state = 'open'; b.cooldown = Date.now() + 2500;
-    announce('A new bug moved in. Assigned to Nova.'); wander(b);
+    announce('A new bug moved in. Nova’s fix is ready for your approval.'); wander(b);
   });
   // At most one pointer calculation per 80ms; no animation render loop.
   let pointer = null, frame = 0, lastPointer = 0;
@@ -159,7 +197,7 @@
     bugs.forEach(b => {
       if (b.state !== 'open' || Date.now() < b.cooldown) return;
       const rect = b.el.getBoundingClientRect();
-      if (Math.hypot(pointer.x - rect.x - 14, pointer.y - rect.y - 17) < 100) {
+      if (Math.hypot(pointer.x - rect.x - rect.width / 2, pointer.y - rect.y - rect.height / 2) < 100) {
         const card = b.card.getBoundingClientRect(); shy(b, pointer.x - card.x, pointer.y - card.y);
       }
     });
@@ -190,10 +228,14 @@
   const resize = new ResizeObserver(entries => entries.forEach(({ target }) => {
     const b = bugs.find(bug => bug.card === target);
     if (b.state !== 'open') return;
-    stop(b); measure(b); place(b, Math.max(6, Math.min(b.x, b.width - 36)), 4); wander(b);
+    stop(b); measure(b); startPosition(b); wander(b);
   }));
+  function startPosition(b) {
+    b.el.style.left = '0'; b.el.style.right = 'auto'; b.el.style.top = '0';
+    place(b, b.index === 1 ? b.width - b.size - 8 : b.width * (b.index === 0 ? .56 : .24), b.index === 1 ? 6 : b.lane);
+  }
   bugs.forEach(b => {
-    measure(b); place(b, Math.min(b.x, b.width - 36), 4);
+    measure(b); startPosition(b);
     b.button.disabled = false; b.button.addEventListener('click', () => fix(b)); resize.observe(b.card);
   });
 })();

@@ -1,10 +1,9 @@
 # The bug leaves
-A small, standalone goodbye: each fixed issue sends its resident beetle packing.
-Ziki’s agents do the fixing; the human gets to mark the moment and watch it leave.
-The literal bug makes that handoff visible, with a wave instead of a victory blast.
-Colours copy Ziki’s light tokens and its effective dark brand overrides.
-Original SVG beetles, a bindle and fading tracks carry the whole story.
-No 3D, no sound, no confetti, no autoplay chaos, no runtime dependencies.
-Reduced motion keeps the bugs still and replaces the departure with a short fade.
-Without JavaScript, readable issue cards and resting beetles remain; controls stay disabled.
-A hidden tab pauses motion; system fonts keep the page useful if Inter cannot load.
+A small, standalone goodbye for a literal bug living on an issue card.
+An agent readies the fix; a human approves it and sends the beetle on its way.
+The bindle, three waves and a last look make that handoff visible and kind.
+Ziki’s existing light, dark, warning and success tokens keep it part of the product.
+A bottom lane keeps the little walk clear of the issue and its controls.
+No 3D, no sound, no confetti, no autoplay chaos and no runtime dependencies.
+Reduced motion replaces the goodbye with a short fade; hidden tabs pause everything.
+Without JavaScript the cards remain readable; without Inter the system font takes over.

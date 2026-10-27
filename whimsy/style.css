@@ -12,6 +12,8 @@
   --zk-accent:#1f5fd9;
   --zk-ok-bg:#e3f6ec;
   --zk-ok-fg:#146c43;
+  --zk-warn-bg:#fdf3d7;
+  --zk-warn-fg:#7a4e00;
   --zk-info-bg:#e7f0ff;
   --zk-info-fg:#1d4fb8
 }
@@ -29,6 +31,8 @@
     --zk-accent:#8fc9ff;
     --zk-ok-bg:#0f3326;
     --zk-ok-fg:#6ee7a8;
+    --zk-warn-bg:#3a2c0c;
+    --zk-warn-fg:#f6cf6b;
     --zk-info-bg:#14294f;
     --zk-info-fg:#9cc2ff
   }
@@ -140,8 +144,8 @@ h1 {
   font-weight:500;
   padding:5px 8px;
   border-radius:5px;
-  background:var(--zk-info-bg);
-  color:var(--zk-info-fg);
+  background:var(--zk-warn-bg);
+  color:var(--zk-warn-fg);
   white-space:nowrap
 }
 .issue h2 {
@@ -558,4 +562,46 @@ footer {
   .leg,.feelers {
     stroke:#c09289
   }
+}
+
+/* Tight content above a dedicated walking lane. The right rail connects the perch. */
+.issue { height:230px; min-height:230px; padding:20px 24px 66px; }
+.card-top { margin-right:54px; }
+.status { width:116px; flex-shrink:0; font-size:9px; }
+.issue h2 { margin:16px 44px 12px 0; min-height:0; font-size:16px; line-height:1.4; }
+.card-bottom { position:relative; margin-right:42px; min-height:44px; }
+.fix { width:112px; }
+.approved { position:absolute; right:0; top:0; width:112px; height:44px; display:grid; place-items:center; font-size:10px; color:var(--zk-muted); visibility:hidden; }
+.issue.approving .fix { visibility:hidden; }
+.issue.approving .approved { visibility:visible; }
+.issue.approving .status { background:var(--zk-ok-bg); color:var(--zk-ok-fg); }
+.bug { width:40px; height:48px; transform:translate(140px,174px); }
+.bearing,.body-bob { width:100%; height:100%; }
+.bug svg { width:100%; height:100%; }
+.bug::before { content:""; position:absolute; width:30px; height:13px; left:5px; bottom:1px; background:radial-gradient(ellipse,rgba(70,40,30,.2),transparent 70%); transform:scaleX(1.2); }
+.issue:nth-child(2) .bug { left:auto; right:8px; top:6px; transform:none; }
+.issue:nth-child(3) .bug { transform:translate(70px,174px); }
+.walking .body-bob { animation:bob .28s ease-in-out infinite alternate; }
+.wave { transform-origin:13px 22px; }
+.waving .wave { animation:goodbye .333s ease-in-out 3!important; }
+.last-wave .wave { animation:goodbye .42s ease-in-out 1!important; }
+.footprint { width:0; height:0; background:none; box-shadow:none; animation:none; }
+.footprint::before,.footprint::after { content:""; position:absolute; width:4px; height:2px; border-radius:50%; background:var(--zk-muted); }
+.footprint::before { left:-2px; top:-5px; transform:rotate(-15deg); }
+.footprint::after { left:3px; top:3px; transform:rotate(15deg); }
+@keyframes goodbye { 0%,100% { transform:rotate(40deg); } 50% { transform:rotate(100deg); } }
+@keyframes bob { from { transform:translateY(-1px); } to { transform:translateY(1px); } }
+@media(max-width:960px) {
+ .issue { height:210px; min-height:210px; padding:18px 22px 62px; }
+ .issue h2 { font-size:15px; margin-top:14px; margin-bottom:10px; }
+ .assigned { display:block; margin-bottom:1px; }
+ .bug { width:34px; height:41px; transform:translate(140px,160px); }
+ .issue:nth-child(3) .bug { transform:translate(70px,160px); }
+ .bug::before { width:26px; left:4px; }
+ .card-bottom { margin-right:38px; }
+ .card-top { margin-right:46px; }
+ .status { width:110px; font-size:8px; }
+}
+@media(prefers-reduced-motion:reduce) {
+ .walking .body-bob,.last-wave .wave { animation:none!important; }
 }
