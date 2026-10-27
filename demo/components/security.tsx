@@ -1,10 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 import { useStore, useAgeLabel } from "@/lib/store";
+import { zikiProtectedAreas } from "@/lib/guard-profile";
+import { validateArea, MAX_LABEL, MAX_PATTERN } from "@/lib/areas";
 import { suggestDelegation } from "@/lib/guard";
 import { verifyChain } from "@/lib/chain";
-import { RiskMark, TextButton, focus } from "./ui";
+import { Dialog, PrimaryButton, RiskMark, TextButton, focus } from "./ui";
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -20,6 +23,62 @@ const BOUNDARY = [
   { title: "Ask me", body: "Changes to the app’s code and UI, and proposals that may add a library." },
   { title: "Always me", body: "Scripts, dependencies, CI and build, auth and secrets, AGENTS.md, deploys and force pushes." },
 ];
+
+function ProtectedAreas() {
+  const { state, act } = useStore();
+  const [open, setOpen] = useState(false);
+  const [label, setLabel] = useState("");
+  const [pattern, setPattern] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const areas = [...zikiProtectedAreas, ...state.areas];
+  const field = `mt-1 w-full rounded-xl border border-zk-border bg-zk-bg px-3 text-sm text-zk-text ${focus}`;
+
+  const close = () => { setOpen(false); setError(null); setLabel(""); setPattern(""); };
+  const save = () => {
+    const problem = validateArea(label, pattern, areas);
+    if (problem) { setError(problem); return; }
+    act.addArea(label, pattern);
+    close();
+  };
+  return (
+    <div className="space-y-1 border-t border-zk-divider pt-4">
+      <h3 className="text-[13px] font-bold text-zk-text">Protected areas</h3>
+      <p className="text-[13px] text-zk-muted">Any change that touches these always needs you.</p>
+      <ul aria-label="Protected areas" className="divide-y divide-zk-divider">
+        {areas.map((a) => (
+          <li key={a.label} className="flex items-baseline justify-between gap-4 py-2 text-[15px] text-zk-text">
+            <span className="min-w-0">{a.label}</span>
+            <span className="shrink-0 text-[13px] tabular-nums text-zk-muted">{a.globs.length} file {a.globs.length === 1 ? "pattern" : "patterns"}</span>
+          </li>
+        ))}
+      </ul>
+      <TextButton onClick={() => setOpen(true)}>Add an area</TextButton>
+
+      <Dialog open={open} onClose={close} title="Add a protected area">
+        <form
+          noValidate
+          onSubmit={(e) => { e.preventDefault(); save(); }}
+          className="mt-3 space-y-3"
+        >
+          <div>
+            <label htmlFor="area-label" className="text-[13px] font-bold text-zk-text">Name</label>
+            <input id="area-label" value={label} maxLength={MAX_LABEL} onChange={(e) => { setLabel(e.target.value); setError(null); }} placeholder="Composer" className={`${field} h-11`} autoFocus />
+          </div>
+          <div>
+            <label htmlFor="area-pattern" className="text-[13px] font-bold text-zk-text">File pattern</label>
+            <input id="area-pattern" value={pattern} maxLength={MAX_PATTERN} onChange={(e) => { setPattern(e.target.value); setError(null); }} placeholder="lib/composer/**" aria-describedby="area-help" className={`${field} h-11 font-mono`} />
+            <p id="area-help" className="mt-1 text-[13px] text-zk-muted">A path from the repo root. <span className="font-mono">*</span> matches inside a folder, <span className="font-mono">**</span> matches everything below it.</p>
+          </div>
+          {error ? <p role="alert" className="text-[13px] font-bold text-zk-bad-fg">{error}</p> : null}
+          <div className="flex items-center justify-end gap-3 pt-1">
+            <TextButton onClick={close}>Cancel</TextButton>
+            <PrimaryButton type="submit">Add area</PrimaryButton>
+          </div>
+        </form>
+      </Dialog>
+    </div>
+  );
+}
 
 export function Security() {
   const { state, needs, act } = useStore();
@@ -81,6 +140,7 @@ export function Security() {
             </div>
           ))}
         </dl>
+        <ProtectedAreas />
         <Link href="/agents/nova" className={`inline-flex min-h-11 items-center text-sm font-bold text-zk-accent hover:underline ${focus}`}>Change rules</Link>
       </Section>
 
