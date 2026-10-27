@@ -92,6 +92,12 @@ export function Inbox() {
     else router.push(url, { scroll: false });
   }, [router, tab, itemParam]);
 
+  // On desktop the first item opens by default. Writing it into the URL keeps the decision on screen
+  // after it resolves (otherwise the pane would jump to the next item and hide "Restored. Nothing ran.").
+  useEffect(() => {
+    if (!itemParam && tab !== "done" && list[0] && isDesktop()) go({ item: list[0].id }, true);
+  }, [itemParam, tab, list, go, isDesktop]);
+
   // Keyboard: J/K move, Enter open, S stop and restore (Needs you), A approve (Can wait only), Esc back.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
