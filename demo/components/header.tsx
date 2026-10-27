@@ -188,12 +188,30 @@ function AgentsMenu() {
   );
 }
 
+/** A quiet way for reviewers to compare today's Ziki with the change. Not part of Ziki. */
+function BeforeAfter() {
+  const pathname = usePathname();
+  if (pathname === "/") return null;
+  const isBefore = pathname.startsWith("/before");
+  const security = pathname.includes("security");
+  const beforeHref = security ? "/before/security" : "/before/inbox";
+  const afterHref = security ? "/security" : "/inbox";
+  const cls = (on: boolean) => `rounded-full px-2 py-1 ${linkFocus} ${on ? "font-bold text-zk-text" : "text-zk-muted hover:text-zk-text"}`;
+  return (
+    <div role="group" aria-label="Compare" className="flex items-center text-xs max-sm:hidden">
+      <Link href={beforeHref} aria-current={isBefore ? "page" : undefined} className={cls(isBefore)}>Before</Link>
+      <span aria-hidden="true" className="text-zk-border">·</span>
+      <Link href={afterHref} aria-current={!isBefore ? "page" : undefined} className={cls(!isBefore)}>After</Link>
+    </div>
+  );
+}
+
 function Bell() {
   const { state, needs } = useStore();
   const pathname = usePathname();
   const before = pathname.startsWith("/before");
-  const paused = needs.filter((i) => i.kind === "paused" && i.state !== "restored");
-  const unread = before ? 2 : needs.length;
+  const paused = needs.filter((i) => i.kind === "paused");
+  const unread = before ? 2 : paused.length + 2;
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const btn = useRef<HTMLButtonElement>(null);
@@ -207,8 +225,8 @@ function Bell() {
       ]
     : [
         ...paused.map((i) => ({ id: i.id, text: `${i.agent} ${i.sentence}. Paused, nothing has run.`, href: `/inbox?item=${i.id}`, unread: true })),
-        ...needs.filter((i) => i.kind !== "paused").map((i) => ({ id: i.id, text: `${i.agent} ${i.sentence}`, href: `/inbox?item=${i.id}`, unread: true })),
-        { id: "old", text: "SpecialOne reviewed T-1869", href: "/inbox?tab=done", unread: false },
+        { id: "n1", text: "SpecialOne commented on T-1869", href: "/inbox?tab=done", unread: true },
+        { id: "n2", text: "Your issue #1874 was moved to In progress", href: "/inbox?tab=done", unread: true },
       ];
   void state;
   return (
@@ -297,6 +315,7 @@ export function AppHeader() {
         </nav>
 
         <div className="ml-auto flex min-w-0 flex-wrap items-center justify-end gap-2 max-sm:gap-1 lg:shrink-0">
+          <BeforeAfter />
           <AgentsMenu />
           <div ref={accountRef} className="relative">
             <button
