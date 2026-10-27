@@ -25,7 +25,7 @@ export function runGuard(input: ChangeInput, config: Partial<GuardConfig> = {}):
     addedDependencies ||= manifest.addedDependencies;
     fileCategories.push(categories);
     findings.push(...manifest.findings, ...detectContent(file, settings));
-    if (categories.includes("unknown") && !isManifest(file.path)) findings.push({code: "unknown_file", tier: "human", file: file.path, title: "This file is not recognised by the guard.", evidence: {excerpt: file.path, after: sha256(file.after ?? "")}});
+    if (categories.includes("unknown") && !isManifest(file.path)) findings.push({code: "unknown_file", tier: "human", file: file.path, title: "Ziki doesn't recognise this kind of file, so it needs you.", evidence: {excerpt: file.path, after: sha256(file.after ?? "")}});
   });
   for (const category of [...new Set(fileCategories.flat())].filter(isLocked)) {
     const paths = input.files.filter((_, i) => fileCategories[i].includes(category) && !findings.some(f => f.file === input.files[i].path && ["scripts_changed", "deps_changed", "unreadable_manifest"].includes(f.code))).map(f => f.path).sort();
