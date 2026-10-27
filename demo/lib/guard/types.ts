@@ -21,8 +21,9 @@ export interface Finding {
   code: FindingCode; tier: Tier; file?: string; line?: number; title: string;
   evidence?: { before?: string; after?: string; excerpt?: string; metric?: number };
 }
-export interface GuardConfig { whitespaceRun: number; entropyThreshold: number; entropyMinLength: number; entropyMaxWhitespaceRatio: number; obfuscatedIdentifiers: number; longLineLength: number }
-export const DEFAULT_CONFIG: Readonly<GuardConfig> = Object.freeze({ whitespaceRun: 200, entropyThreshold: 5, entropyMinLength: 1000, entropyMaxWhitespaceRatio: 0.05, obfuscatedIdentifiers: 5, longLineLength: 2000 });
+export interface ProtectedArea { label: string; globs: string[] }
+export interface GuardConfig { protectedAreas?: ProtectedArea[]; whitespaceRun: number; entropyThreshold: number; entropyMinLength: number; entropyMaxWhitespaceRatio: number; obfuscatedIdentifiers: number; longLineLength: number }
+export const DEFAULT_CONFIG: Readonly<GuardConfig> = Object.freeze({ protectedAreas: [], whitespaceRun: 200, entropyThreshold: 5, entropyMinLength: 1000, entropyMaxWhitespaceRatio: 0.05, obfuscatedIdentifiers: 5, longLineLength: 2000 });
 export interface GuardResult {
   tier: Tier; findings: Finding[]; categories: Category[]; matchesPromise: boolean;
   fingerprint: string | null; summary: string;
