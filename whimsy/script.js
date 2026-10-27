@@ -1,296 +1,193 @@
 (() => {
-  'use strict';
-  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
-  const main = document.querySelector('main');
-  const empty = document.querySelector('.empty');
-  const report = document.querySelector('.report');
-  const live = document.querySelector('#announcement');
-  const bugs = [...document.querySelectorAll('.issue')].map((card, i) => ({
-    card, el: card.querySelector('.bug'), bearing: card.querySelector('.bearing'),
-    button: card.querySelector('.fix'), status: card.querySelector('.status'),
-    robot: card.querySelector('.robot'), panel: card.querySelector('.door-panel'),
-    parcel: card.querySelector('.robot-bindle'), fly: card.querySelector('.handoff'),
-    x: 20 + i * 69, y: 5, angle: 90, version: 0, state: 'open', cooldown: 0,
-    animations: new Set(), index: i, width: 0, height: 0
-  }));
-  // Every choreography step is a pausable Web Animation, including the rests.
-  function animate(b, node, frames, duration) {
-    const moves = frames.some(frame => 'transform' in frame);
-    if (moves && reduced.matches) duration = 0;
-    const a = node.animate(frames, { duration, fill: 'forwards', easing: 'linear' });
-    b.animations.add(a);
-    if (document.hidden) a.pause();
-    return a.finished.then(() => true, () => false).finally(() => b.animations.delete(a));
+ 'use strict';
+ const $ = selector => document.querySelector(selector);
+ const stage = $('.stage'), scene = $('.scene'), meta = $('.issue-meta');
+ const bug = $('.bug'), bearing = $('.bearing');
+ const panel = $('.door-panel'), glow = $('.warm-light'), parcel = $('.held-bindle');
+ const fly = $('.flying-bindle'), approve = $('.approve'), report = $('.report');
+ const finalCopy = $('.final-copy'), live = $('#announcement'), reduced = matchMedia('(prefers-reduced-motion: reduce)');
+ const initial = [
+  { id:'ZK-041', title:'The save button needs a second click', agent:'Nova' },
+  { id:'ZK-042', title:'Wednesday shows up twice', agent:'Kite' },
+  { id:'ZK-043', title:'The last checkbox won’t stay checked', agent:'Moss' }
+ ];
+ let issues = initial.slice(), index = 0, state = 'waiting', x = 0, focused = false, near = false, asking = false;
+ let nextId = 44, approvedCount = 0;
+ const active = new Set(), paused = new Set();
+ function pauseMotion(animation) {
+  const time = animation.currentTime;
+  animation.pause();
+  if (time !== null) animation.currentTime = time;
+ }
+ document.documentElement.classList.add('js');
+ // A single pausable clock for the story; no render loop or wall-clock timers.
+ async function tween(node, frames, duration, delay = 0, easing = 'ease-in-out') {
+  if (reduced.matches && frames.some(frame => 'transform' in frame)) duration = 0;
+  const animation = node.animate(frames, { duration, delay, easing, fill:'forwards' });
+  active.add(animation); if (document.hidden) pauseMotion(animation);
+  const ok = await animation.finished.then(() => true, () => false);
+  if (ok) Object.assign(node.style, frames[frames.length - 1]);
+  animation.cancel(); active.delete(animation); return ok;
+ }
+ const rest = duration => tween($('.clock'), [{ opacity:0 }, { opacity:0 }], reduced.matches ? 0 : duration);
+ function phase(name) { state = name; stage.dataset.phase = name; stage.classList.toggle('waiting', name === 'waiting'); attention(); }
+ function attention() { stage.classList.toggle('noticed', state === 'waiting' && (focused || near)); }
+ function position(value) { x = value; bug.style.transform = `translateX(${x}px)`; }
+ function waitingX() { return scene.clientWidth < 500 ? 48 : 104; }
+ async function turn(angle) {
+  await tween(bearing, [{ transform:getComputedStyle(bearing).transform }, { transform:`rotate(${angle}deg)` }], 160);
+ }
+ function clearTracks() {
+  scene.querySelectorAll('.footprint').forEach(dot => { dot.getAnimations().forEach(a => a.cancel()); dot.remove(); });
+ }
+ function tracks(to, duration) {
+  if (reduced.matches) return;
+  const distance = to - x;
+  // Each pair has a distance-based delay, so spacing survives a slow phone or hidden tab.
+  for (let d = 12; d < distance; d += 14) {
+   const dot = document.createElement('i'); dot.className = 'footprint';
+   dot.style.transform = `translateX(${x + d + 24}px)`;
+   $('.illustration').append(dot);
+   tween(dot, [{ opacity:.5 }, { opacity:0 }], 2000, d / distance * duration).then(() => dot.remove());
   }
-  function measure(b) { b.width = b.card.clientWidth; b.height = b.card.clientHeight; b.size = b.el.offsetWidth; b.lane = b.height - b.el.offsetHeight - 5; }
-  function place(b, x, y) { b.x = x; b.y = y; b.el.style.transform = `translate(${x}px,${y}px)`; }
-  function stop(b) {
-    const m = new DOMMatrixReadOnly(getComputedStyle(b.el).transform);
-    const rotation = getComputedStyle(b.bearing).transform;
-    b.version++;
-    b.animations.forEach(a => a.cancel());
-    // Finished fill effects must also be removed before writing the next position.
-    b.el.getAnimations().forEach(a => a.cancel());
-    b.bearing.getAnimations().forEach(a => a.cancel());
-    place(b, m.m41, m.m42);
-    b.bearing.style.transform = rotation;
-    b.el.classList.remove('walking', 'noticing', 'waving');
-  }
-  async function turn(b, angle, duration = 180) {
-    const from = getComputedStyle(b.bearing).transform;
-    b.angle = angle;
-    const ok = await animate(b, b.bearing, [{ transform: from }, { transform: `rotate(${angle}deg)` }], duration);
-    if (ok) { b.bearing.style.transform = `rotate(${angle}deg)`; b.bearing.getAnimations().forEach(a => a.cancel()); }
-    return ok;
-  }
-  async function move(b, x, y, duration) {
-    const ok = await animate(b, b.el, [
-      { transform: `translate(${b.x}px,${b.y}px)` }, { transform: `translate(${x}px,${y}px)` }
-    ], duration);
-    if (ok) { place(b, x, y); b.el.getAnimations().forEach(a => a.cancel()); }
-    return ok;
-  }
-  async function rest(b, duration) {
-    const ok = await animate(b, b.el, [{ opacity: 1 }, { opacity: 1 }], duration);
-    if (ok) b.el.getAnimations().forEach(a => a.cancel());
-    return ok;
-  }
-  async function wander(b) {
-    if (reduced.matches || b.state !== 'open') return;
-    const version = b.version;
-    if (!await rest(b, 400 + b.index * 600)) return;
-    // The second beetle has a sheltered perch; the others share the bottom lane.
-    let right = b.index !== 2;
-    while (b.state === 'open' && version === b.version && !reduced.matches) {
-      measure(b);
-      const perched = b.y < 30;
-      const x = perched ? b.width - b.size - (right ? 5 : 20) : (right ? b.width - b.size - 100 : 8);
-      const y = perched ? 6 : b.lane;
-      if (!await turn(b, x > b.x ? 90 : -90)) return;
-      b.el.classList.add('walking');
-      if (!await move(b, x, y, Math.max(500, Math.abs(x - b.x) / 12 * 1000))) return;
-      b.el.classList.remove('walking');
-      if (!await rest(b, 1100 + b.index * 170)) return;
-      right = !right;
-    }
-  }
-  async function shy(b, px, py) {
-    if (b.state !== 'open' || reduced.matches || Date.now() < b.cooldown) return;
-    b.cooldown = Date.now() + 3500;
-    stop(b);
-    const version = b.version;
-    const dx = px - b.x - b.size / 2, dy = py - b.y - b.el.offsetHeight / 2;
-    b.el.classList.add('noticing');
-    b.el.style.setProperty('--look', `${Math.max(-28, Math.min(28, dx / 3))}deg`);
-    if (!await turn(b, Math.atan2(dy, dx) * 180 / Math.PI + 90, 160)) return;
-    if (!await rest(b, 420)) return;
-    b.el.classList.remove('noticing');
-    measure(b);
-    const perched = b.y < 30;
-    const x = perched
-      ? Math.max(b.width - b.size - 22, Math.min(b.width - b.size - 4, b.x + (dx > 0 ? -16 : 16)))
-      : Math.max(6, Math.min(b.width - b.size - 100, b.x + (dx > 0 ? -44 : 44)));
-    const y = perched ? 6 : b.lane;
-    if (!await turn(b, Math.atan2(y - b.y, x - b.x) * 180 / Math.PI + 90)) return;
-    b.el.classList.add('walking');
-    if (!await move(b, x, y, 440)) return;
-    b.el.classList.remove('walking');
-    if (version === b.version) wander(b);
-  }
-  function announce(message) { live.textContent = message; }
-  function showEmpty() {
-    if (!bugs.every(b => b.state === 'gone')) return;
-    main.classList.add('all-left'); empty.inert = false; empty.removeAttribute('aria-hidden');
-    announce('All fixes approved. The bugs packed up and left. No bugs live here anymore.');
-    // Keep keyboard users at a useful next action when the last button disappears.
-    if (bugs.some(b => b.button === document.activeElement)) report.focus({ preventScroll: true });
-  }
-  function footprints(b, x, y, duration) {
-    if (reduced.matches) return;
-    const distance = Math.abs(x - b.x), direction = x > b.x ? 1 : -1;
-    // Place pairs by distance, not frame rate. Delayed opacity animations share
-    // the walk's clock, so a hidden tab freezes both the beetle and its tracks.
-    for (let d = 12; d < distance; d += 14) {
-      const dot = document.createElement('i');
-      dot.className = 'footprint'; dot.setAttribute('aria-hidden', 'true');
-      dot.style.opacity = '0';
-      dot.style.transform = `translate(${b.x + direction * d + b.size / 2}px,${y + b.el.offsetHeight / 2 + 4}px) rotate(${direction > 0 ? 0 : 180}deg)`;
-      b.card.append(dot);
-      const a = dot.animate([{ opacity: .55 }, { opacity: 0 }], {
-        duration: 2000, delay: d / distance * duration, fill: 'forwards'
-      });
-      b.animations.add(a); if (document.hidden) a.pause();
-      a.finished.catch(() => {}).finally(() => { b.animations.delete(a); dot.remove(); });
-    }
-  }
-  async function walk(b, x, y, duration, tracks = false) {
-    if (!await turn(b, Math.atan2(y - b.y, x - b.x) * 180 / Math.PI + 90)) return false;
-    b.el.classList.add('walking');
-    if (tracks) footprints(b, x, y, duration);
-    const ok = await move(b, x, y, duration);
-    b.el.classList.remove('walking'); return ok;
-  }
-  function attention(b) {
-    b.card.classList.toggle('agent-noticed', b.state === 'open' && (b.focused || b.near));
-  }
-  async function gate(b, open) {
-    const transform = open ? 'scaleX(.12)' : 'scaleX(1)';
-    b.card.classList.toggle('door-open', open);
-    await animate(b, b.panel, [{ transform: getComputedStyle(b.panel).transform }, { transform }], 320);
-    b.panel.style.transform = transform;
-    b.panel.getAnimations().forEach(a => a.cancel());
-  }
-  async function handOver(b) {
-    const card = b.card.getBoundingClientRect(), arm = b.parcel.getBoundingClientRect();
-    const x = arm.left - card.left, y = arm.top - card.top;
-    const endX = b.x + b.size * .65, endY = b.y + 19;
-    b.card.classList.add('handing'); b.fly.hidden = false; b.fly.style.opacity = '1';
-    b.parcel.style.opacity = '0';
-    await animate(b, b.fly, [
-      { transform: `translate(${x}px,${y}px)` },
-      { transform: `translate(${(x + endX) / 2}px,${Math.min(y, endY) - 10}px)` },
-      { transform: `translate(${endX}px,${endY}px)` }
-    ], 650);
-    b.fly.hidden = true; b.fly.style.opacity = '0';
-    b.fly.getAnimations().forEach(a => a.cancel());
-    b.card.classList.remove('handing'); b.el.classList.add('packed');
-  }
-  async function wave(b, angle) {
-    await turn(b, angle); b.el.classList.add('waving');
-    await rest(b, 460); b.el.classList.remove('waving');
-  }
-  async function fix(b) {
-    if (b.state !== 'open') return;
-    b.hadFocus = b.button === document.activeElement;
-    stop(b); b.state = 'packing'; b.button.setAttribute('aria-disabled', 'true');
-    b.status.textContent = `Fixed by ${b.card.dataset.agent}`;
-    b.card.classList.add('approving', 'agent-busy'); attention(b);
-    b.button.setAttribute('aria-label', 'Approved just now');
-    const message = `Approved. ${b.card.dataset.agent} opened the door and the bug packed up and left.`;
-    announce(message); measure(b);
-    if (reduced.matches) {
-      b.parcel.style.opacity = '0'; b.el.classList.add('packed');
-      await gate(b, true);
-      await animate(b, b.el, [{ opacity: 1 }, { opacity: 0 }], 450);
-    } else {
-      // The sheltered beetle descends the clear rail to meet the waiting agent.
-      if (b.y < 30 && !await walk(b, b.width - b.size - 4, b.lane, 650)) return;
-      if (!await walk(b, b.width - b.size - 96, b.lane, 600)) return;
-      await handOver(b);
-      b.card.classList.add('holding-door'); await gate(b, true);
-      await wave(b, 45); await wave(b, 0);
-      b.state = 'leaving';
-      if (!await walk(b, b.width + b.size, b.lane, 1900 + b.index * 120, true)) return;
-    }
-    // Remove the exiting body before closing the panel across the lane.
-    b.el.hidden = true;
-    // A completed goodbye leaves a clean card, including delayed final steps.
-    b.card.querySelectorAll('.footprint').forEach(dot => {
-      dot.getAnimations().forEach(a => a.cancel());
-      dot.remove();
-    });
-    await gate(b, false); b.card.classList.remove('holding-door');
-    if (!reduced.matches) {
-      const head = b.robot.querySelector('.robot-head');
-      await animate(b, head, [{ transform: 'rotate(0deg)' }, { transform: 'rotate(9deg)' }, { transform: 'rotate(0deg)' }], 420);
-      head.getAnimations().forEach(a => a.cancel());
-    }
-    b.state = 'gone'; b.el.style.opacity = '0'; b.el.hidden = true;
-    b.el.classList.remove('walking');
-    b.card.classList.add('resolved');
-    const wasFocused = b.hadFocus;
-    b.button.disabled = true;
-    if (wasFocused) {
-      const next = bugs.find(bug => bug.state === 'open');
-      if (next) next.button.focus({ preventScroll: true });
-    }
-    announce(message);
-    showEmpty();
-    if (wasFocused && bugs.every(bug => bug.state === 'gone')) report.focus({ preventScroll: true });
-  }
-  report.addEventListener('click', async () => {
-    const b = bugs[0];
-    if (b.state !== 'gone') return;
-    main.classList.remove('all-left'); empty.inert = true; empty.setAttribute('aria-hidden', 'true');
-    b.el.hidden = false; stop(b); b.state = 'entering'; b.el.classList.remove('packed'); b.el.style.opacity = '1';
-    b.card.classList.remove('resolved', 'approving', 'agent-busy', 'holding-door', 'door-open');
-    b.parcel.style.opacity = '1'; b.panel.style.transform = 'scaleX(1)'; b.status.textContent = 'Fix ready · Nova';
-    b.button.textContent = 'Approve fix'; b.button.disabled = false; b.button.removeAttribute('aria-disabled'); b.button.removeAttribute('aria-label');
-    b.button.focus({ preventScroll: true });
-    b.card.querySelectorAll('.footprint').forEach(dot => dot.remove());
-    measure(b); place(b, -b.size * 2, b.lane); b.bearing.style.transform = 'rotate(90deg)';
-    if (!reduced.matches) { b.el.classList.add('walking'); await move(b, 65, b.lane, 1300); }
-    else place(b, 65, b.lane);
-    b.el.classList.remove('walking'); b.state = 'open'; b.cooldown = Date.now() + 2500;
-    announce('A new bug moved in. Nova’s fix is ready for your approval.'); wander(b);
+ }
+ async function walk(to, duration, footprints = false) {
+  await turn(90); bug.classList.add('walking');
+  if (footprints) tracks(to, duration);
+  await tween(bug, [{ transform:`translateX(${x}px)` }, { transform:`translateX(${to}px)` }], duration, 0, 'linear');
+  position(to); bug.classList.remove('walking');
+ }
+ async function gate(open) {
+  stage.classList.toggle('holding', open);
+  await Promise.all([
+   tween(panel, [{ transform:getComputedStyle(panel).transform }, { transform:open ? 'scaleX(.08)' : 'scaleX(1)' }], 360),
+   tween(glow, [{ opacity:getComputedStyle(glow).opacity }, { opacity:open ? .85 : 0 }], reduced.matches ? 0 : 360)
+  ]);
+ }
+ async function handover() {
+  phase('handover');
+  const base = scene.getBoundingClientRect(), from = parcel.getBoundingClientRect();
+  const startX = from.left - base.left, startY = from.top - base.top;
+  const endX = x + 30, endY = bug.offsetTop + 24;
+  fly.hidden = false; fly.style.opacity = '1'; parcel.style.opacity = '0';
+  await tween(fly, [
+   { transform:`translate(${startX}px,${startY}px)` },
+   { transform:`translate(${(startX + endX) / 2}px,${Math.min(startY,endY) - 12}px)` },
+   { transform:`translate(${endX}px,${endY}px)` }
+  ], 720);
+  fly.hidden = true; fly.style.opacity = '0'; bug.classList.add('packed');
+ }
+ async function wave(angle) {
+  await turn(angle); bug.classList.add('waving'); await rest(460); bug.classList.remove('waving');
+ }
+ function updateQueue() {
+  const remaining = issues.slice(index + 1);
+  document.querySelectorAll('.queue-row').forEach((row, i) => {
+   const issue = remaining[i]; row.style.visibility = issue ? 'visible' : 'hidden';
+   row.setAttribute('aria-hidden', issue ? 'false' : 'true');
+   if (issue) {
+    row.querySelector('.queue-id').textContent = issue.id;
+    row.querySelector('.queue-title').textContent = issue.title;
+    row.querySelector('.queue-agent').textContent = issue.agent;
+   }
   });
-  // At most one pointer calculation per 80ms; no animation render loop.
-  let pointer = null, frame = 0, lastPointer = 0;
-  function notice(time) {
-    frame = 0;
-    if (!pointer || document.hidden || time - lastPointer < 80) return;
-    lastPointer = time;
-    bugs.forEach(b => {
-      if (b.state !== 'open') return;
-      const button = b.button.getBoundingClientRect();
-      const dx = Math.max(button.left - pointer.x, 0, pointer.x - button.right);
-      const dy = Math.max(button.top - pointer.y, 0, pointer.y - button.bottom);
-      b.near = Math.hypot(dx, dy) < 80; attention(b);
-      if (Date.now() < b.cooldown) return;
-      const rect = b.el.getBoundingClientRect();
-      if (Math.hypot(pointer.x - rect.x - rect.width / 2, pointer.y - rect.y - rect.height / 2) < 100) {
-        const card = b.card.getBoundingClientRect(); shy(b, pointer.x - card.x, pointer.y - card.y);
-      }
-    });
+  $('.queue-clear').hidden = remaining.length !== 0;
+ }
+ function renderIssue() {
+  const issue = issues[index];
+  $('#issue-id').textContent = issue.id; $('#issue-title').textContent = issue.title;
+  $('.status').textContent = `Fix ready · ${issue.agent}`;
+  $('#agent-name').textContent = issue.agent; $('.avatar').textContent = issue.agent[0];
+  $('.counter').textContent = `${index + 1} of ${issues.length}`;
+  updateQueue();
+ }
+ function addDone(issue) {
+  const list = $('.done-list');
+  let line = list.children[approvedCount];
+  if (!line) { line = document.createElement('li'); list.append(line); }
+  line.textContent = `${issue.id} · Fixed by ${issue.agent} · approved by you`;
+  line.removeAttribute('aria-hidden'); line.classList.add('complete');
+  approvedCount++; $('.done-count').textContent = `${approvedCount} approved`; $('.done-clear').hidden = true;
+ }
+ async function arrive() {
+  phase('next');
+  await tween(meta, [{ opacity:1, transform:'translateY(0)' }, { opacity:0, transform:'translateY(-5px)' }], reduced.matches ? 0 : 140);
+  renderIssue(); approve.textContent = 'Approve fix'; stage.classList.remove('approved-issue', 'fix-approved'); parcel.style.opacity = '1';
+  bug.classList.remove('packed'); bug.hidden = false; bug.style.opacity = '1'; position(-80);
+  await Promise.all([
+   tween(meta, [{ opacity:0, transform:'translateY(5px)' }, { opacity:1, transform:'translateY(0)' }], reduced.matches ? 0 : 220),
+   walk(waitingX(), 900)
+  ]);
+  approve.removeAttribute('aria-disabled'); approve.removeAttribute('aria-label');
+  phase('waiting'); live.textContent = `Next issue: ${issues[index].title}. ${issues[index].agent}’s fix is ready. Your approval opens the door.`;
+ }
+ approve.addEventListener('click', async () => {
+  if (state !== 'waiting') return;
+  const issue = issues[index], keepFocus = document.activeElement === approve;
+  phase('approaching'); approve.textContent = 'Approving…'; approve.setAttribute('aria-disabled','true');
+  live.textContent = `Approved. ${issue.agent} opened the door and the bug left.`;
+  $('.status').textContent = `Fixed by ${issue.agent}`; stage.classList.add('fix-approved');
+  if (reduced.matches) {
+   parcel.style.opacity = '0'; bug.classList.add('packed'); phase('open');
+   await gate(true); await tween(bug, [{ opacity:1 }, { opacity:0 }], 450);
+  } else {
+   await walk(Math.max(waitingX(), scene.clientWidth - 224), 700);
+   await handover(); phase('open'); await gate(true);
+   await wave(45); await wave(0); phase('leaving');
+   await walk(scene.clientWidth + 60, 2100, true);
   }
-  function pointerEvent(event) {
-    if (document.hidden) return;
-    pointer = { x: event.clientX, y: event.clientY };
-    if (!frame) frame = requestAnimationFrame(notice);
+  bug.hidden = true; clearTracks(); phase('closed'); await gate(false);
+  if (!reduced.matches) await tween($('.robot-head'), [{ transform:'rotate(0deg)' }, { transform:'rotate(8deg)' }, { transform:'rotate(0deg)' }], 400);
+  await addDone(issue);
+  index++;
+  if (index < issues.length) { await arrive(); return; }
+  phase('final'); stage.classList.add('approved-issue'); approve.disabled = true;
+  finalCopy.hidden = false;
+  if (keepFocus) report.focus({ preventScroll:true });
+  live.textContent = 'No bugs live here anymore. Every fix was approved by you.';
+  if (!reduced.matches) await tween($('.door-arm'), [{ transform:'rotate(0deg)' }, { transform:'rotate(-35deg)' }, { transform:'rotate(0deg)' }], 520);
+ });
+ report.addEventListener('click', async () => {
+  if (state !== 'final') return;
+  phase('next'); finalCopy.hidden = true; approve.disabled = false; approve.setAttribute('aria-disabled','true');
+  issues = [{ id:`ZK-${String(nextId++).padStart(3,'0')}`, title:'The cursor keeps its loading coat on', agent:'Nova' }];
+  index = 0; await arrive(); approve.focus({ preventScroll:true });
+ });
+ approve.addEventListener('focus', () => { focused = true; attention(); });
+ approve.addEventListener('blur', () => { focused = false; attention(); });
+ $('.door').addEventListener('click', async () => {
+  if (state !== 'waiting' || asking) return;
+  asking = true; stage.classList.add('asking');
+  await tween($('.robot-head'), [0,-4,4,-4,0].map(value => ({ transform:`rotate(${value}deg)` })), 480);
+  await rest(200); stage.classList.remove('asking'); asking = false;
+ });
+ // Pointer work is event-driven, at most once per 80ms. Animation uses no JS render loop.
+ let pointer = null, frame = 0, last = -80;
+ function notice(time) {
+  frame = 0; if (!pointer || document.hidden || time - last < 80) return;
+  last = time; const rect = approve.getBoundingClientRect();
+  near = Math.hypot(Math.max(rect.left-pointer.x,0,pointer.x-rect.right),Math.max(rect.top-pointer.y,0,pointer.y-rect.bottom)) < 80;
+  attention();
+ }
+ function pointerEvent(event) {
+  if (document.hidden) return;
+  pointer = { x:event.clientX, y:event.clientY }; if (!frame) frame = requestAnimationFrame(notice);
+ }
+ document.addEventListener('pointermove',pointerEvent,{ passive:true });
+ document.addEventListener('pointerdown',pointerEvent,{ passive:true });
+ document.addEventListener('pointerout',event => { if (!event.relatedTarget) { near = false; attention(); } });
+ document.addEventListener('visibilitychange',() => {
+  if (document.hidden) {
+   if (frame) cancelAnimationFrame(frame); frame = 0;
+   document.getAnimations().forEach(animation => { if (animation.playState === 'running') { paused.add(animation); pauseMotion(animation); } });
+   document.documentElement.classList.add('paused');
+  } else {
+   document.documentElement.classList.remove('paused');
+   paused.forEach(animation => { if (animation.playState === 'paused') animation.play(); }); paused.clear();
+   active.forEach(animation => { if (animation.playState === 'paused') animation.play(); });
   }
-  document.addEventListener('pointermove', pointerEvent, { passive: true });
-  document.addEventListener('pointerdown', pointerEvent, { passive: true });
-  document.addEventListener('pointerout', event => {
-    if (!event.relatedTarget) bugs.forEach(b => { b.near = false; attention(b); });
-  });
-  const hiddenAnimations = new Set();
-  document.addEventListener('visibilitychange', () => {
-    document.documentElement.classList.toggle('paused', document.hidden);
-    if (document.hidden) {
-      if (frame) cancelAnimationFrame(frame); frame = 0;
-      document.getAnimations().forEach(a => { if (a.playState === 'running') { hiddenAnimations.add(a); a.pause(); } });
-    } else {
-      hiddenAnimations.forEach(a => { if (a.playState === 'paused') a.play(); }); hiddenAnimations.clear();
-      bugs.forEach(b => b.animations.forEach(a => { if (a.playState === 'paused') a.play(); }));
-    }
-  });
-  reduced.addEventListener('change', () => bugs.forEach(b => {
-    if (b.state === 'open') { stop(b); if (!reduced.matches) wander(b); }
-    else if (reduced.matches) b.animations.forEach(a => a.finish());
-  }));
-  // Observe the cards individually so their edge lanes follow responsive wrapping.
-  const resize = new ResizeObserver(entries => entries.forEach(({ target }) => {
-    const b = bugs.find(bug => bug.card === target);
-    if (b.state !== 'open') return;
-    stop(b); measure(b); startPosition(b); wander(b);
-  }));
-  function startPosition(b) {
-    b.el.style.left = '0'; b.el.style.right = 'auto'; b.el.style.top = '0';
-    place(b, b.index === 1 ? b.width - b.size - 8 : b.width * (b.index === 0 ? .42 : .18), b.index === 1 ? 6 : b.lane);
-  }
-  bugs.forEach(b => {
-    measure(b); startPosition(b);
-    b.button.disabled = false; b.button.addEventListener('click', () => fix(b));
-    b.button.addEventListener('focus', () => { b.focused = true; attention(b); });
-    b.button.addEventListener('blur', () => { b.focused = false; attention(b); });
-    b.card.querySelector('.door-zone').addEventListener('click', async () => {
-      if (b.state !== 'open' || b.asking) return;
-      b.asking = true; b.card.classList.add('agent-asking');
-      const head = b.robot.querySelector('.robot-head');
-      await animate(b, head, [0, -2, 2, -2, 0].map(x => ({ transform: `translateX(${x}px)` })), 440);
-      head.getAnimations().forEach(a => a.cancel());
-      b.card.classList.remove('agent-asking'); b.asking = false;
-    });
-    resize.observe(b.card);
-  });
+ });
+ reduced.addEventListener('change',() => { if (reduced.matches) active.forEach(animation => animation.finish()); });
+ new ResizeObserver(() => { if (state === 'waiting') position(waitingX()); }).observe(scene);
+ position(waitingX()); approve.disabled = false;
 })();
