@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useStore } from "@/lib/store";
-import { LIMIT_LABELS, type Item } from "@/lib/scenario";
+import { LIMIT_LABELS, groupFindings, type Item } from "@/lib/scenario";
 import type { LimitKind } from "@/lib/guard";
 import { Dialog, HoldButton, PrimaryButton, TextButton, focus } from "./ui";
 
@@ -47,6 +47,20 @@ function Resolved({ title, body, extra }: { title: string; body: string; extra?:
   );
 }
 
+function Evidence({ f }: { f: Item["paused"] extends infer P ? P extends { findings: (infer F)[] } ? F : never : never }) {
+  const ev = f.evidence;
+  const lines: string[] = [];
+  if (ev?.before) lines.push(`- ${ev.before}`);
+  if (ev?.after) lines.push(`+ ${ev.after.length > 90 ? ev.after.slice(0, 12) + "… (hash)" : ev.after}`);
+  if (ev?.excerpt) lines.push(ev.excerpt);
+  if (typeof ev?.metric === "number") lines.push(`measured: ${Number.isInteger(ev.metric) ? ev.metric.toLocaleString("en-US") : ev.metric.toFixed(2)}`);
+  return (
+    <pre className="overflow-x-auto whitespace-pre-wrap break-words rounded-lg bg-zk-chip p-3 font-mono text-xs leading-relaxed text-zk-text">
+      {lines.length ? lines.join("\n") : "No excerpt."}
+    </pre>
+  );
+}
+
 // ------------------------------------------------------------------ A. paused change
 
 function PausedDecision({ item, stopOpen, setStopOpen }: { item: Item; stopOpen: boolean; setStopOpen: (v: boolean) => void }) {
@@ -59,7 +73,8 @@ function PausedDecision({ item, stopOpen, setStopOpen }: { item: Item; stopOpen:
   const [quick, setQuick] = useState<string | null>(null);
   const [note, setNote] = useState("");
   const opened = state.opened[item.id] ?? [];
-  const total = p.findings.length;
+  const groups = groupFindings(p.findings);
+  const total = groups.length;
   const allOpened = opened.length >= total;
   const branches = p.branches === 1 ? "1 branch" : `${p.branches} branches`;
 
@@ -106,10 +121,10 @@ function PausedDecision({ item, stopOpen, setStopOpen }: { item: Item; stopOpen:
         <section aria-labelledby={`found-${item.id}`}>
           <h3 id={`found-${item.id}`} className="text-[13px] font-bold text-zk-text">Ziki found</h3>
           <ol className="mt-2 space-y-1.5">
-            {p.findings.map((f, i) => (
-              <li key={f.code} className="flex gap-2.5 text-[15px] leading-snug text-zk-text">
+            {groups.map((g, i) => (
+              <li key={g.code} className="flex gap-2.5 text-[15px] leading-snug text-zk-text">
                 <span aria-hidden="true" className="w-5 shrink-0 font-mono text-[12px] leading-[1.6] text-zk-muted">{String(i + 1).padStart(2, "0")}</span>
-                <span>{f.title}</span>
+                <span>{g.title}{g.items.length > 1 ? <span className="text-zk-muted"> +{g.items.length - 1} more</span> : null}</span>
               </li>
             ))}
           </ol>
@@ -124,29 +139,33 @@ function PausedDecision({ item, stopOpen, setStopOpen }: { item: Item; stopOpen:
         </TextButton>
         {showChanges || reviewing ? (
           <ul id={`changes-${item.id}`} className="mt-1 divide-y divide-zk-divider border-y border-zk-divider">
-            {p.findings.map((f, i) => {
-              const isOpen = opened.includes(f.code);
+            {groups.map((g, i) => {
+              const isOpen = opened.includes(g.code);
               return (
-                <li key={f.code}>
+                <li key={g.code}>
                   <button
                     type="button"
                     aria-expanded={isOpen}
-                    onClick={() => act.openFinding(item.id, f.code)}
+                    onClick={() => act.openFinding(item.id, g.code)}
                     className={`flex min-h-11 w-full items-start gap-2.5 py-2.5 text-left text-sm ${focus}`}
                   >
                     <span aria-hidden="true" className="w-5 shrink-0 font-mono text-[12px] leading-[1.6] text-zk-muted">{String(i + 1).padStart(2, "0")}</span>
                     <span className="min-w-0 flex-1">
-                      <span className="font-semibold text-zk-text">{f.title}</span>
-                      {f.file ? <span className="ml-2 font-mono text-xs text-zk-muted">{f.file}{f.line ? `:${f.line}` : ""}</span> : null}
+                      <span className="font-semibold text-zk-text">{g.title}</span>
+                      {g.items.length > 1 ? <span className="ml-2 text-xs text-zk-muted">{g.items.length} found</span> : null}
                     </span>
                     <span className="shrink-0 text-xs font-bold text-zk-accent">{isOpen ? "Opened" : "Open"}</span>
                   </button>
                   {isOpen ? (
-                    <pre className="mb-3 ml-[30px] overflow-x-auto whitespace-pre-wrap break-words rounded-lg bg-zk-chip p-3 font-mono text-xs leading-relaxed text-zk-text">
-                      {f.evidence?.before ? `- ${f.evidence.before}\n` : ""}
-                      {f.evidence?.after ? `+ ${f.evidence.after}` : ""}
-                      {f.evidence?.excerpt ?? ""}
-                    </pre>
+                    <div className="mb-3 ml-[30px] space-y-3">
+                      {g.items.map((f, k) => (
+                        <div key={k}>
+                          {g.items.length > 1 ? <p className="mb-1 text-[13px] text-zk-text2">{f.title}</p> : null}
+                          <p className="mb-1 font-mono text-xs text-zk-muted">{f.file ?? "this push"}{f.line ? `:${f.line}` : ""}</p>
+                          <Evidence f={f} />
+                        </div>
+                      ))}
+                    </div>
                   ) : null}
                 </li>
               );

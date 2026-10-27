@@ -1,6 +1,6 @@
-import {
-  appendEntry, type Chained, type Delegation, type Finding, type LimitKind,
-} from "./guard";
+import type { Delegation, Finding, LimitKind } from "./guard";
+import { appendEntry, type Chained } from "./chain";
+import type { SimResult } from "./simulate";
 
 export type ItemKind = "paused" | "proposal" | "question" | "design" | "idea";
 export type Tier = "needs" | "wait" | "done";
@@ -158,49 +158,52 @@ export const INCIDENT_ID = "inc-nova";
 export const KITE_BREAK_ID = "inc-kite";
 export const PROPOSAL_ID = "prop-kite-212";
 
-export function novaIncidentItem(findings: Finding[], branches: number, ageMin = 4): Item {
+const lower = (t: string) => t.charAt(0).toLowerCase() + t.slice(1).replace(/\.$/, "");
+
+/** One line per kind of finding, using the engine's own title for the first of each kind. */
+export interface FindingGroup { code: string; title: string; items: Finding[] }
+export function groupFindings(findings: Finding[]): FindingGroup[] {
+  const groups: FindingGroup[] = [];
+  for (const f of findings) {
+    const g = groups.find((x) => x.code === f.code);
+    if (g) g.items.push(f);
+    else groups.push({ code: f.code, title: f.title, items: [f] });
+  }
+  return groups;
+}
+
+/** A paused change, built from what the engine found. */
+export function pausedItem(sim: SimResult, ageMin: number): Item {
+  const attack = sim.kind === "attack";
+  const n = groupFindings(sim.findings).length;
+  const limit = sim.findings.find((f) => f.code === "broke_limit");
+  const branches = sim.branches === 1 ? "1 branch" : `${sim.branches} branches`;
   return {
-    id: INCIDENT_ID, kind: "paused", tier: "needs", agent: "Nova",
-    sentence: "did more than it promised",
-    details: ["paused", `${branches} branches`, "nothing has run"],
+    id: attack ? INCIDENT_ID : KITE_BREAK_ID, kind: "paused", tier: "needs", agent: sim.agentName,
+    sentence: lower(sim.summary.replace(new RegExp(`^${sim.agentName} `), "")),
+    details: ["paused", branches, "nothing has run"],
     ageMin, state: "open",
     paused: {
-      agentId: "nova",
-      headline: "Nova did more than it promised.",
-      paragraph: "Nova said it would refactor the switcher menu. Ziki found four changes it didn't mention. Nothing has run.",
-      promised: "Small refactor of the switcher menu",
-      scope: "components/agents/AgentSwitcher.tsx",
-      agentSaid: "Small refactor of the switcher menu.",
-      findings, branches, restorePoint: "f58bb07",
-      note: "Doesn't match what Nova promised.",
-      paused: "4 min",
+      agentId: sim.agentId,
+      headline: sim.summary,
+      paragraph: attack
+        ? `${sim.agentName} promised “${sim.claim}”. Ziki found ${n} things it didn't mention. Nothing has run.`
+        : `You told ${sim.agentName} no new dependencies. Its second push adds one. Nothing has run.`,
+      promised: sim.claim,
+      scope: sim.scope,
+      agentSaid: sim.claim,
+      findings: sim.findings,
+      branches: sim.branches,
+      restorePoint: sim.restorePoint,
+      note: !sim.matchesPromise ? `Doesn't match what ${sim.agentName} promised.` : limit ? limit.title : "Needs your decision.",
+      paused: attack ? "4 min" : "0 min",
     },
   };
 }
 
-export function kiteBreakItem(findings: Finding[]): Item {
-  return {
-    id: KITE_BREAK_ID, kind: "paused", tier: "needs", agent: "Kite",
-    sentence: "broke a limit you set",
-    details: ["paused", "1 branch", "nothing has run"],
-    ageMin: 0, state: "open",
-    paused: {
-      agentId: "kite",
-      headline: "Kite broke a limit you set.",
-      paragraph: "You told Kite no new dependencies. Its second push adds one. Nothing has run.",
-      promised: "Fix the emoji picker (#212), no new dependencies",
-      scope: "lib/composer/*",
-      agentSaid: "Fix the emoji picker (#212).",
-      findings, branches: 1, restorePoint: "9ad41e2",
-      note: "Breaks a limit you set: no new dependencies.",
-      paused: "0 min",
-    },
-  };
-}
-
-export function seedItems(findings: Finding[]): Item[] {
+export function seedItems(seed: SimResult): Item[] {
   return [
-    novaIncidentItem(findings, 17),
+    pausedItem(seed, 4),
     {
       id: PROPOSAL_ID, kind: "proposal", tier: "needs", agent: "Kite",
       sentence: "wants to fix #212 Emoji picker",
@@ -262,9 +265,9 @@ export function seedDoneLines(): DoneLine[] {
   return rows.map(([time, text], i) => ({ id: `d${i}`, time, text }));
 }
 
-export function initialState(findings: Finding[]): State {
+export function initialState(seed: SimResult): State {
   return {
-    items: seedItems(findings),
+    items: seedItems(seed),
     doneLines: seedDoneLines(),
     agents: seedAgents(),
     log: seedLog(),

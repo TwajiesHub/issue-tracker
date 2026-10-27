@@ -133,7 +133,7 @@ export function Inbox() {
 
   const n = counts.needs;
   const headline = n === 0 ? "All clear." : `${n} ${n === 1 ? "decision needs" : "decisions need"} you.`;
-  const showSuggestion = state.suggestion === "open" && suggestDelegation({ category: "docs", approvals: 12, total: 12, brokenPromisesInWindow: 0 }).suggest;
+  const showSuggestion = state.suggestion === "open" && suggestDelegation({ category: "docs", approvals: 12, total: 12, brokenPromisesInWindow: 0 }) !== null;
 
   const tabs: { id: Tab; label: string }[] = [
     { id: "needs", label: "Needs you" }, { id: "wait", label: "Can wait" }, { id: "done", label: "Done by agents" },

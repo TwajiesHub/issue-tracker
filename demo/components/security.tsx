@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useStore, useAgeLabel } from "@/lib/store";
-import { suggestDelegation, verifyChain } from "@/lib/guard";
+import { suggestDelegation } from "@/lib/guard";
+import { verifyChain } from "@/lib/chain";
 import { RiskMark, TextButton, focus } from "./ui";
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
@@ -28,7 +29,7 @@ export function Security() {
   const doneByAgents = state.doneLines.filter((l) => !l.text.startsWith("You ")).length;
   const checked = 3;
   const chain = verifyChain(state.log);
-  const showSuggestion = state.suggestion === "open" && suggestDelegation({ category: "docs", approvals: 12, total: 12, brokenPromisesInWindow: 0 }).suggest;
+  const showSuggestion = state.suggestion === "open" && suggestDelegation({ category: "docs", approvals: 12, total: 12, brokenPromisesInWindow: 0 }) !== null;
 
   return (
     <div className="mx-auto max-w-3xl space-y-8">

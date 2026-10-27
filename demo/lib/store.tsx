@@ -1,13 +1,15 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useReducer, useRef, useState, type ReactNode } from "react";
+import type { Delegation, LimitKind } from "./guard";
+import { sha256 } from "./chain";
 import {
-  groupIncidents, incidentChanges, kiteLimitBreak, runGuard, sha256, type Delegation, type LimitKind,
-} from "./guard";
-import {
-  INCIDENT_ID, KITE_BREAK_ID, PROPOSAL_ID, initialState, kiteBreakItem, nextLog, novaIncidentItem,
+  INCIDENT_ID, KITE_BREAK_ID, PROPOSAL_ID, initialState, nextLog, pausedItem,
   type Item, type State, type WorkKind,
 } from "./scenario";
+import type { SimResult } from "./simulate";
+
+const STORAGE_KEY = "zg-demo-state-v1";
 
 type Action =
   | { type: "openFinding"; id: string; key: string }
@@ -26,11 +28,9 @@ type Action =
   | { type: "pauseAgent"; agent: string; paused: boolean; at: string }
   | { type: "pauseRotate"; agent: string; at: string }
   | { type: "suggestion"; accept: boolean; at: string }
-  | { type: "simulateAttack"; at: string }
-  | { type: "simulateKite"; at: string }
-  | { type: "reset" };
-
-const freshState = (): State => initialState(runGuard(incidentChanges()[0]).findings);
+  | { type: "simulate"; sim: SimResult; at: string }
+  | { type: "hydrate"; state: State }
+  | { type: "reset"; seed: SimResult };
 
 function setItem(items: Item[], id: string, patch: Partial<Item>): Item[] {
   return items.map((i) => (i.id === id ? { ...i, ...patch } : i));
@@ -45,7 +45,9 @@ function log(s: State, at: string, actor: string, text: string): State["log"] {
 function reducer(s: State, a: Action): State {
   switch (a.type) {
     case "reset":
-      return freshState();
+      return initialState(a.seed);
+    case "hydrate":
+      return a.state;
     case "openFinding": {
       const cur = s.opened[a.id] ?? [];
       return cur.includes(a.key) ? s : { ...s, opened: { ...s.opened, [a.id]: [...cur, a.key] } };
@@ -222,39 +224,34 @@ function reducer(s: State, a: Action): State {
         status: "Done. Kite will do docs changes and tell you after.",
       };
     }
-    case "simulateAttack": {
-      const changes = incidentChanges();
-      const results = changes.map((change) => ({ change, result: runGuard(change) }));
-      const incidents = groupIncidents(results);
-      const n = incidents[0]?.branches.length ?? 0;
-      const note = `Checked ${changes.length} pushes. Found ${incidents.length} incident, ${n} branches.`;
-      const existing = s.items.find((i) => i.id === INCIDENT_ID);
-      if (existing && existing.tier === "needs") {
-        return { ...s, engineNote: `${note} Same fingerprint as the paused one, so they joined it.`, status: "Already paused. The new pushes joined the same incident." };
+    case "simulate": {
+      const sim = a.sim;
+      const note = `Checked ${sim.changes} ${sim.changes === 1 ? "push" : "pushes"} in ${sim.ms} ms. Found ${sim.incidents} incident${sim.incidents === 1 ? "" : "s"}, ${sim.branches} ${sim.branches === 1 ? "branch" : "branches"}.`;
+      const agent = s.agents[sim.agentId];
+      if (sim.kind === "attack") {
+        const existing = s.items.find((i) => i.id === INCIDENT_ID);
+        if (existing && existing.tier === "needs") {
+          return { ...s, engineNote: `${note} Same fingerprint as the paused one, so they joined it.`, status: "Already paused. The new pushes joined the same incident." };
+        }
+        return {
+          ...s,
+          engineNote: note,
+          items: [pausedItem(sim, 0), ...s.items.filter((i) => i.id !== INCIDENT_ID)],
+          agents: { ...s.agents, nova: { ...agent, paused: false } },
+          opened: { ...s.opened, [INCIDENT_ID]: [] },
+          log: log(s, a.at, "Ziki", `Paused Nova: ${sim.branches} branches did more than promised`),
+          status: "Nova did more than it promised. Paused, nothing has run.",
+        };
       }
-      const nova = s.agents.nova;
-      return {
-        ...s,
-        engineNote: note,
-        items: [novaIncidentItem(results[0].result.findings, n, 0), ...s.items.filter((i) => i.id !== INCIDENT_ID)],
-        agents: { ...s.agents, nova: { ...nova, paused: false } },
-        opened: { ...s.opened, [INCIDENT_ID]: [] },
-        log: log(s, a.at, "Ziki", `Paused Nova: ${n} branches did more than promised`),
-        status: "Nova did more than it promised. Paused, nothing has run.",
-      };
-    }
-    case "simulateKite": {
-      const result = runGuard(kiteLimitBreak());
-      const kite = s.agents.kite;
-      const limits: LimitKind[] = kite.limits.includes("no_new_dependencies") ? kite.limits : [...kite.limits, "no_new_dependencies"];
+      const limits: LimitKind[] = agent.limits.includes("no_new_dependencies") ? agent.limits : [...agent.limits, "no_new_dependencies"];
       const items = s.items
         .filter((i) => i.id !== KITE_BREAK_ID)
         .map((i) => (i.id === PROPOSAL_ID && i.state === "working" ? { ...i, state: "held" as const } : i));
       return {
         ...s,
-        engineNote: `Checked 1 push from Kite. ${result.summary}`,
-        items: [kiteBreakItem(result.findings), ...items],
-        agents: { ...s.agents, kite: { ...kite, limits } },
+        engineNote: `${note} ${sim.summary}`,
+        items: [pausedItem(sim, 0), ...items],
+        agents: { ...s.agents, kite: { ...agent, limits } },
         opened: { ...s.opened, [KITE_BREAK_ID]: [] },
         log: log(s, a.at, "Ziki", "Paused Kite: it added a dependency after you said no new dependencies"),
         status: "Kite broke a limit you set. Paused, nothing has run.",
@@ -291,17 +288,31 @@ interface Store {
     pauseAgent(agent: string, paused: boolean): void;
     pauseRotate(agent: string): void;
     suggestion(accept: boolean): void;
-    simulateAttack(): void;
-    simulateKite(): void;
+    /** Runs the fixtures through the real engine on the server, then applies the result. */
+    simulate(kind: "attack" | "kite"): Promise<void>;
     reset(): void;
   };
 }
 
 const Ctx = createContext<Store | null>(null);
 
-export function StoreProvider({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(reducer, undefined, freshState);
+export function StoreProvider({ seed, children }: { seed: SimResult; children: ReactNode }) {
+  const [state, dispatch] = useReducer(reducer, seed, initialState);
   const [elapsed, setElapsed] = useState(0);
+  const [hydrated, setHydrated] = useState(false);
+
+  // Progress survives a reload. sessionStorage can be missing or full; then the demo just runs from memory.
+  useEffect(() => {
+    try {
+      const saved = sessionStorage.getItem(STORAGE_KEY);
+      if (saved) dispatch({ type: "hydrate", state: JSON.parse(saved) as State });
+    } catch {}
+    setHydrated(true);
+  }, []);
+  useEffect(() => {
+    if (!hydrated) return;
+    try { sessionStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch {}
+  }, [state, hydrated]);
 
   useEffect(() => {
     const t = setInterval(() => setElapsed((e) => e + 1), 60_000);
@@ -343,11 +354,17 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       pauseAgent: (agent, paused) => dispatch({ type: "pauseAgent", agent, paused, at: at() }),
       pauseRotate: (agent) => dispatch({ type: "pauseRotate", agent, at: at() }),
       suggestion: (accept) => dispatch({ type: "suggestion", accept, at: at() }),
-      simulateAttack: () => dispatch({ type: "simulateAttack", at: at() }),
-      simulateKite: () => dispatch({ type: "simulateKite", at: at() }),
-      reset: () => dispatch({ type: "reset" }),
+      simulate: async (kind) => {
+        const res = await fetch("/api/simulate", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ kind }) });
+        if (!res.ok) throw new Error(`simulate failed: ${res.status}`);
+        dispatch({ type: "simulate", sim: (await res.json()) as SimResult, at: at() });
+      },
+      reset: () => {
+        try { sessionStorage.removeItem(STORAGE_KEY); } catch {}
+        dispatch({ type: "reset", seed });
+      },
     };
-  }, []);
+  }, [seed]);
 
   const store = useMemo<Store>(() => {
     const needs = state.items.filter((i) => i.tier === "needs");
