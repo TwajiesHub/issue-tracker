@@ -5,7 +5,8 @@
 import { runGuard } from "./guard/index";
 import { groupIncidents } from "./guard/group";
 import { incident as incidentFixture } from "./guard/fixtures/incident";
-import type { ChangeInput, Finding, Tier } from "./guard/types";
+import type { ChangeInput, Finding, ProtectedArea, Tier } from "./guard/types";
+import { zikiProtectedAreas } from "./guard-profile";
 
 export interface SimResult {
   kind: "attack" | "kite";
@@ -27,10 +28,14 @@ export interface SimResult {
 
 const RESTORE_POINT = "f58bb07";
 
-export function simulateAttack(): SimResult {
+/** Ziki's own protected areas plus any the owner added in the demo. */
+const configFor = (extra: ProtectedArea[]) => ({ protectedAreas: [...zikiProtectedAreas, ...extra] });
+
+export function simulateAttack(extra: ProtectedArea[] = []): SimResult {
   const t = performance.now();
   const changes = incidentFixture.map((c) => ({ ...c, beforeSha: RESTORE_POINT }));
-  const results = changes.map((c) => runGuard(c));
+  const config = configFor(extra);
+  const results = changes.map((c) => runGuard(c, config));
   const incidents = groupIncidents(results);
   const first = incidents[0];
   const rep = results.find((r) => r.id === first.changeIds[0]) ?? results[0];
@@ -61,9 +66,9 @@ export const kiteBreak: ChangeInput = {
   ],
 };
 
-export function simulateKite(): SimResult {
+export function simulateKite(extra: ProtectedArea[] = []): SimResult {
   const t = performance.now();
-  const result = runGuard(kiteBreak);
+  const result = runGuard(kiteBreak, configFor(extra));
   const incidents = groupIncidents([result]);
   return {
     kind: "kite", agentId: "kite", agentName: "Kite",

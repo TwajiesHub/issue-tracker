@@ -29,6 +29,7 @@ type Action =
   | { type: "pauseRotate"; agent: string; at: string }
   | { type: "suggestion"; accept: boolean; at: string }
   | { type: "simulate"; sim: SimResult; at: string }
+  | { type: "addArea"; label: string; glob: string; at: string }
   | { type: "hydrate"; state: State }
   | { type: "reset"; seed: SimResult };
 
@@ -47,7 +48,15 @@ function reducer(s: State, a: Action): State {
     case "reset":
       return initialState(a.seed);
     case "hydrate":
-      return a.state;
+      // Older saved states have no areas.
+      return { ...a.state, areas: a.state.areas ?? [] };
+    case "addArea":
+      return {
+        ...s,
+        areas: [...s.areas, { label: a.label, globs: [a.glob] }],
+        log: log(s, a.at, "You", `Added a protected area: ${a.label}`),
+        status: `Protected area added: ${a.label}. It applies to the next check.`,
+      };
     case "openFinding": {
       const cur = s.opened[a.id] ?? [];
       return cur.includes(a.key) ? s : { ...s, opened: { ...s.opened, [a.id]: [...cur, a.key] } };
@@ -288,6 +297,7 @@ interface Store {
     pauseAgent(agent: string, paused: boolean): void;
     pauseRotate(agent: string): void;
     suggestion(accept: boolean): void;
+    addArea(label: string, glob: string): void;
     /** Runs the fixtures through the real engine on the server, then applies the result. */
     simulate(kind: "attack" | "kite"): Promise<void>;
     reset(): void;
@@ -300,6 +310,8 @@ export function StoreProvider({ seed, children }: { seed: SimResult; children: R
   const [state, dispatch] = useReducer(reducer, seed, initialState);
   const [elapsed, setElapsed] = useState(0);
   const [hydrated, setHydrated] = useState(false);
+  const stateRef = useRef(state);
+  useEffect(() => { stateRef.current = state; }, [state]);
 
   // Progress survives a reload. sessionStorage can be missing or full; then the demo just runs from memory.
   useEffect(() => {
@@ -354,8 +366,9 @@ export function StoreProvider({ seed, children }: { seed: SimResult; children: R
       pauseAgent: (agent, paused) => dispatch({ type: "pauseAgent", agent, paused, at: at() }),
       pauseRotate: (agent) => dispatch({ type: "pauseRotate", agent, at: at() }),
       suggestion: (accept) => dispatch({ type: "suggestion", accept, at: at() }),
+      addArea: (label, glob) => dispatch({ type: "addArea", label: label.trim(), glob: glob.trim(), at: at() }),
       simulate: async (kind) => {
-        const res = await fetch("/api/simulate", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ kind }) });
+        const res = await fetch("/api/simulate", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ kind, areas: stateRef.current.areas }) });
         if (!res.ok) throw new Error(`simulate failed: ${res.status}`);
         dispatch({ type: "simulate", sim: (await res.json()) as SimResult, at: at() });
       },

@@ -1,4 +1,5 @@
 import type { Delegation, Finding, LimitKind } from "./guard";
+import type { ProtectedArea } from "./guard/types";
 import { appendEntry, type Chained } from "./chain";
 import type { SimResult } from "./simulate";
 
@@ -98,6 +99,8 @@ export interface State {
   agents: Record<string, AgentState>;
   log: Chained<LogEntry>[];
   suggestion: "open" | "accepted" | "dismissed";
+  /** Protected areas the owner added in the demo (Ziki's own come from guard-profile.ts). */
+  areas: ProtectedArea[];
   opened: Record<string, string[]>;
   status: string;
   engineNote: string | null;
@@ -272,6 +275,7 @@ export function initialState(seed: SimResult): State {
     agents: seedAgents(),
     log: seedLog(),
     suggestion: "open",
+    areas: [],
     opened: {},
     status: "",
     engineNote: null,
