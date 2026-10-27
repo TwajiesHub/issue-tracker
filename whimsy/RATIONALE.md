@@ -1,9 +1,10 @@
-# The bug leaves
-A small, standalone goodbye for a literal bug living on an issue card.
-An agent readies the fix; a human approves it and sends the beetle on its way.
-The bindle, three waves and a last look make that handoff visible and kind.
-Ziki’s existing light, dark, warning and success tokens keep it part of the product.
-A bottom lane keeps the little walk clear of the issue and its controls.
-No 3D, no sound, no confetti, no autoplay chaos and no runtime dependencies.
-Reduced motion replaces the goodbye with a short fade; hidden tabs pause everything.
-Without JavaScript the cards remain readable; without Inter the system font takes over.
+# The agent holds the door
+An agent fixes the issue, holds a beetle’s bindle and waits beside a closed door.
+Agents act; humans hold the decision. Silence never approves a fix.
+Only Approve fix starts the handoff, opens the door and lets the beetle leave.
+The patient robot notices you and gently declines attempts to skip approval.
+A wave, a little walk and the robot’s nod make the shared effort visible.
+Ziki’s own colour tokens and the existing beetle palette keep the scene quiet.
+No libraries, sound, speech bubbles or extra controls; hidden tabs pause motion.
+Reduced motion shows the open door, fades the bug, then closes the door.
+Without JavaScript the cards remain readable; system fonts cover an unavailable Inter.

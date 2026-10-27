@@ -8,6 +8,8 @@
   const bugs = [...document.querySelectorAll('.issue')].map((card, i) => ({
     card, el: card.querySelector('.bug'), bearing: card.querySelector('.bearing'),
     button: card.querySelector('.fix'), status: card.querySelector('.status'),
+    robot: card.querySelector('.robot'), panel: card.querySelector('.door-panel'),
+    parcel: card.querySelector('.robot-bindle'), fly: card.querySelector('.handoff'),
     x: 20 + i * 69, y: 5, angle: 90, version: 0, state: 'open', cooldown: 0,
     animations: new Set(), index: i, width: 0, height: 0
   }));
@@ -62,7 +64,7 @@
     while (b.state === 'open' && version === b.version && !reduced.matches) {
       measure(b);
       const perched = b.y < 30;
-      const x = perched ? b.width - b.size - (right ? 5 : 20) : (right ? b.width - b.size - 8 : 8);
+      const x = perched ? b.width - b.size - (right ? 5 : 20) : (right ? b.width - b.size - 100 : 8);
       const y = perched ? 6 : b.lane;
       if (!await turn(b, x > b.x ? 90 : -90)) return;
       b.el.classList.add('walking');
@@ -87,7 +89,7 @@
     const perched = b.y < 30;
     const x = perched
       ? Math.max(b.width - b.size - 22, Math.min(b.width - b.size - 4, b.x + (dx > 0 ? -16 : 16)))
-      : Math.max(6, Math.min(b.width - b.size - 6, b.x + (dx > 0 ? -44 : 44)));
+      : Math.max(6, Math.min(b.width - b.size - 100, b.x + (dx > 0 ? -44 : 44)));
     const y = perched ? 6 : b.lane;
     if (!await turn(b, Math.atan2(y - b.y, x - b.x) * 180 / Math.PI + 90)) return;
     b.el.classList.add('walking');
@@ -128,46 +130,73 @@
     const ok = await move(b, x, y, duration);
     b.el.classList.remove('walking'); return ok;
   }
+  function attention(b) {
+    b.card.classList.toggle('agent-noticed', b.state === 'open' && (b.focused || b.near));
+  }
+  async function gate(b, open) {
+    const transform = open ? 'scaleX(.12)' : 'scaleX(1)';
+    b.card.classList.toggle('door-open', open);
+    await animate(b, b.panel, [{ transform: getComputedStyle(b.panel).transform }, { transform }], 320);
+    b.panel.style.transform = transform;
+    b.panel.getAnimations().forEach(a => a.cancel());
+  }
+  async function handOver(b) {
+    const card = b.card.getBoundingClientRect(), arm = b.parcel.getBoundingClientRect();
+    const x = arm.left - card.left, y = arm.top - card.top;
+    const endX = b.x + b.size * .65, endY = b.y + 19;
+    b.card.classList.add('handing'); b.fly.hidden = false; b.fly.style.opacity = '1';
+    b.parcel.style.opacity = '0';
+    await animate(b, b.fly, [
+      { transform: `translate(${x}px,${y}px)` },
+      { transform: `translate(${(x + endX) / 2}px,${Math.min(y, endY) - 10}px)` },
+      { transform: `translate(${endX}px,${endY}px)` }
+    ], 650);
+    b.fly.hidden = true; b.fly.style.opacity = '0';
+    b.fly.getAnimations().forEach(a => a.cancel());
+    b.card.classList.remove('handing'); b.el.classList.add('packed');
+  }
+  async function wave(b, angle) {
+    await turn(b, angle); b.el.classList.add('waving');
+    await rest(b, 460); b.el.classList.remove('waving');
+  }
   async function fix(b) {
     if (b.state !== 'open') return;
     b.hadFocus = b.button === document.activeElement;
     stop(b); b.state = 'packing'; b.button.setAttribute('aria-disabled', 'true');
     b.status.textContent = `Fixed by ${b.card.dataset.agent}`;
-    b.card.classList.add('approving');
-    // The real button remains in place for focus; its visible replacement is text.
+    b.card.classList.add('approving', 'agent-busy'); attention(b);
     b.button.setAttribute('aria-label', 'Approved just now');
-    announce(`You approved ${b.card.dataset.agent}’s fix. The bug is packing up.`);
-    b.el.classList.add('packed');
+    const message = `Approved. ${b.card.dataset.agent} opened the door and the bug packed up and left.`;
+    announce(message); measure(b);
     if (reduced.matches) {
+      b.parcel.style.opacity = '0'; b.el.classList.add('packed');
+      await gate(b, true);
       await animate(b, b.el, [{ opacity: 1 }, { opacity: 0 }], 450);
     } else {
-      b.el.classList.add('waving');
-      if (!await rest(b, 1050)) return;
-      b.el.classList.remove('waving'); measure(b);
-      if (b.y < 30) {
-        // Descend the clear right rail, then join the bottom lane at a readable distance.
-        if (!await walk(b, b.width - b.size - 4, b.lane, 650)) return;
-        if (!await walk(b, b.width * .56, b.lane, 500, true)) return;
-      }
+      // The sheltered beetle descends the clear rail to meet the waiting agent.
+      if (b.y < 30 && !await walk(b, b.width - b.size - 4, b.lane, 650)) return;
+      if (!await walk(b, b.width - b.size - 96, b.lane, 600)) return;
+      await handOver(b);
+      b.card.classList.add('holding-door'); await gate(b, true);
+      await wave(b, 45); await wave(b, 0);
       b.state = 'leaving';
-      const right = b.x + b.size / 2 >= b.width / 2;
-      const edge = right ? b.width - b.size + 5 : -5;
-      const duration = 1600 + b.index * 250;
-      if (!await walk(b, edge, b.lane, duration, true)) return;
-      if (!await rest(b, 180)) return;
-      if (!await turn(b, right ? -90 : 90, 250)) return;
-      b.el.classList.add('last-wave');
-      if (!await rest(b, 450)) return;
-      b.el.classList.remove('last-wave');
-      if (!await walk(b, right ? b.width + b.size : -b.size * 2, b.lane, 550, true)) return;
+      if (!await walk(b, b.width + b.size, b.lane, 1900 + b.index * 120, true)) return;
     }
-    b.state = 'gone'; b.el.style.opacity = '0'; b.el.hidden = true;
-    b.el.classList.remove('walking');
+    // Remove the exiting body before closing the panel across the lane.
+    b.el.hidden = true;
     // A completed goodbye leaves a clean card, including delayed final steps.
     b.card.querySelectorAll('.footprint').forEach(dot => {
       dot.getAnimations().forEach(a => a.cancel());
       dot.remove();
     });
+    await gate(b, false); b.card.classList.remove('holding-door');
+    if (!reduced.matches) {
+      const head = b.robot.querySelector('.robot-head');
+      await animate(b, head, [{ transform: 'rotate(0deg)' }, { transform: 'rotate(9deg)' }, { transform: 'rotate(0deg)' }], 420);
+      head.getAnimations().forEach(a => a.cancel());
+    }
+    b.state = 'gone'; b.el.style.opacity = '0'; b.el.hidden = true;
+    b.el.classList.remove('walking');
     b.card.classList.add('resolved');
     const wasFocused = b.hadFocus;
     b.button.disabled = true;
@@ -175,7 +204,7 @@
       const next = bugs.find(bug => bug.state === 'open');
       if (next) next.button.focus({ preventScroll: true });
     }
-    announce(`Fix approved. Fixed by ${b.card.dataset.agent}. The bug packed up and left.`);
+    announce(message);
     showEmpty();
     if (wasFocused && bugs.every(bug => bug.state === 'gone')) report.focus({ preventScroll: true });
   }
@@ -184,7 +213,8 @@
     if (b.state !== 'gone') return;
     main.classList.remove('all-left'); empty.inert = true; empty.setAttribute('aria-hidden', 'true');
     b.el.hidden = false; stop(b); b.state = 'entering'; b.el.classList.remove('packed'); b.el.style.opacity = '1';
-    b.card.classList.remove('resolved', 'approving'); b.status.textContent = 'Fix ready · Nova';
+    b.card.classList.remove('resolved', 'approving', 'agent-busy', 'holding-door', 'door-open');
+    b.parcel.style.opacity = '1'; b.panel.style.transform = 'scaleX(1)'; b.status.textContent = 'Fix ready · Nova';
     b.button.textContent = 'Approve fix'; b.button.disabled = false; b.button.removeAttribute('aria-disabled'); b.button.removeAttribute('aria-label');
     b.button.focus({ preventScroll: true });
     b.card.querySelectorAll('.footprint').forEach(dot => dot.remove());
@@ -201,7 +231,12 @@
     if (!pointer || document.hidden || time - lastPointer < 80) return;
     lastPointer = time;
     bugs.forEach(b => {
-      if (b.state !== 'open' || Date.now() < b.cooldown) return;
+      if (b.state !== 'open') return;
+      const button = b.button.getBoundingClientRect();
+      const dx = Math.max(button.left - pointer.x, 0, pointer.x - button.right);
+      const dy = Math.max(button.top - pointer.y, 0, pointer.y - button.bottom);
+      b.near = Math.hypot(dx, dy) < 80; attention(b);
+      if (Date.now() < b.cooldown) return;
       const rect = b.el.getBoundingClientRect();
       if (Math.hypot(pointer.x - rect.x - rect.width / 2, pointer.y - rect.y - rect.height / 2) < 100) {
         const card = b.card.getBoundingClientRect(); shy(b, pointer.x - card.x, pointer.y - card.y);
@@ -209,12 +244,15 @@
     });
   }
   function pointerEvent(event) {
-    if (reduced.matches || document.hidden) return;
+    if (document.hidden) return;
     pointer = { x: event.clientX, y: event.clientY };
     if (!frame) frame = requestAnimationFrame(notice);
   }
   document.addEventListener('pointermove', pointerEvent, { passive: true });
   document.addEventListener('pointerdown', pointerEvent, { passive: true });
+  document.addEventListener('pointerout', event => {
+    if (!event.relatedTarget) bugs.forEach(b => { b.near = false; attention(b); });
+  });
   const hiddenAnimations = new Set();
   document.addEventListener('visibilitychange', () => {
     document.documentElement.classList.toggle('paused', document.hidden);
@@ -238,10 +276,21 @@
   }));
   function startPosition(b) {
     b.el.style.left = '0'; b.el.style.right = 'auto'; b.el.style.top = '0';
-    place(b, b.index === 1 ? b.width - b.size - 8 : b.width * (b.index === 0 ? .56 : .24), b.index === 1 ? 6 : b.lane);
+    place(b, b.index === 1 ? b.width - b.size - 8 : b.width * (b.index === 0 ? .42 : .18), b.index === 1 ? 6 : b.lane);
   }
   bugs.forEach(b => {
     measure(b); startPosition(b);
-    b.button.disabled = false; b.button.addEventListener('click', () => fix(b)); resize.observe(b.card);
+    b.button.disabled = false; b.button.addEventListener('click', () => fix(b));
+    b.button.addEventListener('focus', () => { b.focused = true; attention(b); });
+    b.button.addEventListener('blur', () => { b.focused = false; attention(b); });
+    b.card.querySelector('.door-zone').addEventListener('click', async () => {
+      if (b.state !== 'open' || b.asking) return;
+      b.asking = true; b.card.classList.add('agent-asking');
+      const head = b.robot.querySelector('.robot-head');
+      await animate(b, head, [0, -2, 2, -2, 0].map(x => ({ transform: `translateX(${x}px)` })), 440);
+      head.getAnimations().forEach(a => a.cancel());
+      b.card.classList.remove('agent-asking'); b.asking = false;
+    });
+    resize.observe(b.card);
   });
 })();
