@@ -1,3 +1,4 @@
+import { matchesAny } from "./glob";
 import { sha256 } from "./chain";
 import { categorize, isLocked, isManifest } from "./categorize";
 import { classify, summarize, tierRank } from "./classify";
@@ -9,7 +10,10 @@ import { fingerprint, obfuscatedHashes } from "./fingerprint";
 import { DEFAULT_CONFIG, FINDING_CODES, type Category, type ChangeInput, type Finding, type GuardConfig, type GuardResult } from "./types";
 export function runGuard(input: ChangeInput, config: Partial<GuardConfig> = {}): GuardResult {
   const settings = {...DEFAULT_CONFIG, ...config};
-  for (const value of Object.values(settings)) if (!Number.isFinite(value) || value <= 0) throw new RangeError("Guard thresholds must be positive and finite");
+  const {protectedAreas = [], ...thresholds} = settings;
+  if (!Array.isArray(protectedAreas) || protectedAreas.some(area => !area || typeof area.label !== "string" || !area.label.trim() || !Array.isArray(area.globs) || area.globs.some(glob => typeof glob !== "string"))) throw new TypeError("Invalid protected areas");
+  for (const value of Object.values(thresholds)) if (!Number.isFinite(value) || value <= 0) throw new RangeError("Guard thresholds must be positive and finite");
+  if (settings.entropyMaxWhitespaceRatio > 1) throw new RangeError("Whitespace ratio must not exceed one");
   const findings: Finding[] = [], fileCategories: Category[][] = [];
   let addedDependencies = false;
   input.files.forEach(file => {
@@ -27,7 +31,17 @@ export function runGuard(input: ChangeInput, config: Partial<GuardConfig> = {}):
     const paths = input.files.filter((_, i) => fileCategories[i].includes(category) && !findings.some(f => f.file === input.files[i].path && ["scripts_changed", "deps_changed", "unreadable_manifest"].includes(f.code))).map(f => f.path).sort();
     if (paths.length) findings.push({code: "protected_path", tier: "human", title: "This change touches protected files.", evidence: {excerpt: `${category}: ${paths.join(", ")}`, after: JSON.stringify(paths.map(path => [path, sha256(input.files.find(file => file.path === path)?.after ?? "")]))}});
   }
-  findings.push(...detectHistory(input), ...detectPromise(input, fileCategories, addedDependencies));
+  let protectedAreaMatched = false;
+  for (const area of protectedAreas) {
+    const files = input.files.filter(file => matchesAny(file.path, area.globs));
+    if (!files.length) continue;
+    protectedAreaMatched = true;
+    findings.push({code: "protected_path", tier: "human", title: `This touches an area you marked as protected: ${area.label}.`, evidence: {
+      excerpt: JSON.stringify({label: area.label, files: files.map(file => file.path).sort()}),
+      after: JSON.stringify(files.map(file => [file.path, sha256(file.after ?? "")]).sort((a, b) => a[0].localeCompare(b[0]))),
+    }});
+  }
+  findings.push(...detectHistory(input), ...detectPromise(input, fileCategories, addedDependencies, protectedAreaMatched));
   const categories = [...new Set(fileCategories.flat())];
   const tier = classify(categories, findings, input.delegation);
   const mismatch = findings.find(f => f.code === "claim_mismatch");

@@ -62,10 +62,12 @@ export function detectContent(file: FileChange, config: GuardConfig): Finding[] 
   const allowlisted = isLockfile(file.path) || matchesAny(file.path, ["**/*.min.*", "dist/**", "build/**", ".next/**", "public/**/*.js"]);
   if (!allowlisted) {
     const entropy = shannonEntropy(text);
+    const whitespaceRatio = (text.match(/[ \t\r\n]/g)?.length ?? 0) / text.length;
+    const packedEntropy = !/\.svg$/i.test(file.path) && text.length >= config.entropyMinLength && entropy >= config.entropyThreshold && whitespaceRatio < config.entropyMaxWhitespaceRatio;
     const identifiers = text.match(/_0x[0-9a-f]{3,}/gi)?.length ?? 0;
     const longLine = /\.(?:js|mjs|cjs|ts)$/.test(file.path) && text.split("\n").some(line => line.length >= config.longLineLength);
-    if ((text.length >= config.entropyMinLength && entropy >= config.entropyThreshold) || identifiers >= config.obfuscatedIdentifiers || longLine) {
-      findings.push({code: "obfuscated_file", tier: "human", file: file.path, title: "This file contains text that looks obfuscated.", evidence: {metric: entropy, excerpt: JSON.stringify({size: text.length, identifiers, longLine})}});
+    if (packedEntropy || identifiers >= config.obfuscatedIdentifiers || longLine) {
+      findings.push({code: "obfuscated_file", tier: "human", file: file.path, title: "This file contains text that looks obfuscated.", evidence: {metric: entropy, excerpt: JSON.stringify({size: text.length, whitespaceRatio, identifiers, longLine})}});
     }
   }
   return findings;

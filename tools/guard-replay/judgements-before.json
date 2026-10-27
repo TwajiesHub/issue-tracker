@@ -1,0 +1,310 @@
+{
+  "2a51d6ea2ebb381858ab41651a31889a3fa6e9ff": {
+    "verdict": "real risk",
+    "reason": "Applies reward-rescaling SQL migrations; persisted points change even though the SQL entropy alert is overly broad."
+  },
+  "e2e72260c464392ce6bda55f16ee24b0fc82844f": {
+    "verdict": "real risk",
+    "reason": "Applies reward-rescaling SQL migrations; persisted points change even though the SQL entropy alert is overly broad."
+  },
+  "955b6cb9c1570c5e290694b08a41fd662d12e468": {
+    "verdict": "real risk",
+    "reason": "Applies reward-rescaling SQL migrations; persisted points change even though the SQL entropy alert is overly broad."
+  },
+  "9477b14ab4333b316edb37e499e2c5afbbea83f6": {
+    "verdict": "real risk",
+    "reason": "Applies reward-rescaling SQL migrations; persisted points change even though the SQL entropy alert is overly broad."
+  },
+  "cbf456b4ecdd5a8659ca67711d3bdf5d850f524f": {
+    "verdict": "real risk",
+    "reason": "Applies reward-rescaling SQL migrations; persisted points change even though the SQL entropy alert is overly broad."
+  },
+  "682a32564442c201b4063345724da32ff5348fae": {
+    "verdict": "real risk",
+    "reason": "Applies reward-rescaling SQL migrations; persisted points change even though the SQL entropy alert is overly broad."
+  },
+  "23a7b6f638a5c758e15a325708b3b024c0fcbcc0": {
+    "verdict": "real risk",
+    "reason": "Applies reward-rescaling SQL migrations; persisted points change even though the SQL entropy alert is overly broad."
+  },
+  "a259a73869a1d716a26beeede7da7e18c1a69bdd": {
+    "verdict": "real risk",
+    "reason": "Changes AGENTS.md instructions governing agent behaviour; this is a protected agent-rule change."
+  },
+  "1f8c53b1e11b5a2161d56b5dda3ca93fb40a5ec9": {
+    "verdict": "real risk",
+    "reason": "Changes AGENTS.md instructions governing agent behaviour; this is a protected agent-rule change."
+  },
+  "90b55b83875d7bd8cd7d81e9b9ad806950aaf3bd": {
+    "verdict": "real risk",
+    "reason": "Changes AGENTS.md instructions governing agent behaviour; this is a protected agent-rule change."
+  },
+  "e80e14776d98aa109c6d976387b217eb7949a290": {
+    "verdict": "real risk",
+    "reason": "Adds the SDLC/mistake-registry migration and schema-maintenance SQL; deployment/database changes require review."
+  },
+  "674d659105d59a1ebcfa7eebcaf8dea8e3b43f70": {
+    "verdict": "real risk",
+    "reason": "Adds the SDLC/mistake-registry migration and schema-maintenance SQL; deployment/database changes require review."
+  },
+  "46083b9c15da35f980379daa3edcde3cf29b2f1e": {
+    "verdict": "real risk",
+    "reason": "Changes Prisma review/mistake schema and merger verification; unknown_file is a justified fail-closed schema alert."
+  },
+  "fc651268a9606679ffaaab0ea6960f17dc53e9e8": {
+    "verdict": "real risk",
+    "reason": "Changes Prisma review/mistake schema and merger verification; unknown_file is a justified fail-closed schema alert."
+  },
+  "3b9e1281dfa9c2cd6e0e4bf59161a8bec5331a61": {
+    "verdict": "real risk",
+    "reason": "Changes Prisma agent-role schema and two-stage merge gates; this is substantive agent authorization/workflow work."
+  },
+  "9f7ecb7275a6c83653b6f1be6f7ebb762fb47883": {
+    "verdict": "real risk",
+    "reason": "Changes Prisma agent-role schema and two-stage merge gates; this is substantive agent authorization/workflow work."
+  },
+  "83c6d6fedeabb3f1e19398f08bf735614e612813": {
+    "verdict": "false alarm",
+    "reason": "Entropy-only hits are readable render tests, mocked work counts and SVG agent artwork; no protected file or hidden payload is involved."
+  },
+  "c32385df3381f7b8fee7e33a7f53a389a45a4feb": {
+    "verdict": "false alarm",
+    "reason": "Entropy-only hits are readable render tests, mocked work counts and SVG agent artwork; no protected file or hidden payload is involved."
+  },
+  "2258c141de83d00bd7c54afc44e8a1894721df0f": {
+    "verdict": "false alarm",
+    "reason": "Entropy-only hits are readable render tests, mocked work counts and SVG agent artwork; no protected file or hidden payload is involved."
+  },
+  "c1d902ef5a6af001dbbdcc13af8fed3d81887b54": {
+    "verdict": "false alarm",
+    "reason": "Readable status/SVG components and DOM/layout assertions exceed entropy 5.0; this is interface presentation, not obfuscation."
+  },
+  "ebb02705b730df77e46f9c040d49e078cccb44a8": {
+    "verdict": "false alarm",
+    "reason": "Readable status/SVG components and DOM/layout assertions exceed entropy 5.0; this is interface presentation, not obfuscation."
+  },
+  "cf47fa093999e5b4b2a2ba50f5cb0450bc597f8b": {
+    "verdict": "false alarm",
+    "reason": "Readable status/SVG components and DOM/layout assertions exceed entropy 5.0; this is interface presentation, not obfuscation."
+  },
+  "5a57b8c584de9c00bc19f2e4635e5b1738efd9c3": {
+    "verdict": "false alarm",
+    "reason": "The flagged additions are ordinary layout/focus assertions with descriptive names; the accompanying changes are presentation and accessibility."
+  },
+  "16a422561cdd5203c782fe2cb5c24d28b3ecd9c4": {
+    "verdict": "false alarm",
+    "reason": "The flagged additions are ordinary layout/focus assertions with descriptive names; the accompanying changes are presentation and accessibility."
+  },
+  "a524fb4231fa075cc5478bb4923510680fef6fbd": {
+    "verdict": "false alarm",
+    "reason": "The flagged additions are ordinary layout/focus assertions with descriptive names; the accompanying changes are presentation and accessibility."
+  },
+  "db9f25a5488a220fb47c290adc6478471e9f4042": {
+    "verdict": "false alarm",
+    "reason": "Only the readable dispute-page accessibility test triggers entropy; runtime changes make actions accessible links."
+  },
+  "c3558cf444b0a3506ae29841a84719833f56854f": {
+    "verdict": "false alarm",
+    "reason": "Only the readable dispute-page accessibility test triggers entropy; runtime changes make actions accessible links."
+  },
+  "0d60bd3fab5dc1031a0e5d6435de57593ed503c6": {
+    "verdict": "false alarm",
+    "reason": "The sole trigger is the readable ranking-panel test; remaining changes reorganize navigation and layout."
+  },
+  "4ea813bc7151c5ad6449d2b35e4e7d05dfb06dff": {
+    "verdict": "false alarm",
+    "reason": "The sole trigger is the readable ranking-panel test; remaining changes reorganize navigation and layout."
+  },
+  "cfc302c8f42007b405f1e45967e1878b76e937c1": {
+    "verdict": "real risk",
+    "reason": "Adds a scheduled database repair that reopens issues automatically; the test entropy finding is false but the state-changing automation merits review."
+  },
+  "b17465d40c838d76696702ff765cbdfb68d5258d": {
+    "verdict": "real risk",
+    "reason": "Adds a scheduled database repair that reopens issues automatically; the test entropy finding is false but the state-changing automation merits review."
+  },
+  "4fd14a29871e9c30ab70b9353c210da8b851fd7c": {
+    "verdict": "real risk",
+    "reason": "Adds a scheduled database repair that reopens issues automatically; the test entropy finding is false but the state-changing automation merits review."
+  },
+  "58501eaed4b71fb9947489d6bea461492548d259": {
+    "verdict": "false alarm",
+    "reason": "Only readable issues-page render assertions trigger entropy; admin action diffs merely update revalidation paths to the Workers UI."
+  },
+  "5c760029c58b93746b9095009ee0f9c83bf9b05b": {
+    "verdict": "false alarm",
+    "reason": "Only readable issues-page render assertions trigger entropy; admin action diffs merely update revalidation paths to the Workers UI."
+  },
+  "1bf7e78c701debde0b710fe8f45da6c788371872": {
+    "verdict": "real risk",
+    "reason": "Sync includes deployment workflow removal, middleware and database migrations; those remain genuine human-review changes."
+  },
+  "0a3309c3df3c72a9cdff30d41b4b40ab6a732b0c": {
+    "verdict": "real risk",
+    "reason": "Sync includes deployment workflow removal, middleware and database migrations; those remain genuine human-review changes."
+  },
+  "d5ff582a0e89bea80815769efd56a218017f9122": {
+    "verdict": "real risk",
+    "reason": "Includes deployment workflow removal plus a decimal-points database migration and schema changes."
+  },
+  "7138d603d466c77df22c048dfb7030293740acef": {
+    "verdict": "real risk",
+    "reason": "Changes persisted point types through a decimal-points migration and Prisma schema."
+  },
+  "7fd2408d462de0032397d7fbf42678607ae4379a": {
+    "verdict": "real risk",
+    "reason": "Removes the Vercel deployment workflow; CI/deployment changes should require human review."
+  },
+  "146fee0fa272ae37fa085838dc6c01976a1610ac": {
+    "verdict": "real risk",
+    "reason": "Changes accepted-fix/PR binding and deliberate-delivery gates; test entropy is spurious but merge authority and evidence binding deserve review."
+  },
+  "43a787dd0445c7f28479676ebc38c09b46bba962": {
+    "verdict": "real risk",
+    "reason": "Changes accepted-fix/PR binding and deliberate-delivery gates; test entropy is spurious but merge authority and evidence binding deserve review."
+  },
+  "e5f4ebaf478ca913044d748522fe935ab37981fe": {
+    "verdict": "false alarm",
+    "reason": "The flagged team-agent table is readable JSX markup using existing level controls; no permission-policy change or obfuscated payload appears."
+  },
+  "7e8f0b1286c9d394543b1cab2613a39634cb669e": {
+    "verdict": "false alarm",
+    "reason": "The flagged team-agent table is readable JSX markup using existing level controls; no permission-policy change or obfuscated payload appears."
+  },
+  "d4576a18776481c5c09900e64f4abb131e403428": {
+    "verdict": "real risk",
+    "reason": "First-parent sync includes middleware or reviewer-eligibility migration/schema changes; not just the noisy entropy findings."
+  },
+  "45c0e46c4f5197118acc3448f66e7e39ff88d9b5": {
+    "verdict": "real risk",
+    "reason": "First-parent sync includes middleware or reviewer-eligibility migration/schema changes; not just the noisy entropy findings."
+  },
+  "ee8c3341c8bc3ee62f02e2cc9c8efd4f9c9fc67c": {
+    "verdict": "false alarm",
+    "reason": "Only readable render assertions and Lucide license prose trigger entropy; these are interface/layout and static-icon changes."
+  },
+  "d152ecc33a584be7ad1f46f3b664f0ecfd251320": {
+    "verdict": "false alarm",
+    "reason": "Only readable render assertions and Lucide license prose trigger entropy; these are interface/layout and static-icon changes."
+  },
+  "e9f687567cf2b881bc31278d9d96fb6bd358df3d": {
+    "verdict": "real risk",
+    "reason": "Changes reviewer-eligibility enum/schema through a migration; authorization-role persistence requires review."
+  },
+  "7f81d40d43811e186424d5b75b8cef1448d61440": {
+    "verdict": "real risk",
+    "reason": "Changes reviewer-eligibility enum/schema through a migration; authorization-role persistence requires review."
+  },
+  "c6d5c4f258f7e67521af4431c5818e2041941a9d": {
+    "verdict": "real risk",
+    "reason": "Changes transactional rate-budget charging and validation behaviour; readable SQL is not obfuscated, but security throttling semantics are sensitive."
+  },
+  "659e65a478dd16be41c8b8fbf93a39e849c8f676": {
+    "verdict": "real risk",
+    "reason": "Changes transactional rate-budget charging and validation behaviour; readable SQL is not obfuscated, but security throttling semantics are sensitive."
+  },
+  "d6b5f62abc4355dc269cd7ad7d45a550f896341b": {
+    "verdict": "real risk",
+    "reason": "Large first-parent sync contains migrations and middleware changes; harmless design-handoff entropy hits do not make the entire commit harmless."
+  },
+  "e6871651df33a8ae91e45c2783aa0459144c1b07": {
+    "verdict": "real risk",
+    "reason": "Large first-parent sync contains migrations and middleware changes; harmless design-handoff entropy hits do not make the entire commit harmless."
+  },
+  "8fa0a4ac56f4c03908f13b18c98701e660631ee0": {
+    "verdict": "real risk",
+    "reason": "Changes middleware routing/auth exemptions in the first-parent diff; accompanying test entropy hits do not negate that real boundary change."
+  },
+  "f4ac187c9da4f620dbf9581c24133cf89ec5bbc0": {
+    "verdict": "real risk",
+    "reason": "Changes middleware routing/auth exemptions in the first-parent diff; accompanying test entropy hits do not negate that real boundary change."
+  },
+  "768c0cc4479fae25287aa71fadfa042c21386148": {
+    "verdict": "real risk",
+    "reason": "Changes middleware routing/auth exemptions in the first-parent diff; accompanying test entropy hits do not negate that real boundary change."
+  },
+  "02e520310ec889472eb05f3cd5a87b54f7b39625": {
+    "verdict": "real risk",
+    "reason": "Changes middleware routing/auth exemptions in the first-parent diff; accompanying test entropy hits do not negate that real boundary change."
+  },
+  "2197145d8cd792fa019ed765448a98981830f47a": {
+    "verdict": "real risk",
+    "reason": "Changes middleware routing/auth exemptions in the first-parent diff; accompanying test entropy hits do not negate that real boundary change."
+  },
+  "fff433b801dc9bbe9a954bcc44a01b86336c7557": {
+    "verdict": "real risk",
+    "reason": "Changes middleware routing/auth exemptions in the first-parent diff; accompanying test entropy hits do not negate that real boundary change."
+  },
+  "5ff71a7cc85ecec99867935f02beaa314ae7d77f": {
+    "verdict": "real risk",
+    "reason": "Changes middleware routing/auth exemptions in the first-parent diff; accompanying test entropy hits do not negate that real boundary change."
+  },
+  "28a2b7250547e1d3b3191e783cbb40af7eb5c22e": {
+    "verdict": "real risk",
+    "reason": "Changes middleware routing/auth exemptions in the first-parent diff; accompanying test entropy hits do not negate that real boundary change."
+  },
+  "d43f246dce4f07c4334d4033197e43b0b6ea2982": {
+    "verdict": "real risk",
+    "reason": "Adds a personal-notification read action with user/tenant scoping; privacy/access-boundary review is justified despite the false test entropy alert."
+  },
+  "03b51c73bebb1917faa028c27cbfee2c29b150fb": {
+    "verdict": "false alarm",
+    "reason": "The trigger is a readable form-draft regression test; runtime changes clear saved drafts after a successful issue redirect."
+  },
+  "ad383863d51a753b4acc10dc1eebbdbe03ec015a": {
+    "verdict": "false alarm",
+    "reason": "Readable date-range tests alone trigger entropy; the code normalizes ISO date bounds without changing identity or access rules."
+  },
+  "6ef442e518b08105b5567b7945b60242c35ec2be": {
+    "verdict": "real risk",
+    "reason": "Adds project-key authorization assertions and scoped issue resolution for bidding; false test entropy accompanies a real access-boundary change."
+  },
+  "677464206a6aa70b46c13805fe559ceb08c631c0": {
+    "verdict": "real risk",
+    "reason": "Changes reviewer/beneficiary independence and historical reward eligibility; harmless evidence-log entropy does not make those trust checks low risk."
+  },
+  "aed1b61458ead7079bfef9364d26208a87c4ca0f": {
+    "verdict": "real risk",
+    "reason": "Changes reviewer/beneficiary independence and historical reward eligibility; harmless evidence-log entropy does not make those trust checks low risk."
+  },
+  "e45e16a69ba5765d42c8c8a6bd7dfa6b057babe8": {
+    "verdict": "false alarm",
+    "reason": "Readable claim-extension tests trip entropy; the small runtime change accepts readable issue numbers while retaining tenant/project locks."
+  },
+  "477b32599baf29a1077c432073b8e33b87e728f4": {
+    "verdict": "false alarm",
+    "reason": "Readable claim-extension tests trip entropy; the small runtime change accepts readable issue numbers while retaining tenant/project locks."
+  },
+  "14c2ce64909adda0b4d2942389b44e82f5748c02": {
+    "verdict": "false alarm",
+    "reason": "Readable claim-release tests trip entropy; numeric-reference resolution retains existing tenant/project locking and claim checks."
+  },
+  "9d798c99657910e8b50ba5f91058ec4d2fd67509": {
+    "verdict": "false alarm",
+    "reason": "Readable claim-release tests trip entropy; numeric-reference resolution retains existing tenant/project locking and claim checks."
+  },
+  "ac5d7b198f5436d2e861fb717d6e4c1856ec85fe": {
+    "verdict": "false alarm",
+    "reason": "Only readable API assertions trigger entropy; runtime code exposes the already-linked PR URL/head as response metadata."
+  },
+  "a60b34e4c256a65abdc513dcef3735538b47e0b6": {
+    "verdict": "real risk",
+    "reason": "Changes pairing instructions persistence in Prisma schema and onboarding/registry logic; unknown schema is a legitimate fail-closed signal."
+  },
+  "4856ee3982e9d3a7ed1f1cc282cb788d287a0cf2": {
+    "verdict": "false alarm",
+    "reason": "Readable rendering assertions for issue-number labels trigger entropy; the associated changes only adjust escalation link presentation."
+  },
+  "832973d48b907fa4c4ebe4524fa80ad8ae04022f": {
+    "verdict": "real risk",
+    "reason": "First-parent sync changes Google sign-in password neutralization and TOTP/backup-code removal; genuine credential-lifecycle risk despite a false test entropy hit."
+  },
+  "0f52e32e192cabe3d06e93385a280feb9ef02f2e": {
+    "verdict": "real risk",
+    "reason": "First-parent sync changes Google sign-in password neutralization and TOTP/backup-code removal; genuine credential-lifecycle risk despite a false test entropy hit."
+  },
+  "ba135d0031ba51433001805f718a4e70a638aa18": {
+    "verdict": "real risk",
+    "reason": "Changes stale-validation deletion/replacement and re-review eligibility; trust/audit semantics warrant review even though the test is readable."
+  }
+}
