@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export const metadata = { title: "Security" };
+export const metadata = { title: "Security (before)" };
 
 /** Today's Security tab in Ziki: the "Coming soon" card, unchanged. */
 export default function BeforeSecurity() {

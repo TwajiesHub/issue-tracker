@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export const metadata = { title: "Issues (the Inbox today)" };
+export const metadata = { title: "Inbox (before)" };
 
 const TABS = [
   { label: "Need your input", n: 0 },
