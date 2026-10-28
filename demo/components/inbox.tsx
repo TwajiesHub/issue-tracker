@@ -5,8 +5,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useAgeLabel, useStore } from "@/lib/store";
 import { suggestDelegation } from "@/lib/guard";
 import type { Item } from "@/lib/scenario";
-import { DecisionPane } from "./decision";
-import { BackIcon, PrimaryButton, RiskMark, TextButton, focus } from "./ui";
+import { CONFIRM_MS, DecisionPane } from "./decision";
+import { BackIcon, Kbd, PrimaryButton, RiskMark, TextButton, focus, panel } from "./ui";
 
 type Tab = "needs" | "wait" | "done";
 
@@ -37,16 +37,16 @@ function ItemRow({
       >
         <span className="mt-[3px]"><RiskMark tier={item.tier === "done" ? "done" : item.kind === "question" ? "wait" : item.tier} /></span>
         <span className="min-w-0 flex-1">
-          <span className="block text-[15px] leading-snug text-zk-text">
+          <span className="t-body block text-[15px] leading-snug">
             <span className="font-bold">{item.agent}</span> {item.sentence}
           </span>
-          <span className="mt-0.5 block truncate text-[13px] text-zk-muted">
+          <span className="t-support mt-0.5 block truncate text-[13px] font-normal">
             {item.details.map((d, i) => (
-              <span key={d}>{i > 0 ? " · " : ""}{/^#/.test(d) ? <span className="font-mono text-[12px]">{d}</span> : d}</span>
+              <span key={d}>{i > 0 ? " · " : ""}{/^#/.test(d) ? <span className="font-mono text-xs">{d}</span> : d}</span>
             ))}
           </span>
         </span>
-        <span className="shrink-0 pt-0.5 text-[13px] tabular-nums text-zk-muted group-hover:max-lg:hidden">{age(item.ageMin)}</span>
+        <span className="t-quiet shrink-0 pt-0.5 text-[13px] tabular-nums group-hover:max-lg:hidden">{age(item.ageMin)}</span>
       </button>
       {quick ? (
         <div className={`absolute right-2 top-1/2 -translate-y-1/2 items-center gap-1 rounded-full bg-zk-chip px-1 group-focus-within:flex group-hover:flex ${revealed ? "flex" : "hidden"}`}>
@@ -93,10 +93,23 @@ export function Inbox() {
   }, [router, tab, itemParam]);
 
   // On desktop the first item opens by default. Writing it into the URL keeps the decision on screen
-  // after it resolves (otherwise the pane would jump to the next item and hide "Restored. Nothing ran.").
+  // after it resolves (otherwise the pane would jump to the next item and hide the confirmation).
   useEffect(() => {
     if (!itemParam && tab !== "done" && list[0] && isDesktop()) go({ item: list[0].id }, true);
   }, [itemParam, tab, list, go, isDesktop]);
+
+  // After Stop and restore, the confirmation stays for a few seconds, then the Inbox moves on to the next decision.
+  const moveOn = useRef<() => void>(() => {});
+  moveOn.current = () => go({ item: isDesktop() ? openNeeds[0]?.id ?? null : null }, true);
+  const prev = useRef<{ id?: string; state?: string }>({});
+  useEffect(() => {
+    const was = prev.current;
+    prev.current = { id: selected?.id, state: selected?.state };
+    if (selected?.kind === "paused" && selected.state === "restored" && was.id === selected.id && was.state !== "restored") {
+      const t = setTimeout(() => moveOn.current(), CONFIRM_MS);
+      return () => clearTimeout(t);
+    }
+  }, [selected?.id, selected?.state, selected?.kind]);
 
   // Keyboard: J/K move, Enter open, S stop and restore (Needs you), A approve (Can wait only), Esc back.
   useEffect(() => {
@@ -140,21 +153,21 @@ export function Inbox() {
   ];
 
   return (
-    <div className="space-y-5">
-      <div className={itemParam ? "max-lg:hidden" : ""}>
-        <h1 className="text-[28px] font-extrabold tracking-[-0.02em] text-zk-text max-sm:text-2xl">
-          {headline} <span className="font-semibold text-zk-text2">Your agents finished {counts.done} things on their own.</span>
+    <div className="space-y-6">
+      <div className={`space-y-1 ${itemParam ? "max-lg:hidden" : ""}`}>
+        <h1 className="t-headline text-[28px] leading-tight max-sm:text-2xl">
+          {headline} <span className="t-support font-medium tracking-normal">Your agents finished <span className="tabular-nums">{counts.done}</span> things on their own.</span>
         </h1>
         <TextButton aria-expanded={how} aria-controls="how-it-works" onClick={() => setHow((v) => !v)}>How this works</TextButton>
         {how ? (
-          <p id="how-it-works" className="max-w-2xl text-[13px] leading-relaxed text-zk-text2">
+          <p id="how-it-works" className="t-support zg-in max-w-2xl text-sm font-normal leading-relaxed">
             Agents work on their own. When a change doesn’t match what they promised, or breaks a rule you set, it pauses here and nothing runs until you decide. Low-risk changes wait in Can wait. Everything else they did is in Done by agents.
           </p>
         ) : null}
       </div>
 
       <nav aria-label="Inbox lists" className={`overflow-x-auto ${itemParam ? "max-lg:hidden" : ""}`}>
-        <ul className="flex w-max gap-1 border-b border-zk-divider">
+        <ul className="flex w-max border-b border-zk-divider sm:gap-1">
           {tabs.map((t) => {
             const on = tab === t.id;
             return (
@@ -163,10 +176,10 @@ export function Inbox() {
                   type="button"
                   aria-current={on ? "page" : undefined}
                   onClick={() => go({ tab: t.id, item: null })}
-                  className={`-mb-px inline-flex h-10 items-center gap-1.5 whitespace-nowrap border-b-2 px-3 text-[13px] ${focus} ${on ? "border-electric-blue-strong font-semibold text-zk-text" : "border-transparent font-medium text-zk-text2 hover:text-zk-text"}`}
+                  className={`-mb-px inline-flex h-11 items-center gap-1 whitespace-nowrap rounded-t-md border-b-2 px-2 text-[13px] sm:gap-1.5 sm:px-3 sm:text-sm ${focus} ${on ? "t-body border-electric-blue-strong font-semibold" : "t-support border-transparent hover:text-zk-text"}`}
                 >
                   {t.label}
-                  <span className={`rounded-full px-1.5 font-mono text-[11px] tabular-nums ${on ? "bg-zk-tint text-zk-accent" : "bg-zk-chip text-zk-muted"}`}>{counts[t.id]}</span>
+                  <span className={`rounded-full px-1.5 font-mono text-xs tabular-nums ${on ? "bg-zk-tint text-zk-accent" : "bg-zk-chip text-zk-text2"}`}>{counts[t.id]}</span>
                 </button>
               </li>
             );
@@ -175,71 +188,74 @@ export function Inbox() {
       </nav>
 
       {tab === "needs" && n === 0 && !itemFromParam ? (
-        <div className="py-16 text-center">
-          <p className="text-xl font-extrabold text-zk-text">Nothing needs you.</p>
-          <p className="mt-1.5 text-sm text-zk-muted">Your agents finished {counts.done} things today.</p>
+        <div className={`${panel} zg-fade px-6 py-16 text-center`}>
+          <p className="t-headline text-xl">You’re all caught up.</p>
+          <p className="t-support mt-1.5 text-[15px] font-normal">Your agents keep going.</p>
           <TextButton className="mt-2" onClick={() => go({ tab: "done", item: null })}>See what they did →</TextButton>
         </div>
       ) : tab === "done" && !itemFromParam ? (
-        <div className="max-w-3xl space-y-5">
+        <div key="done" className={`${panel} zg-fade max-w-3xl space-y-5 p-5 sm:p-6`}>
           {showSuggestion ? (
-            <section aria-label="Suggestion" className="space-y-1.5 border-b border-zk-divider pb-5">
-              <p className="text-[15px] text-zk-text"><span className="font-bold">Kite kept its promise on all 12 docs changes.</span> Let it just do these and tell you after?</p>
+            <section aria-label="Suggestion" className="space-y-2 border-b border-zk-divider pb-5">
+              <p className="t-body text-[15px]"><span className="font-bold">Kite kept its promise on all 12 docs changes.</span> Let it just do these and tell you after?</p>
               <div className="flex flex-wrap items-center gap-x-4">
                 <PrimaryButton className="!h-10" onClick={() => act.suggestion(true)}>Yes</PrimaryButton>
                 <TextButton onClick={() => act.suggestion(false)}>Not now</TextButton>
               </div>
-              <p className="text-[13px] text-zk-muted">Scripts, CI, auth and AGENTS.md always need you.</p>
+              <p className="t-quiet text-[13px]">Scripts, CI, auth and AGENTS.md always need you.</p>
             </section>
           ) : state.suggestion === "accepted" ? (
-            <p className="border-b border-zk-divider pb-4 text-sm text-zk-text2">Done. Kite will do docs changes and tell you after. <span className="text-zk-muted">Scripts, CI, auth and AGENTS.md always need you.</span></p>
+            <p className="t-support border-b border-zk-divider pb-4 text-sm font-normal">Done. Kite will do docs changes and tell you after. <span className="t-quiet">Scripts, CI, auth and AGENTS.md always need you.</span></p>
           ) : null}
           <ul className="divide-y divide-zk-divider">
             {state.doneLines.map((l) => (
-              <li key={l.id} className="flex gap-4 py-2.5 text-[15px] text-zk-text">
-                <span className="w-11 shrink-0 font-mono text-[13px] leading-[1.6] tabular-nums text-zk-muted">{l.time}</span>
+              <li key={l.id} className="t-body flex gap-4 py-2.5 text-[15px]">
+                <span className="t-quiet w-11 shrink-0 font-mono text-[13px] leading-[1.6] tabular-nums">{l.time}</span>
                 <span>{l.text}</span>
               </li>
             ))}
           </ul>
         </div>
       ) : (
-        <div className="grid gap-8 lg:grid-cols-[minmax(0,26rem)_minmax(0,1fr)]">
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,26rem)_minmax(0,1fr)]">
           <div className={itemParam ? "max-lg:hidden" : ""}>
-            {list.length ? (
-              <ul aria-label={tab === "needs" ? "Needs you" : "Can wait"} className="space-y-0.5">
-                {list.map((i) => (
-                  <ItemRow
-                    key={i.id}
-                    item={i}
-                    tab={tab}
-                    selected={selected?.id === i.id}
-                    revealed={revealed === i.id}
-                    setRevealed={(v) => setRevealed(v ? i.id : null)}
-                    onOpen={() => go({ item: i.id }, isDesktop())}
-                  />
-                ))}
-              </ul>
-            ) : (
-              <p className="px-3 py-6 text-sm text-zk-muted">Nothing here.</p>
-            )}
-            {tab === "wait" ? <p className="px-3 pt-4 text-[13px] text-zk-muted">These never run code.</p> : null}
-            <p className="px-3 pt-4 text-xs text-zk-muted max-lg:hidden">
-              <kbd className="font-mono">J</kbd>/<kbd className="font-mono">K</kbd> move · <kbd className="font-mono">Enter</kbd> open ·{" "}
-              {tab === "needs" ? <><kbd className="font-mono">S</kbd> stop and restore · </> : <><kbd className="font-mono">A</kbd> approve · </>}
-              <kbd className="font-mono">Esc</kbd> back
+            <div className={`${panel} p-2`}>
+              {list.length ? (
+                <ul key={tab} aria-label={tab === "needs" ? "Needs you" : "Can wait"} className="zg-fade space-y-0.5">
+                  {list.map((i) => (
+                    <ItemRow
+                      key={i.id}
+                      item={i}
+                      tab={tab}
+                      selected={selected?.id === i.id}
+                      revealed={revealed === i.id}
+                      setRevealed={(v) => setRevealed(v ? i.id : null)}
+                      onOpen={() => go({ item: i.id }, isDesktop())}
+                    />
+                  ))}
+                </ul>
+              ) : (
+                <p className="t-support px-3 py-6 text-sm font-normal">Nothing here.</p>
+              )}
+            </div>
+            {tab === "wait" ? <p className="t-quiet px-3 pt-3 text-[13px]">These never run code.</p> : null}
+            <p className="t-quiet flex flex-wrap items-center gap-x-3 gap-y-1.5 px-3 pt-3 text-xs max-lg:hidden">
+              <span className="whitespace-nowrap"><Kbd>J</Kbd> <Kbd>K</Kbd> move</span>
+              <span className="whitespace-nowrap"><Kbd>Enter</Kbd> open</span>
+              {tab === "needs" ? <span className="whitespace-nowrap"><Kbd>S</Kbd> stop and restore</span> : <span className="whitespace-nowrap"><Kbd>A</Kbd> approve</span>}
+              <span className="whitespace-nowrap"><Kbd>Esc</Kbd> back</span>
             </p>
           </div>
           <section
             aria-label="Decision"
-            className={`min-w-0 lg:border-l lg:border-zk-divider lg:pl-8 ${itemParam ? "" : "max-lg:hidden"}`}
+            className={`${panel} min-w-0 p-5 sm:p-7 lg:p-8 ${itemParam ? "" : "max-lg:hidden"}`}
           >
             {itemParam ? (
-              <button type="button" onClick={() => go({ item: null })} className={`mb-3 inline-flex min-h-11 items-center gap-1 rounded-lg text-sm font-bold text-zk-accent hover:underline lg:hidden ${focus}`}>
+              <button type="button" onClick={() => go({ item: null })} className={`mb-3 inline-flex min-h-11 items-center gap-1 rounded-md text-sm font-semibold text-zk-accent hover:underline lg:hidden ${focus}`}>
                 <BackIcon /> Inbox
               </button>
             ) : null}
-            {selected ? <DecisionPane key={selected.id} item={selected} stopOpen={stopOpen} setStopOpen={setStopOpen} /> : <p className="text-sm text-zk-muted">Pick something from the list.</p>}
+            {selected ? <DecisionPane key={selected.id} item={selected} stopOpen={stopOpen} setStopOpen={setStopOpen} /> : <p className="t-support text-sm font-normal">Pick something from the list.</p>}
           </section>
         </div>
       )}

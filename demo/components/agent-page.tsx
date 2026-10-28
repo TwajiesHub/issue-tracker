@@ -7,7 +7,7 @@ import {
   DELEGATION_LABELS, LIMIT_LABELS, LOCKED_LABELS, WORK_LABELS, type WorkKind,
 } from "@/lib/scenario";
 import type { Delegation } from "@/lib/guard";
-import { Dialog, PrimaryButton, TextButton, focus } from "./ui";
+import { Dialog, PrimaryButton, TextButton, focus, panel } from "./ui";
 
 function Lock() {
   return (
@@ -36,6 +36,16 @@ function Segmented({ name, value, onChange }: { name: string; value: Delegation;
   );
 }
 
+/** One panel per section, with the same header row as Security. */
+function Card({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <section className={`${panel} zg-fade space-y-3 p-5 sm:p-6`}>
+      <h2 className="t-body text-base">{title}</h2>
+      {children}
+    </section>
+  );
+}
+
 export function AgentPage({ id }: { id: string }) {
   const { state, act } = useStore();
   const agent = state.agents[id];
@@ -43,88 +53,82 @@ export function AgentPage({ id }: { id: string }) {
   if (!agent) {
     return (
       <div className="space-y-2">
-        <h1 className="text-[28px] font-extrabold text-zk-text">No agent called “{id}”.</h1>
-        <Link href="/agents/nova" className="text-sm font-bold text-zk-accent hover:underline">Open Nova</Link>
+        <h1 className="t-headline text-[28px]">No agent called “{id}”.</h1>
+        <Link href="/agents/nova" className={`rounded-md text-sm font-semibold text-zk-accent hover:underline ${focus}`}>Open Nova</Link>
       </div>
     );
   }
   const brokenCount = agent.total - agent.kept;
   return (
-    <div className="mx-auto max-w-3xl space-y-8">
-      <div>
-        <nav aria-label="Breadcrumb" className="mb-2 flex items-center gap-2 text-[13px] text-zk-muted">
-          <Link href="/inbox" className="hover:text-zk-text">Inbox</Link><span aria-hidden="true">›</span><span>Agents</span>
+    <div className="mx-auto max-w-3xl space-y-6">
+      <div className="space-y-3">
+        <nav aria-label="Breadcrumb" className="t-quiet flex items-center gap-2 text-[13px]">
+          <Link href="/inbox" className={`rounded-md hover:text-zk-text ${focus}`}>Inbox</Link><span aria-hidden="true">›</span><span>Agents</span>
         </nav>
         <div className="flex flex-wrap items-center gap-3">
-          <span aria-hidden="true" className="flex h-11 w-11 items-center justify-center rounded-full bg-zk-tint text-base font-extrabold text-zk-accent">{agent.name.slice(0, 2).toUpperCase()}</span>
+          <span aria-hidden="true" className="flex h-11 w-11 items-center justify-center rounded-full bg-zk-tint text-base font-bold text-zk-accent">{agent.name.slice(0, 2).toUpperCase()}</span>
           <div>
-            <h1 className="text-[28px] font-extrabold leading-tight tracking-[-0.02em] text-zk-text max-sm:text-2xl">{agent.name}</h1>
-            <p className="text-sm text-zk-muted">{agent.blurb}</p>
+            <h1 className="t-headline text-[28px] leading-tight max-sm:text-2xl">{agent.name}</h1>
+            <p className="t-support text-sm font-normal">{agent.blurb}</p>
           </div>
         </div>
         {agent.paused ? (
-          <p className="mt-4 text-[15px] text-zk-text" role="status">
-            <span className="font-bold">{agent.name} is paused.</span> It can’t push, run code or bid until you resume it.
+          <p className="t-body text-[15px]" role="status">
+            <span className="font-bold">{agent.name} is paused.</span> <span className="t-support font-normal">It can’t push, run code or bid until you resume it.</span>
           </p>
         ) : null}
       </div>
 
-      <section className="space-y-1.5 border-t border-zk-divider pt-6">
-        <h2 className="text-base font-bold text-zk-text">Promises kept</h2>
-        <p className="text-[15px] text-zk-text">
-          <span className="text-2xl font-extrabold tabular-nums">{agent.kept} of {agent.total}</span>
-        </p>
+      <Card title="Promises kept">
+        <p className="t-headline text-2xl tabular-nums">{agent.kept} of {agent.total}</p>
         {agent.broken ? (
-          <p className="text-[13px] text-zk-text2">
-            The one broken: <a href="#broken" className={`font-bold text-zk-accent hover:underline ${focus}`}>{agent.broken.ref}</a>
-          </p>
+          <>
+            <p className="t-support text-sm font-normal">
+              The one broken: <a href="#broken" className={`rounded-md font-semibold text-zk-accent hover:underline ${focus}`}>{agent.broken.ref}</a>
+            </p>
+            <p id="broken" className="t-quiet text-[13px]"><span className="font-mono">{agent.broken.ref}</span> · {agent.broken.when} · {agent.broken.text}</p>
+          </>
         ) : (
-          <p className="text-[13px] text-zk-text2">{brokenCount === 0 ? "Every promise kept." : ""}</p>
+          <p className="t-support text-sm font-normal">{brokenCount === 0 ? "Every promise kept." : ""}</p>
         )}
-        {agent.broken ? (
-          <p id="broken" className="text-[13px] text-zk-muted"><span className="font-mono">{agent.broken.ref}</span> · {agent.broken.when} · {agent.broken.text}</p>
-        ) : null}
-      </section>
+      </Card>
 
-      <section className="space-y-3 border-t border-zk-divider pt-6">
-        <h2 className="text-base font-bold text-zk-text">Delegation</h2>
-        <p className="text-[13px] text-zk-muted">How much {agent.name} may do before asking you, per kind of work.</p>
+      <Card title="Delegation">
+        <p className="t-support text-[13px] font-normal">How much {agent.name} may do before asking you, per kind of work.</p>
         <ul className="divide-y divide-zk-divider">
           {(Object.keys(WORK_LABELS) as WorkKind[]).map((k) => (
             <li key={k} className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 py-3">
-              <span className="text-[15px] text-zk-text">{WORK_LABELS[k]}</span>
+              <span className="t-body text-[15px] font-normal">{WORK_LABELS[k]}</span>
               <Segmented name={`${WORK_LABELS[k]} delegation`} value={agent.delegation[k]} onChange={(v) => act.setDelegation(agent.id, k, v)} />
             </li>
           ))}
           {LOCKED_LABELS.map((l) => (
-            <li key={l} className="flex items-center justify-between gap-4 py-3 text-zk-text2">
-              <span className="text-[15px]">{l}</span>
-              <span className="inline-flex items-center gap-1.5 text-[13px] font-semibold"><Lock />Always me</span>
+            <li key={l} className="flex items-center justify-between gap-4 py-3">
+              <span className="t-support text-[15px] font-normal">{l}</span>
+              <span className="t-quiet inline-flex items-center gap-1.5 text-[13px]"><Lock />Always me</span>
             </li>
           ))}
         </ul>
-      </section>
+      </Card>
 
-      <section className="space-y-2 border-t border-zk-divider pt-6">
-        <h2 className="text-base font-bold text-zk-text">Active limits</h2>
+      <Card title="Active limits">
         {agent.limits.length ? (
           <ul className="divide-y divide-zk-divider">
             {agent.limits.map((l) => (
-              <li key={l} className="flex items-center justify-between gap-4 py-1.5 text-[15px] text-zk-text">
-                {LIMIT_LABELS[l]}
+              <li key={l} className="flex items-center justify-between gap-4 py-1.5">
+                <span className="t-body text-[15px] font-normal">{LIMIT_LABELS[l]}</span>
                 <TextButton aria-label={`Remove limit: ${LIMIT_LABELS[l]}`} onClick={() => act.removeLimit(agent.id, l)}>Remove</TextButton>
               </li>
             ))}
           </ul>
         ) : (
-          <p className="text-sm text-zk-muted">None. Add limits when you approve a proposal or reply to a pause.</p>
+          <p className="t-support text-sm font-normal">None. Add limits when you approve a proposal or reply to a pause.</p>
         )}
-      </section>
+      </Card>
 
-      <section className="space-y-3 border-t border-zk-divider pt-6">
-        <h2 className="text-base font-bold text-zk-text">Access</h2>
+      <Card title="Access">
         <div className="flex items-center justify-between gap-4">
-          <label htmlFor="pause" className="text-[15px] text-zk-text">Pause agent</label>
+          <label htmlFor="pause" className="t-body text-[15px] font-normal">Pause agent</label>
           <button
             id="pause"
             type="button"
@@ -137,19 +141,19 @@ export function AgentPage({ id }: { id: string }) {
             <span className="sr-only">{agent.paused ? "Paused" : "Running"}</span>
           </button>
         </div>
-        <p className="text-[13px] text-zk-muted">
+        <p className="t-quiet text-[13px]">
           Key <span className="font-mono">zk_live_••••{agent.keySuffix}</span>
           {agent.rotations ? ` · rotated ${agent.rotations} ${agent.rotations === 1 ? "time" : "times"} in this demo` : ""}
         </p>
         <div className="flex flex-wrap items-center gap-x-5">
           <TextButton onClick={() => setConfirm(true)}>Pause and rotate key</TextButton>
         </div>
-      </section>
+      </Card>
 
       <Dialog open={confirm} onClose={() => setConfirm(false)} title={`Pause ${agent.name} and rotate its key?`}>
-        <ul className="mt-3 space-y-2 text-sm text-zk-text">
-          <li className="flex gap-2"><span aria-hidden="true" className="text-zk-muted">•</span>{agent.name} can’t push, run code or bid</li>
-          <li className="flex gap-2"><span aria-hidden="true" className="text-zk-muted">•</span>Its current key stops working at once</li>
+        <ul className="t-body mt-3 space-y-2 text-sm font-normal">
+          <li className="flex gap-2"><span aria-hidden="true" className="t-quiet">•</span>{agent.name} can’t push, run code or bid</li>
+          <li className="flex gap-2"><span aria-hidden="true" className="t-quiet">•</span>Its current key stops working at once</li>
         </ul>
         <div className="mt-5 flex items-center justify-end gap-3">
           <TextButton onClick={() => setConfirm(false)}>Cancel</TextButton>

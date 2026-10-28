@@ -180,7 +180,8 @@ export function groupFindings(findings: Finding[]): FindingGroup[] {
 export function pausedItem(sim: SimResult, ageMin: number): Item {
   const attack = sim.kind === "attack";
   const findings = sim.findings.map(plainFinding);
-  const n = groupFindings(findings).length;
+  // The mismatch note says what claim_mismatch says, so the list (and this count) leaves it out.
+  const n = groupFindings(findings).filter((g) => !(g.code === "claim_mismatch" && !sim.matchesPromise)).length;
   const limit = findings.find((f) => f.code === "broke_limit");
   const branches = sim.branches === 1 ? "1 branch" : `${sim.branches} branches`;
   return {

@@ -7,12 +7,16 @@ import { zikiProtectedAreas } from "@/lib/guard-profile";
 import { validateArea, MAX_LABEL, MAX_PATTERN } from "@/lib/areas";
 import { suggestDelegation } from "@/lib/guard";
 import { verifyChain } from "@/lib/chain";
-import { Dialog, PrimaryButton, RiskMark, TextButton, focus } from "./ui";
+import { Dialog, PrimaryButton, RiskMark, TextButton, focus, panel } from "./ui";
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+/** One panel per section. The action, if any, sits in the section's own header row. */
+function Section({ title, action, children }: { title: string; action?: React.ReactNode; children: React.ReactNode }) {
   return (
-    <section className="space-y-2.5 border-t border-zk-divider pt-6">
-      <h2 className="text-base font-bold text-zk-text">{title}</h2>
+    <section className={`${panel} zg-fade space-y-4 p-5 sm:p-6`}>
+      <div className="flex min-h-6 items-center justify-between gap-4">
+        <h2 className="t-body text-base">{title}</h2>
+        {action}
+      </div>
       {children}
     </section>
   );
@@ -41,18 +45,20 @@ function ProtectedAreas() {
     close();
   };
   return (
-    <div className="space-y-1 border-t border-zk-divider pt-4">
-      <h3 className="text-[13px] font-bold text-zk-text">Protected areas</h3>
-      <p className="text-[13px] text-zk-muted">Any change that touches these always needs you.</p>
+    <div className="space-y-2 border-t border-zk-divider pt-4">
+      <div className="flex min-h-6 items-center justify-between gap-4">
+        <h3 className="t-body text-sm">Protected areas</h3>
+        <TextButton className="-my-2" onClick={() => setOpen(true)}>Add an area</TextButton>
+      </div>
+      <p className="t-support text-[13px] font-normal">Any change that touches these always needs you.</p>
       <ul aria-label="Protected areas" className="divide-y divide-zk-divider">
         {areas.map((a) => (
-          <li key={a.label} className="flex items-baseline justify-between gap-4 py-2 text-[15px] text-zk-text">
-            <span className="min-w-0">{a.label}</span>
-            <span className="shrink-0 text-[13px] tabular-nums text-zk-muted">{a.globs.length} file {a.globs.length === 1 ? "pattern" : "patterns"}</span>
+          <li key={a.label} className="flex items-baseline justify-between gap-4 py-2.5">
+            <span className="t-body min-w-0 text-[15px] font-normal">{a.label}</span>
+            <span className="t-quiet shrink-0 text-[13px] tabular-nums">{a.globs.length} file {a.globs.length === 1 ? "pattern" : "patterns"}</span>
           </li>
         ))}
       </ul>
-      <TextButton onClick={() => setOpen(true)}>Add an area</TextButton>
 
       <Dialog open={open} onClose={close} title="Add a protected area">
         <form
@@ -61,15 +67,15 @@ function ProtectedAreas() {
           className="mt-3 space-y-3"
         >
           <div>
-            <label htmlFor="area-label" className="text-[13px] font-bold text-zk-text">Name</label>
+            <label htmlFor="area-label" className="t-body text-sm">Name</label>
             <input id="area-label" value={label} maxLength={MAX_LABEL} onChange={(e) => { setLabel(e.target.value); setError(null); }} placeholder="Composer" className={`${field} h-11`} autoFocus />
           </div>
           <div>
-            <label htmlFor="area-pattern" className="text-[13px] font-bold text-zk-text">File pattern</label>
+            <label htmlFor="area-pattern" className="t-body text-sm">File pattern</label>
             <input id="area-pattern" value={pattern} maxLength={MAX_PATTERN} onChange={(e) => { setPattern(e.target.value); setError(null); }} placeholder="lib/composer/**" aria-describedby="area-help" className={`${field} h-11 font-mono`} />
-            <p id="area-help" className="mt-1 text-[13px] text-zk-muted">A path from the repo root. <span className="font-mono">*</span> matches inside a folder, <span className="font-mono">**</span> matches everything below it.</p>
+            <p id="area-help" className="t-support mt-1 text-[13px] font-normal">A path from the repo root. <span className="font-mono">*</span> matches inside a folder, <span className="font-mono">**</span> matches everything below it.</p>
           </div>
-          {error ? <p role="alert" className="text-[13px] font-bold text-zk-bad-fg">{error}</p> : null}
+          {error ? <p role="alert" className="text-[13px] font-semibold text-zk-bad-fg">{error}</p> : null}
           <div className="flex items-center justify-end gap-3 pt-1">
             <TextButton onClick={close}>Cancel</TextButton>
             <PrimaryButton type="submit">Add area</PrimaryButton>
@@ -91,33 +97,33 @@ export function Security() {
   const showSuggestion = state.suggestion === "open" && suggestDelegation({ category: "docs", approvals: 12, total: 12, brokenPromisesInWindow: 0 }) !== null;
 
   return (
-    <div className="mx-auto max-w-3xl space-y-8">
-      <h1 className="text-[28px] font-extrabold leading-tight tracking-[-0.02em] text-zk-text max-sm:text-2xl">
+    <div className="mx-auto max-w-3xl space-y-6">
+      <h1 className="t-headline text-[28px] leading-tight max-sm:text-2xl">
         {paused.length > 0 ? (
           <>
-            <span>{paused.length} {paused.length === 1 ? "change to Zedu is" : "changes to Zedu are"} paused for you.</span>{" "}
-            <span className="font-semibold text-zk-text2">Everything else your agents did today passed.</span>
+            <span><span className="tabular-nums">{paused.length}</span> {paused.length === 1 ? "change to Zedu is" : "changes to Zedu are"} paused for you.</span>{" "}
+            <span className="t-support font-medium tracking-normal">Everything else your agents did today passed.</span>
           </>
         ) : (
           <>
             <span>All clear.</span>{" "}
-            <span className="font-semibold text-zk-text2">Your agents made {doneByAgents + checked + restored + 6} changes today; all passed.</span>
+            <span className="t-support font-medium tracking-normal">Your agents made <span className="tabular-nums">{doneByAgents + checked + restored + 6}</span> changes today; all passed.</span>
           </>
         )}
       </h1>
 
       {paused.length > 0 ? (
         <Section title="Paused for you">
-          <ul className="-mx-3">
+          <ul className="-mx-2">
             {paused.map((i) => (
               <li key={i.id}>
                 <Link href={`/inbox?item=${i.id}`} className={`flex items-start gap-3 rounded-xl px-3 py-3 hover:bg-zk-chip ${focus}`}>
                   <span className="mt-[3px]"><RiskMark tier="needs" /></span>
                   <span className="min-w-0 flex-1">
-                    <span className="block text-[15px] leading-snug text-zk-text"><span className="font-bold">{i.agent}</span> {i.sentence}</span>
-                    <span className="mt-0.5 block truncate text-[13px] text-zk-muted">{i.details.join(" · ")}</span>
+                    <span className="t-body block text-[15px] leading-snug"><span className="font-bold">{i.agent}</span> {i.sentence}</span>
+                    <span className="t-support mt-0.5 block truncate text-[13px] font-normal">{i.details.join(" · ")}</span>
                   </span>
-                  <span className="shrink-0 pt-0.5 text-[13px] tabular-nums text-zk-muted">{age(i.ageMin)}</span>
+                  <span className="t-quiet shrink-0 pt-0.5 text-[13px] tabular-nums">{age(i.ageMin)}</span>
                 </Link>
               </li>
             ))}
@@ -126,50 +132,52 @@ export function Security() {
       ) : null}
 
       <Section title="Today">
-        <p className="text-[15px] text-zk-text2">
+        <p className="t-support text-[15px] font-normal tabular-nums">
           {doneByAgents} changes passed · {checked} checked by your rules · {restored} restored.
         </p>
       </Section>
 
-      <Section title="Your boundary">
+      <Section
+        title="Your boundary"
+        action={<Link href="/agents/nova" className={`-my-2 inline-flex min-h-11 items-center rounded-md text-sm font-semibold text-zk-accent hover:underline ${focus}`}>Change rules</Link>}
+      >
         <dl className="grid gap-x-8 gap-y-4 sm:grid-cols-3">
           {BOUNDARY.map((b) => (
             <div key={b.title}>
-              <dt className="text-[13px] font-bold text-zk-text">{b.title}</dt>
-              <dd className="mt-1 text-[13px] leading-relaxed text-zk-text2">{b.body}</dd>
+              <dt className="t-body text-sm">{b.title}</dt>
+              <dd className="t-support mt-1 text-[13px] font-normal leading-relaxed">{b.body}</dd>
             </div>
           ))}
         </dl>
         <ProtectedAreas />
-        <Link href="/agents/nova" className={`inline-flex min-h-11 items-center text-sm font-bold text-zk-accent hover:underline ${focus}`}>Change rules</Link>
       </Section>
 
       <Section title="Suggestions">
         {showSuggestion ? (
-          <div className="space-y-1.5">
-            <p className="text-[15px] text-zk-text"><span className="font-bold">Kite kept its promise on all 12 docs changes.</span> Let it just do these and tell you after?</p>
+          <div className="space-y-2">
+            <p className="t-body text-[15px]"><span className="font-bold">Kite kept its promise on all 12 docs changes.</span> Let it just do these and tell you after?</p>
             <div className="flex items-center gap-4">
               <TextButton onClick={() => act.suggestion(true)}>Yes</TextButton>
               <TextButton className="!text-zk-text2" onClick={() => act.suggestion(false)}>Not now</TextButton>
             </div>
-            <p className="text-[13px] text-zk-muted">Scripts, CI, auth and AGENTS.md always need you.</p>
+            <p className="t-quiet text-[13px]">Scripts, CI, auth and AGENTS.md always need you.</p>
           </div>
         ) : (
-          <p className="text-sm text-zk-muted">{state.suggestion === "accepted" ? "Kite now tells you after docs changes. Nothing else to suggest." : "Nothing to suggest right now."}</p>
+          <p className="t-support text-sm font-normal">{state.suggestion === "accepted" ? "Kite now tells you after docs changes. Nothing else to suggest." : "Nothing to suggest right now."}</p>
         )}
       </Section>
 
       <Section title="Decision log">
-        <p className="text-[13px] text-zk-muted">
+        <p className="t-support text-[13px] font-normal">
           Every decision is chained to the one before it, so an edit anywhere breaks the chain.{" "}
-          <span role="status" className="font-semibold text-zk-ok-fg">{chain.ok ? `Chain intact · ${state.log.length} entries` : `Chain broken at entry ${chain.brokenAt + 1}`}</span>
+          <span role="status" className="font-semibold tabular-nums text-zk-ok-fg">{chain.ok ? `Chain intact · ${state.log.length} entries` : `Chain broken at entry ${chain.brokenAt + 1}`}</span>
         </p>
         <ol className="divide-y divide-zk-divider">
           {[...state.log].reverse().map((e, i) => (
             <li key={e.hash} className="flex flex-wrap gap-x-4 gap-y-0.5 py-2.5 text-sm">
-              <span className="w-32 shrink-0 text-[13px] tabular-nums text-zk-muted">{e.entry.t}</span>
-              <span className="min-w-0 flex-1 text-zk-text"><span className="font-semibold">{e.entry.actor}</span> · {e.entry.text}</span>
-              <span className="font-mono text-[11px] text-zk-muted" title={e.hash}>#{state.log.length - i} {e.hash.slice(0, 8)}</span>
+              <span className="t-quiet w-32 shrink-0 text-[13px] tabular-nums">{e.entry.t}</span>
+              <span className="t-body min-w-0 flex-1"><span className="font-semibold">{e.entry.actor}</span> · <span className="font-normal">{e.entry.text}</span></span>
+              <span className="t-quiet font-mono text-xs tabular-nums" title={e.hash}>#{state.log.length - i} {e.hash.slice(0, 8)}</span>
             </li>
           ))}
         </ol>
