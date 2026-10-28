@@ -116,13 +116,41 @@ body:has([data-app-shell]) {
 
 
 
-/* Ziki Guard demo additions: motion for the hold ring and a visible focus style. No new colours. */
+/* Ziki Guard demo additions. No new colours: every rule below uses Ziki's zk-* tokens.
+   Four text levels. Each clears 4.5:1 on the page, panel and selected-row tones in both themes
+   (lowest measured: muted on a selected row, 5.15:1 light / 5.42:1 dark). */
+@layer components {
+  .t-headline { color: var(--zk-text); font-weight: 700; letter-spacing: -0.02em; }
+  .t-body { color: var(--zk-text); font-weight: 500; }
+  .t-support { color: var(--zk-text2); font-weight: 500; }
+  .t-quiet { color: var(--zk-muted); font-weight: 500; }
+}
+
+/* Entry motion: 180ms, opacity and transform only. Off under reduced motion. */
+@keyframes zg-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: none; }
+}
+.zg-in { animation: zg-in 180ms ease-out both; }
+
 @keyframes zg-hold {
   from { stroke-dashoffset: 100; }
   to { stroke-dashoffset: 0; }
 }
+
+/* One focus ring everywhere: accent colour, 2px, 2px offset, following the element's own radius. */
 :focus-visible { outline: 2px solid var(--zk-accent); outline-offset: 2px; }
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+  .zg-in { animation: none; }
   *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
 }
+
+/* Opacity-only fade for panes that contain fixed-position bars (a transform would re-anchor them). */
+@keyframes zg-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.zg-fade { animation: zg-fade 180ms ease-out both; }
+@media (prefers-reduced-motion: reduce) { .zg-fade { animation: none; } }

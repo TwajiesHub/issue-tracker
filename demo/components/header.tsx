@@ -9,7 +9,7 @@ import { useStore } from "@/lib/store";
    Same classes and tokens; the data comes from the demo store instead of the database. */
 
 const linkFocus =
-  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-electric-blue focus-visible:ring-offset-2";
+  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zk-accent";
 
 export function ZikiMark({ className = "h-7 w-auto" }: { className?: string }) {
   return (
@@ -196,9 +196,9 @@ function BeforeAfter() {
   const security = pathname.includes("security");
   const beforeHref = security ? "/before/security" : "/before/inbox";
   const afterHref = security ? "/security" : "/inbox";
-  const cls = (on: boolean) => `rounded-full px-2 py-1 ${linkFocus} ${on ? "font-bold text-zk-text" : "text-zk-muted hover:text-zk-text"}`;
+  const cls = (on: boolean) => `rounded-full px-2 py-1 ${linkFocus} ${on ? "font-semibold text-zk-text" : "font-medium text-zk-text2 hover:text-zk-text"}`;
   return (
-    <div role="group" aria-label="Compare" className="flex items-center text-xs max-sm:hidden">
+    <div role="group" aria-label="Compare" className="flex items-center text-[13px] max-sm:hidden">
       <Link href={beforeHref} aria-current={isBefore ? "page" : undefined} className={cls(isBefore)}>Before</Link>
       <span aria-hidden="true" className="text-zk-border">·</span>
       <Link href={afterHref} aria-current={!isBefore ? "page" : undefined} className={cls(!isBefore)}>After</Link>

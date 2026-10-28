@@ -2,8 +2,20 @@
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
 
-export const focus =
-  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-electric-blue focus-visible:ring-offset-2 focus-visible:ring-offset-zk-surface";
+/** One focus style for every control (see globals.css). */
+export const focus = "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zk-accent";
+
+/** Tonal layers, one step apart: page (bg-zk-bg) → panel → raised (bg-zk-chip). Depth comes from tone; the border stays quiet. */
+export const panel = "rounded-[20px] border border-zk-divider bg-zk-surface";
+
+/** A key hint, like `J`. */
+export function Kbd({ children }: { children: ReactNode }) {
+  return (
+    <kbd className="inline-flex min-w-[1.375rem] items-center justify-center rounded-md border border-zk-border bg-zk-chip px-1.5 py-px font-mono text-xs font-medium text-zk-text2">
+      {children}
+    </kbd>
+  );
+}
 
 /** Risk is shown by shape and words as well as colour: octagon = needs you, triangle = can wait, tick = done. */
 export function RiskMark({ tier, className = "" }: { tier: "needs" | "wait" | "done" | "info"; className?: string }) {
@@ -48,7 +60,7 @@ export function PrimaryButton({
     <button
       type="button"
       {...rest}
-      className={`inline-flex h-11 items-center justify-center rounded-full bg-electric-blue-strong px-6 text-sm font-bold text-white hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-50 ${focus} ${className}`}
+      className={`inline-flex h-11 items-center justify-center rounded-full bg-electric-blue-strong px-6 text-sm font-semibold text-white hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-50 ${focus} ${className}`}
     >
       {children}
     </button>
@@ -63,7 +75,7 @@ export function TextButton({
     <button
       type="button"
       {...rest}
-      className={`-ml-1 inline-flex min-h-11 items-center rounded-lg px-1 text-sm font-bold text-zk-accent hover:underline disabled:cursor-not-allowed disabled:opacity-50 ${focus} ${className}`}
+      className={`-ml-1 inline-flex min-h-11 items-center rounded-md px-1 text-sm font-semibold text-zk-accent hover:underline disabled:cursor-not-allowed disabled:opacity-50 ${focus} ${className}`}
     >
       {children}
     </button>
@@ -91,7 +103,7 @@ export function Dialog({
     >
       {open ? (
         <div className="p-6">
-          <h2 className="text-lg font-extrabold tracking-[-0.01em]">{title}</h2>
+          <h2 className="t-headline text-lg">{title}</h2>
           {children}
         </div>
       ) : null}
@@ -160,7 +172,7 @@ export function HoldButton({
         {label}
         {progress > 0 && progress < 1 ? <span className="hidden font-mono text-xs tabular-nums text-zk-muted motion-reduce:inline">{secs} / {seconds}s</span> : null}
       </button>
-      <p id="hold-caption" className="text-[13px] text-zk-muted">{caption}</p>
+      <p id="hold-caption" className="t-quiet text-[13px]">{caption}</p>
     </div>
   );
 }
