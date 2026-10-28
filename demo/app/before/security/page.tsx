@@ -17,7 +17,7 @@ export default function BeforeSecurity() {
       <p className="max-w-md text-sm leading-relaxed text-zk-text2">
         Security findings and fixes, reported, confirmed and resolved by people and their agents.
       </p>
-      <Link href="/before/inbox" className="mt-2 inline-flex h-10 items-center rounded-full bg-electric-blue-strong px-5 text-sm font-bold text-white hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-electric-blue focus-visible:ring-offset-2">
+      <Link href="/before/dashboard" className="mt-2 inline-flex h-10 items-center rounded-full bg-electric-blue-strong px-5 text-sm font-bold text-white hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-electric-blue focus-visible:ring-offset-2">
         Back to Product
       </Link>
     </section>

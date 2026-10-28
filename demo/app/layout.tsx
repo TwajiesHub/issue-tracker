@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter, Manrope, Geist_Mono } from "next/font/google";
 import { simulateAttack } from "@/lib/simulate";
 import { StoreProvider } from "@/lib/store";
+import { PulseProvider } from "@/lib/pulse";
+import { ProposalBanner, SubTabs } from "@/components/pulse/banner";
 import { AppHeader } from "@/components/header";
 import { DemoPanel } from "@/components/demo-panel";
 import { LiveStatus } from "@/components/live-status";
@@ -30,17 +32,21 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       </head>
       <body className={`${manrope.variable} ${geistMono.variable} ${inter.variable} min-h-screen overflow-x-clip antialiased`}>
         <StoreProvider seed={seed}>
+        <PulseProvider>
           <div data-app-shell="" className="flex min-h-screen flex-col bg-zk-bg">
             <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-zk-surface focus:px-4 focus:py-2 focus:text-sm focus:font-bold focus:text-zk-accent">
               Skip to content
             </a>
+            <ProposalBanner />
             <AppHeader />
+            <SubTabs />
             <main id="main-content" tabIndex={-1} className="mx-auto w-full max-w-6xl flex-1 px-4 py-6 pb-28 focus:outline-none sm:px-6 lg:pb-10">
               {children}
             </main>
             <LiveStatus />
             <DemoPanel />
           </div>
+        </PulseProvider>
         </StoreProvider>
       </body>
     </html>
