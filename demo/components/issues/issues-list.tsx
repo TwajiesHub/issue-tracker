@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { PulseRobot } from "@/components/pulse/robot";
-import { AT, BIDDERS, CAPTION, HINT, ISSUE, derive, formatClock, type Phase } from "@/lib/issue-moment";
+import { AT, AWARD_TO_CLAIM, BIDDERS, ISSUE, awardLabel, caption, derive, formatClock, type Phase } from "@/lib/issue-moment";
 
 /* Ziki's real Issues list (app/(app)/issues/(list)/page.tsx and components/issue-row-status.tsx): same columns, same row
    status words, same hammer. Fictional rows. One row, #1488, plays "the third pip". Transform and opacity only; off under
@@ -54,9 +54,11 @@ const ROWS: Row[] = [
 const SEV_BORDER: Record<Severity, string> = { high: "border-zk-bad-bd", medium: "border-zk-warn-bd", low: "border-zk-ok-fg" };
 const SEV_BARS: Record<Severity, number> = { low: 1, medium: 2, high: 3 };
 
-/** The moment: a few timers after one tap. With reduced motion the end state appears at once. */
+/** The moment: the upvote runs a few timers up to the bids, then it waits for a person to award one. With reduced motion
+ *  nothing moves: the bids appear as buttons at once and the end state appears on the award. */
 function useMoment() {
   const [phase, setPhase] = useState<Phase>("idle");
+  const [winner, setWinner] = useState("Lyra");
   const [reduced, setReduced] = useState(false);
   const [seconds, setSeconds] = useState(1);
   const timers = useRef<number[]>([]);
@@ -68,13 +70,22 @@ function useMoment() {
     clear();
     const calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     setReduced(calm);
-    setSeconds(1);
-    if (calm) { setPhase("claimed"); return; }
+    if (calm) { setPhase("bidding"); return; }
     setPhase("voted");
-    for (const p of ["ready", "bidding", "won", "claimed"] as const) timers.current.push(window.setTimeout(() => setPhase(p), AT[p]));
+    for (const p of ["ready", "bidding"] as const) timers.current.push(window.setTimeout(() => setPhase(p), AT[p]));
   }, [phase, clear]);
 
-  const replay = useCallback(() => { clear(); setPhase("idle"); setReduced(false); setSeconds(1); }, [clear]);
+  const award = useCallback((name: string) => {
+    if (phase !== "bidding") return;
+    clear();
+    setWinner(name);
+    setSeconds(1);
+    if (reduced) { setPhase("claimed"); return; }
+    setPhase("awarded");
+    timers.current.push(window.setTimeout(() => setPhase("claimed"), AWARD_TO_CLAIM));
+  }, [phase, reduced, clear]);
+
+  const replay = useCallback(() => { clear(); setPhase("idle"); setWinner("Lyra"); setReduced(false); setSeconds(1); }, [clear]);
 
   useEffect(() => {
     if (phase !== "claimed") return;
@@ -82,7 +93,7 @@ function useMoment() {
     return () => window.clearInterval(id);
   }, [phase]);
 
-  return { phase, reduced, seconds, vote, replay };
+  return { phase, winner, reduced, seconds, vote, award, replay };
 }
 
 function Pips({ filled }: { filled: number }) {
@@ -97,7 +108,7 @@ function Pips({ filled }: { filled: number }) {
   );
 }
 
-function StatusCell({ row, d, clock }: { row: Row; d: ReturnType<typeof derive>; clock: string }) {
+function StatusCell({ row, d, clock, winner }: { row: Row; d: ReturnType<typeof derive>; clock: string; winner: string }) {
   const s = row.status;
   if (s.kind === "resolved") return <span className="inline-flex items-center gap-1 text-zk-ok-fg"><CheckIcon /> Resolved</span>;
   if (s.kind === "pr") return <span className="inline-flex items-center gap-1.5 font-medium text-indigo-600 dark:text-indigo-400"><span className="inline-flex h-2 w-2 rounded-full bg-indigo-500" aria-hidden="true" /> PR Submitted</span>;
@@ -114,9 +125,9 @@ function StatusCell({ row, d, clock }: { row: Row; d: ReturnType<typeof derive>;
     return (
       <span key="working" className="iss-slide inline-flex min-w-0 flex-col items-start gap-0.5" data-testid="status-working">
         <span className="inline-flex min-w-0 items-center gap-1.5">
-          <PulseRobot name="Lyra" mood="working" size={20} hammer={false} badge={null} />
+          <PulseRobot name={winner} mood="working" size={20} hammer={false} badge={null} />
           <span className="text-zk-ok-fg"><HammeringIcon /></span>
-          <span className="truncate text-zk-text2">Lyra</span>
+          <span className="truncate text-zk-text2" data-testid="status-name">{winner}</span>
           <span className="sr-only">is working on it</span>
         </span>
         <span className="inline-flex items-center gap-0.5 pl-[26px] text-[10.5px] tabular-nums text-zk-muted"><ClockIcon /><span data-testid="claim-clock">{clock}</span></span>
@@ -134,28 +145,48 @@ function StatusCell({ row, d, clock }: { row: Row; d: ReturnType<typeof derive>;
   );
 }
 
-function Auction({ d }: { d: ReturnType<typeof derive> }) {
+/** The bids: three paddle buttons. They wait for a person (a gentle wiggle), and awarding one is the only way on. */
+function Auction({ d, winner, onAward, firstRef }: { d: ReturnType<typeof derive>; winner: string; onAward: (name: string) => void; firstRef: React.Ref<HTMLButtonElement> }) {
+  const shrugger = BIDDERS.find((b) => b.name !== winner)?.name;
   return (
-    <div aria-hidden="true" data-testid="auction" data-on={d.trayOn ? "1" : "0"} className="iss-tray pointer-events-none absolute inset-y-1 right-2 flex w-[172px] items-end justify-around overflow-hidden rounded-[10px] border border-zk-border bg-zk-surface px-1 max-md:left-14 max-md:w-auto">
+    <div role="group" aria-label="Bids on #1488" data-testid="auction" data-on={d.trayOn ? "1" : "0"} className="iss-tray absolute inset-y-1 right-2 flex w-[172px] items-end justify-around overflow-hidden rounded-[10px] border border-zk-border bg-zk-surface px-1 max-md:left-14 max-md:w-auto">
       {BIDDERS.map((b, i) => {
-        const win = d.won && b.wins;
-        const up = d.up && !(d.ducked && !b.wins);
+        const win = d.awarded && b.name === winner;
+        const lost = d.awarded && !win;
+        const up = d.trayOn && !lost;
         return (
-          <div key={b.name} className="iss-bidder flex flex-col items-center" data-bidder={b.name} data-up={up ? "1" : "0"} data-win={win ? "1" : "0"} style={{ ["--d" as string]: `${i * 120}ms` }}>
-            <span className={`relative inline-flex h-[15px] min-w-[44px] items-center justify-center rounded-md border px-1 font-mono text-[10px] font-semibold leading-none tabular-nums ${win ? "border-zk-ok-fg bg-zk-ok-bg text-zk-ok-fg" : "border-zk-border bg-zk-chip text-zk-text2"}`}>
+          <button
+            key={b.name}
+            ref={i === 0 ? firstRef : undefined}
+            type="button"
+            disabled={!d.waiting}
+            onClick={() => onAward(b.name)}
+            aria-label={awardLabel(b)}
+            data-bidder={b.name}
+            data-up={up ? "1" : "0"}
+            data-win={win ? "1" : "0"}
+            data-lost={lost ? "1" : "0"}
+            data-shrug={lost && b.name === shrugger ? "1" : "0"}
+            data-wait={d.waiting ? "1" : "0"}
+            style={{ ["--d" as string]: `${i * 120}ms` }}
+            className="iss-bidder flex min-h-11 min-w-11 flex-col items-center rounded-md focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-zk-accent"
+          >
+            <span aria-hidden="true" className={`relative inline-flex h-[15px] min-w-[44px] items-center justify-center rounded-md border px-1 font-mono text-[10px] font-semibold leading-none tabular-nums ${win ? "border-zk-ok-fg bg-zk-ok-bg text-zk-ok-fg" : "border-zk-border bg-zk-chip text-zk-text2"}`}>
               {b.offer}
               {win ? <span className="pr-tick absolute -right-1.5 -top-1.5 flex h-3 w-3 items-center justify-center rounded-full bg-zk-ok-fg text-[8px] font-extrabold leading-none text-zk-surface">✓</span> : null}
             </span>
-            <span className="h-[3px] w-px bg-zk-muted" />
-            <PulseRobot name={b.name} mood={win ? "working" : "waiting"} size={28} badge={null} hammer={false} happy={win} />
-          </div>
+            <span aria-hidden="true" className="h-[3px] w-px bg-zk-muted" />
+            <span className="iss-wiggle" style={{ ["--w" as string]: `${i * 260}ms` }}>
+              <PulseRobot name={b.name} mood={win ? "working" : "waiting"} size={28} badge={null} hammer={false} happy={win} />
+            </span>
+          </button>
         );
       })}
     </div>
   );
 }
 
-function VoteBtn({ row, count, pressed, onClick, describedBy, btnRef }: { row: Row; count: number; pressed: boolean; onClick: () => void; describedBy?: string; btnRef?: React.Ref<HTMLButtonElement> }) {
+function VoteBtn({ row, count, pressed, onClick, describedBy, btnRef }: { row: Row; count: number; pressed: boolean; onClick: (e: React.MouseEvent) => void; describedBy?: string; btnRef?: React.Ref<HTMLButtonElement> }) {
   return (
     <button
       ref={btnRef}
@@ -176,14 +207,21 @@ function VoteBtn({ row, count, pressed, onClick, describedBy, btnRef }: { row: R
 
 export function IssuesList({ whimsy = false }: { whimsy?: boolean }) {
   const m = useMoment();
-  const d = derive(m.phase);
+  const d = derive(m.phase, m.winner);
   const clock = formatClock(m.seconds);
   const [others, setOthers] = useState<Record<number, boolean>>({});
   const voteRef = useRef<HTMLButtonElement>(null);
+  const firstBid = useRef<HTMLButtonElement>(null);
+  const replayRef = useRef<HTMLButtonElement>(null);
   const [focusBack, setFocusBack] = useState(false);
+  const [keys, setKeys] = useState(false);
   useEffect(() => { if (focusBack && m.phase === "idle") { voteRef.current?.focus(); setFocusBack(false); } }, [focusBack, m.phase]);
+  // A keyboard user who gave the upvote lands on the first bid, and after the award on Replay; a tap leaves focus alone.
+  useEffect(() => { if (keys && m.phase === "bidding") firstBid.current?.focus(); }, [keys, m.phase]);
+  useEffect(() => { if (keys && m.phase === "claimed") { replayRef.current?.focus(); setKeys(false); } }, [keys, m.phase]);
 
-  const live = m.reduced && m.phase === "claimed" ? `You upvoted #${ISSUE.n}. Lyra’s bid won, and she started work on #${ISSUE.n}.` : d.announce;
+  // Reduced motion skips "Ready for bids" and goes straight to the bids, so say both.
+  const live = m.reduced && m.phase === "bidding" ? "You upvoted #1488. Ready for bids. 3 agents bid." : d.announce;
   const tabs = [{ label: "Open", n: 24 }, { label: "In progress", n: 7 }, { label: "Done", n: 112 }, { label: "All", n: 143 }];
 
   return (
@@ -220,11 +258,11 @@ export function IssuesList({ whimsy = false }: { whimsy?: boolean }) {
       </div>
 
       <div className="flex min-h-6 flex-wrap items-center gap-x-3 gap-y-1 text-[13px]" data-testid="moment-line">
-        {whimsy && d.hint ? <p id="moment-hint" className="font-medium text-zk-text2">{HINT}</p> : null}
+        {whimsy && d.hint ? <p id="moment-hint" key={d.hint} className="pr-fade font-medium text-zk-text2">{d.hint}</p> : null}
         {d.done ? (
           <>
-            <p className="pr-fade text-zk-text2">{CAPTION}</p>
-            <button type="button" onClick={() => { setFocusBack(true); m.replay(); }} className={`inline-flex min-h-8 items-center rounded-md px-1 font-semibold text-zk-accent hover:underline ${focus}`}>Replay</button>
+            <p className="pr-fade text-zk-text2">{caption(m.winner)}</p>
+            <button ref={replayRef} type="button" onClick={() => { setFocusBack(true); m.replay(); }} className={`inline-flex min-h-8 items-center rounded-md px-1 font-semibold text-zk-accent hover:underline ${focus}`}>Replay</button>
           </>
         ) : null}
       </div>
@@ -244,7 +282,7 @@ export function IssuesList({ whimsy = false }: { whimsy?: boolean }) {
             const isMoment = row.status.kind === "moment";
             const count = isMoment ? d.votes : row.votes + (others[row.n] ? 1 : 0);
             const pressed = isMoment ? d.votes === 3 : !!others[row.n];
-            const cell = <StatusCell row={row} d={d} clock={clock} />;
+            const cell = <StatusCell row={row} d={d} clock={clock} winner={m.winner} />;
             return (
               <li key={row.n} data-testid={`row-${row.n}`} data-auction={isMoment && d.trayOn ? "1" : "0"} data-severity={row.sev} className={`iss-row relative flex min-h-[60px] items-center gap-4 px-[18px] py-[9px] hover:bg-zk-bg max-md:gap-2.5 max-md:px-2.5 max-md:py-3 ${i < ROWS.length - 1 ? "border-b border-zk-divider" : ""}`}>
                 <div className="w-[52px] shrink-0 max-md:w-10">
@@ -254,7 +292,7 @@ export function IssuesList({ whimsy = false }: { whimsy?: boolean }) {
                     pressed={pressed}
                     describedBy={isMoment && whimsy && d.hint ? "moment-hint" : undefined}
                     btnRef={isMoment ? voteRef : undefined}
-                    onClick={isMoment ? m.vote : () => setOthers((o) => ({ ...o, [row.n]: !o[row.n] }))}
+                    onClick={isMoment ? (e) => { setKeys(e.detail === 0); m.vote(); } :() => setOthers((o) => ({ ...o, [row.n]: !o[row.n] }))}
                   />
                 </div>
                 <div className="iss-main flex min-h-11 min-w-0 flex-1 flex-col justify-center gap-0.5 text-left">
@@ -278,7 +316,7 @@ export function IssuesList({ whimsy = false }: { whimsy?: boolean }) {
                 <span className="flex w-10 shrink-0 items-center justify-end max-lg:hidden">
                   <span aria-hidden="true" className="flex h-7 w-7 items-center justify-center rounded-full bg-zk-tint text-[11px] font-extrabold text-zk-accent">{["PX", "KT", "OR", "NV", "MS"][i]}</span>
                 </span>
-                {isMoment ? <Auction d={d} /> : null}
+                {isMoment ? <Auction d={d} winner={m.winner} onAward={m.award} firstRef={firstBid} /> : null}
               </li>
             );
           })}
