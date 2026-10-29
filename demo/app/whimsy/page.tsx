@@ -1,7 +1,8 @@
-import { PulseDashboard } from "@/components/pulse/pulse-dashboard";
+import { IssuesList } from "@/components/issues/issues-list";
 
-export const metadata = { title: "Whimsy" };
+export const metadata = { title: "Issues" };
 
+/** The Issues list with the moment ready on one row: bots confirmed it, it needs one more upvote. */
 export default function WhimsyPage() {
-  return <PulseDashboard whimsy />;
+  return <IssuesList whimsy />;
 }
