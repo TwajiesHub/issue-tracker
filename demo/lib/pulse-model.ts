@@ -8,6 +8,8 @@ export const BAR_SECONDS = 4 * 3600;
 
 export const POINTS_BASE = 2340;
 export const SHIP_POINTS = 450;
+export const WEEK_BASE = 380;
+export const WEEK_GOAL = 500;
 export const GOAL = { title: "New onboarding", total: 9, doneBase: 6, spentBase: 1200, pool: 2000 } as const;
 
 /** What the person has decided so far. Persisted for the tab. */
@@ -51,6 +53,8 @@ export interface Derived {
   shipWaiting: boolean;
   fixesMerged: number;
   pointsEarned: number;
+  /** The Points this week card; follows the header pill. */
+  weekPoints: number;
 }
 
 export function derive(core: Core, st: Stages): Derived {
@@ -93,6 +97,7 @@ export function derive(core: Core, st: Stages): Derived {
     shipWaiting,
     fixesMerged: 9 + (shipTicked ? 1 : 0),
     pointsEarned: 120 + (shipTicked ? SHIP_POINTS : 0),
+    weekPoints: WEEK_BASE + (core.ship === "shipped" && st.ship >= 4 ? SHIP_POINTS : 0),
   };
 }
 

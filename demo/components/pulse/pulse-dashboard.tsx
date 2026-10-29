@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Pipeline } from "./pipeline";
 import { DecisionSlot } from "./decision-slot";
 import { usePulse } from "@/lib/pulse";
-import { formatPoints } from "@/lib/pulse-model";
+import { WEEK_GOAL, formatPoints } from "@/lib/pulse-model";
 
 const focus = "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zk-accent";
 const AMBER = "#F59E0B";
@@ -92,13 +92,22 @@ function Stuck() {
   );
 }
 
-const STATS = [
-  { label: "Points this week", value: "380", chip: "120 to go", tone: "bg-zk-tint text-zk-accent", note: "500 required this week" },
+const STATS_AFTER = [
   { label: "Assigned to me", value: "12", chip: "2", tone: "bg-zk-bad-bg text-zk-bad-fg", note: "high priority" },
   { label: "Resolved", value: "9", chip: "75%", tone: "bg-zk-chip text-zk-text2", note: "of issues assigned to me" },
 ];
 
 export function PulseDashboard({ whimsy = false }: { whimsy?: boolean }) {
+  const { model } = usePulse();
+  const reached = model.weekPoints >= WEEK_GOAL;
+  const STATS = [
+    {
+      label: "Points this week", value: formatPoints(model.weekPoints), note: "500 required this week",
+      chip: reached ? "Goal reached" : `${WEEK_GOAL - model.weekPoints} to go`,
+      tone: reached ? "bg-zk-ok-bg text-zk-ok-fg" : "bg-zk-tint text-zk-accent",
+    },
+    ...STATS_AFTER,
+  ];
   return (
     <div className="min-w-0 space-y-6">
       <div className="space-y-1.5">
@@ -117,7 +126,7 @@ export function PulseDashboard({ whimsy = false }: { whimsy?: boolean }) {
         {STATS.map((s) => (
           <article key={s.label} className="flex flex-col gap-3 rounded-[20px] border border-zk-border bg-zk-surface p-5">
             <span className="text-sm font-bold text-zk-text">{s.label}</span>
-            <p className="text-[26px] font-extrabold leading-none tabular-nums text-zk-text">{s.value}</p>
+            <p key={s.value} className="pr-flip text-[26px] font-extrabold leading-none tabular-nums text-zk-text">{s.value}</p>
             <div className="flex items-center gap-2 text-[13px] text-zk-muted">
               <span className={`rounded-full px-2 py-0.5 text-xs font-bold ${s.tone}`}>{s.chip}</span>
               <span>{s.note}</span>

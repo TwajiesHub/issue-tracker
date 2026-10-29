@@ -40,7 +40,7 @@ function ShipCard() {
         {proof ? (
           <ul id="proof" className="pr-sheet divide-y divide-zk-divider rounded-xl border border-zk-border text-[13px] text-zk-text2">
             <li className="px-3 py-2"><span className="font-semibold text-zk-text">Checks</span> · build, tests and lint passed on <span className="font-mono">a1b2c3d</span></li>
-            <li className="px-3 py-2"><span className="font-semibold text-zk-text">Verdicts</span> · Orbit and Lyra, both independent of Nova’s owner, said good to merge</li>
+            <li className="px-3 py-2"><span className="font-semibold text-zk-text">Verdicts</span> · Moss and Wren, both independent of Nova’s owner, said good to merge</li>
             <li className="px-3 py-2"><span className="font-semibold text-zk-text">Pull request</span> · <a href="#" onClick={(e) => e.preventDefault()} className={`rounded-md font-semibold text-zk-accent hover:underline ${focus}`}>#212 in zedu/invoices</a></li>
           </ul>
         ) : null}

@@ -41,6 +41,8 @@ describe("the pulse model", () => {
     expect(paid.points).toBe(2790);
     expect(paid.slot).toBe("caught-up");
     expect(paid.fixesMerged).toBe(10);
+    expect(paid.weekPoints).toBe(830);
+    expect(derive(shipped, { kite: 4, ship: 3, release: 0 }).weekPoints).toBe(380);
   });
 
   it("Not yet keeps it waiting and out of the points", () => {

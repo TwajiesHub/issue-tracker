@@ -63,7 +63,7 @@ function useRows(stage: StageId, close: () => void): Row[] {
     case "testing": {
       const nova: Row[] = model.novaStage !== "testing" ? [] : [{
         key: "1470",
-        text: <>{num("#1470")} · Webhook retries · Nova · 2 of 2 verdicts · held for your approval</>,
+        text: <>{num("#1470")} · Webhook retries · Nova · 2 of 2 verdicts (Moss, Wren) · held for your approval</>,
         action: model.slot === "ship" || model.slot === "held" ? { label: "Go to it", done: "", run: go } : undefined,
       }];
       return [
