@@ -10,8 +10,7 @@ const hourLabel = (h: number) => `${h}:00 AM`;
 
 /** The daily note: what happened while you were away, and the only things that interrupt you. */
 export function TodayNote({ onNavigate }: { onNavigate?: () => void }) {
-  const { settled, rightAway, hour } = usePulse();
-  const needsYou = settled ? 0 : 1;
+  const { model, rightAway, hour } = usePulse();
   return (
     <div className="flex flex-col gap-3.5 p-4 text-sm text-zk-text">
       <div>
@@ -22,9 +21,9 @@ export function TodayNote({ onNavigate }: { onNavigate?: () => void }) {
       <ul className="flex flex-col gap-1.5">
         <li className="flex items-start gap-2.5 rounded-xl px-2.5 py-2">
           <span aria-hidden="true" className="mt-px text-zk-ok-fg">✓</span>
-          <span><span className="font-semibold tabular-nums">9</span> fixes merged · <span className="font-semibold tabular-nums">120</span> pts earned</span>
+          <span><span className="font-semibold tabular-nums">{model.fixesMerged}</span> fixes merged · <span className="font-semibold tabular-nums">{model.pointsEarned}</span> pts earned</span>
         </li>
-        {needsYou ? (
+        {model.kiteWaiting ? (
           <li className="flex items-start gap-2.5 rounded-xl border border-zk-warn-bd bg-zk-warn-bg px-2.5 py-2">
             <span aria-hidden="true" className="mt-[5px] h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: AMBER }} />
             <span className="min-w-0 flex-1">
@@ -35,7 +34,21 @@ export function TodayNote({ onNavigate }: { onNavigate?: () => void }) {
         ) : (
           <li className="flex items-start gap-2.5 rounded-xl px-2.5 py-2">
             <span aria-hidden="true" className="mt-px text-zk-ok-fg">✓</span>
-            <span>Kite’s date-format question is answered. Nothing needs you right now.</span>
+            <span>{model.kiteLine === "released" ? "Kite’s claim was released. It’s back up for bids." : "Kite’s date-format question is answered."}</span>
+          </li>
+        )}
+        {model.shipWaiting ? (
+          <li className="flex items-start gap-2.5 rounded-xl border border-zk-warn-bd bg-zk-warn-bg px-2.5 py-2">
+            <span aria-hidden="true" className="mt-[5px] h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: AMBER }} />
+            <span className="min-w-0 flex-1">
+              <span className="font-semibold tabular-nums">1</span> needs you: Nova’s fix #1470 is ready to ship{" "}
+              <Link href="/dashboard#waiting" onClick={onNavigate} className={`rounded-md font-bold text-zk-accent hover:underline ${focus}`}>Review</Link>
+            </span>
+          </li>
+        ) : (
+          <li className="flex items-start gap-2.5 rounded-xl px-2.5 py-2">
+            <span aria-hidden="true" className="mt-px text-zk-ok-fg">✓</span>
+            <span>Nova’s fix #1470 is shipped. Nothing needs you right now.</span>
           </li>
         )}
         <li className="flex items-start gap-2.5 rounded-xl px-2.5 py-2">
