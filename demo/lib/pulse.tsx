@@ -1,12 +1,10 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { BAR_SECONDS, TOTAL_SECONDS, derive, finalStages, type Core, type Derived, type Stages } from "./pulse-model";
 
-/** Kite's claim is released this long after it asks, if nobody answers (3 h 20 m). */
-export const TOTAL_SECONDS = 3 * 3600 + 20 * 60;
-/** The countdown bar is drawn against a 4-hour claim window, so 3h 20m reads as about 83%. */
-export const BAR_SECONDS = 4 * 3600;
-const STORAGE_KEY = "zg-pulse-v1";
+export { BAR_SECONDS, TOTAL_SECONDS };
+const STORAGE_KEY = "zg-pulse-v2";
 
 export type PrefKey = "question" | "direction" | "merge" | "bids" | "reviews" | "fixes";
 
@@ -14,7 +12,7 @@ export type PrefKey = "question" | "direction" | "merge" | "bids" | "reviews" | 
 export const PREF_LABELS: Record<PrefKey, { setting: string; chip: string }> = {
   question: { setting: "An agent asks you a question", chip: "Questions that pause an agent" },
   direction: { setting: "A change to how the product works", chip: "Direction changes" },
-  merge: { setting: "A merge to the live site", chip: "Merges to the live site" },
+  merge: { setting: "A merge your project’s rules hold for approval", chip: "Merges held for approval" },
   bids: { setting: "Bids, claims and offers", chip: "Bids, claims and offers" },
   reviews: { setting: "Reviews and test results", chip: "Reviews and test results" },
   fixes: { setting: "Fixes merged and points earned", chip: "Fixes merged and points earned" },
@@ -22,12 +20,11 @@ export const PREF_LABELS: Record<PrefKey, { setting: string; chip: string }> = {
 const DEFAULT_RIGHT_AWAY: PrefKey[] = ["question", "direction", "merge"];
 const DEFAULT_DAILY: PrefKey[] = ["bids", "reviews", "fixes"];
 
-/** 0 waiting · 1 happy (antenna, eyes, nod) · 2 hammer up · 3 pulse updated, card settles · 4 finished */
+/** Kite's answer moment: 0 waiting · 1 happy (antenna, eyes, nod) · 2 hammer up · 3 pulse updated, card settles · 4 finished */
 export type Phase = 0 | 1 | 2 | 3 | 4;
 
-interface Persisted {
+interface Persisted extends Core {
   deadline: number;
-  answer: string | null;
   rightAway: PrefKey[];
   daily: PrefKey[];
   hour: number;
@@ -40,8 +37,14 @@ interface Pulse {
   reduced: boolean;
   remainingSec: number;
   answer: string | null;
+  released: boolean;
+  ship: Core["ship"];
+  /** Kite's answer moment (0–4). */
   phase: Phase;
-  /** True once the pulse numbers have moved on (answered and settled). */
+  stages: Stages;
+  /** Everything the screen shows, from the two decisions and how far each moment has got. */
+  model: Derived;
+  /** True once Kite's question is settled (answered or released). */
   settled: boolean;
   numbers: PulseNumbers;
   rightAway: PrefKey[];
@@ -52,6 +55,9 @@ interface Pulse {
   announce: string;
   answerNow(choice: string, slow?: boolean): void;
   undo(): void;
+  shipIt(): void;
+  holdShip(): void;
+  releaseKite(): void;
   replay(): void;
   reset(): void;
   skipAhead(): void;
@@ -61,23 +67,29 @@ interface Pulse {
 
 const Ctx = createContext<Pulse | null>(null);
 
-const fresh = (): Persisted => ({ deadline: 0, answer: null, rightAway: DEFAULT_RIGHT_AWAY, daily: DEFAULT_DAILY, hour: 8 });
+const fresh = (): Persisted => ({
+  deadline: 0, answer: null, released: false, ship: "ready", rightAway: DEFAULT_RIGHT_AWAY, daily: DEFAULT_DAILY, hour: 8,
+});
 
 export function PulseProvider({ children }: { children: ReactNode }) {
   const [p, setP] = useState<Persisted>(fresh);
+  const [stages, setStages] = useState<Stages>({ kite: 0, ship: 0, release: 0 });
   const [ready, setReady] = useState(false);
   const [now, setNow] = useState(0);
-  const [phase, setPhase] = useState<Phase>(0);
   const [reduced, setReduced] = useState(false);
   const [announce, setAnnounce] = useState("");
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
+  const reducedRef = useRef(false);
 
   const clearTimers = () => { timers.current.forEach(clearTimeout); timers.current = []; };
+  const later = (ms: number, fn: () => void) => { timers.current.push(setTimeout(fn, ms)); };
+  const setStage = <K extends keyof Stages>(k: K, v: Stages[K]) => setStages((s) => ({ ...s, [k]: v }));
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
     setReduced(mq.matches);
-    const onChange = () => setReduced(mq.matches);
+    reducedRef.current = mq.matches;
+    const onChange = () => { setReduced(mq.matches); reducedRef.current = mq.matches; };
     mq.addEventListener("change", onChange);
     let saved: Persisted | null = null;
     try {
@@ -88,7 +100,7 @@ export function PulseProvider({ children }: { children: ReactNode }) {
     const base = saved ?? fresh();
     const next = { ...fresh(), ...base, deadline: base.deadline || t + TOTAL_SECONDS * 1000 };
     setP(next);
-    setPhase(next.answer ? 4 : 0);
+    setStages(finalStages(next));
     setNow(t);
     setReady(true);
     return () => mq.removeEventListener("change", onChange);
@@ -110,35 +122,66 @@ export function PulseProvider({ children }: { children: ReactNode }) {
   const remainingSec = ready ? Math.max(0, Math.floor((p.deadline - now) / 1000)) : TOTAL_SECONDS;
 
   const answerNow = useCallback((choice: string, slow = false) => {
-    setP((s) => (s.answer ? s : { ...s, answer: choice }));
-    clearTimers();
-    if (reduced) {
-      setPhase(4);
-      setAnnounce("Answered. Kite is back at work on #1491. 15 moving, 0 waiting on you.");
+    setP((s) => (s.answer || s.released ? s : { ...s, answer: choice }));
+    if (reducedRef.current) {
+      setStage("kite", 4);
+      setAnnounce("Answered. Kite is back at work on #1491. 15 moving, 1 waiting on you.");
       return;
     }
     // slow is /whimsy: hop and nod (0.9s), three hammer swings (1.2s), then the pipeline and the pulse update (~2.5s in all).
     const at = slow ? [900, 2100, 2500] : [500, 1100, 1600];
-    setPhase(1);
-    timers.current = [
-      setTimeout(() => setPhase(2), at[0]),
-      setTimeout(() => { setPhase(3); setAnnounce("Answered. Kite is back at work on #1491. 15 moving, 0 waiting on you."); }, at[1]),
-      setTimeout(() => setPhase(4), at[2]),
-    ];
-  }, [reduced]);
+    setStage("kite", 1);
+    later(at[0], () => setStage("kite", 2));
+    later(at[1], () => { setStage("kite", 3); setAnnounce("Answered. Kite is back at work on #1491. 15 moving, 1 waiting on you."); });
+    later(at[2], () => setStage("kite", 4));
+  }, []);
 
   const undo = useCallback(() => {
     clearTimers();
-    setP((s) => ({ ...s, answer: null }));
-    setPhase(0);
-    setAnnounce("Undone. Kite is waiting on you again. 14 moving, 1 waiting on you.");
+    setP((s) => (s.ship === "ready" ? { ...s, answer: null } : s));
+    setStages((s) => ({ ...s, kite: 0 }));
+    setAnnounce("Undone. Kite is waiting on you again. 14 moving, 2 waiting on you.");
+  }, []);
+
+  const shipIt = useCallback(() => {
+    setP((s) => (s.ship === "shipped" ? s : { ...s, ship: "shipped" }));
+    const done = "Shipped. Nova’s fix for #1470 is live. You earned 450 points. 14 moving, 0 waiting on you. You’re all caught up.";
+    if (reducedRef.current) {
+      setStage("ship", 5);
+      setAnnounce(done);
+      return;
+    }
+    setStage("ship", 1);
+    later(450, () => setStage("ship", 2));
+    later(1100, () => { setStage("ship", 3); setAnnounce("Shipped. Nova’s fix for #1470 moved to Merged today."); });
+    later(2000, () => { setStage("ship", 4); setAnnounce(done); });
+    later(2500, () => setStage("ship", 5));
+  }, []);
+
+  const holdShip = useCallback(() => {
+    setP((s) => (s.ship === "shipped" ? s : { ...s, ship: "held" }));
+    setAnnounce("Kept on hold. Nova’s fix waits for you. 1 waiting on you.");
+  }, []);
+
+  const releaseKite = useCallback(() => {
+    setP((s) => (s.answer || s.released ? s : { ...s, released: true }));
+    const msg = "Kite’s claim was released. It’s back up for bids. 14 moving, 1 waiting on you.";
+    if (reducedRef.current) {
+      setStage("release", 3);
+      setAnnounce(msg);
+      return;
+    }
+    setStage("release", 1);
+    later(600, () => setStage("release", 2));
+    later(1400, () => { setStage("release", 3); setAnnounce(msg); });
   }, []);
 
   const replay = useCallback(() => {
     clearTimers();
-    setP((s) => ({ ...s, answer: null, deadline: Date.now() + TOTAL_SECONDS * 1000 }));
+    setP((s) => ({ ...s, answer: null, released: false, ship: "ready", deadline: Date.now() + TOTAL_SECONDS * 1000 }));
+    setStages({ kite: 0, ship: 0, release: 0 });
     setNow(Date.now());
-    setPhase(0);
+    setAnnounce("");
   }, []);
 
   const reset = useCallback(() => {
@@ -146,8 +189,8 @@ export function PulseProvider({ children }: { children: ReactNode }) {
     try { sessionStorage.removeItem(STORAGE_KEY); } catch {}
     const t = Date.now();
     setP({ ...fresh(), deadline: t + TOTAL_SECONDS * 1000 });
+    setStages({ kite: 0, ship: 0, release: 0 });
     setNow(t);
-    setPhase(0);
     setAnnounce("");
   }, []);
 
@@ -170,17 +213,17 @@ export function PulseProvider({ children }: { children: ReactNode }) {
 
   const setHour = useCallback((h: number) => setP((s) => ({ ...s, hour: h })), []);
 
-  const settled = !!p.answer && phase >= 3;
   const value = useMemo<Pulse>(() => {
-    const numbers: PulseNumbers = { moving: settled ? 15 : 14, waiting: settled ? 0 : 1, stuck: 2 };
-    const waiting = numbers.waiting > 0;
+    const model = derive(p, stages);
+    const interrupts = (model.kiteWaiting && p.rightAway.includes("question") ? 1 : 0) + (model.shipWaiting && p.rightAway.includes("merge") ? 1 : 0);
     return {
-      ready, reduced, remainingSec, answer: p.answer, phase, settled, numbers,
-      rightAway: p.rightAway, daily: p.daily, hour: p.hour,
-      interrupts: waiting && p.rightAway.includes("question") ? 1 : 0,
-      announce, answerNow, undo, replay, reset, skipAhead, move, setHour,
+      ready, reduced, remainingSec, answer: p.answer, released: p.released, ship: p.ship,
+      phase: stages.kite, stages, model, settled: !model.kiteWaiting,
+      numbers: { moving: model.moving, waiting: model.waiting, stuck: model.stuck },
+      rightAway: p.rightAway, daily: p.daily, hour: p.hour, interrupts,
+      announce, answerNow, undo, shipIt, holdShip, releaseKite, replay, reset, skipAhead, move, setHour,
     };
-  }, [ready, reduced, remainingSec, p, phase, settled, announce, answerNow, undo, replay, reset, skipAhead, move, setHour]);
+  }, [ready, reduced, remainingSec, p, stages, announce, answerNow, undo, shipIt, holdShip, releaseKite, replay, reset, skipAhead, move, setHour]);
 
   return (
     <Ctx.Provider value={value}>
