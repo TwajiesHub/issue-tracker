@@ -53,7 +53,7 @@ export function rank(p: Phase): number {
   return PHASES.indexOf(p);
 }
 
-export const HINT = "This issue needs one more upvote. Give it one.";
+export const HINT = `“${ISSUE.title}” needs one more upvote. Give it one ↓`;
 export const PICK = "Pick a bid.";
 
 export function derive(phase: Phase, winner: string = "Lyra"): Derived {

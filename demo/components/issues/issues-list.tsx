@@ -149,7 +149,7 @@ function StatusCell({ row, d, clock, winner }: { row: Row; d: ReturnType<typeof 
 function Auction({ d, winner, onAward, firstRef }: { d: ReturnType<typeof derive>; winner: string; onAward: (name: string) => void; firstRef: React.Ref<HTMLButtonElement> }) {
   const shrugger = BIDDERS.find((b) => b.name !== winner)?.name;
   return (
-    <div role="group" aria-label="Bids on #1488" data-testid="auction" data-on={d.trayOn ? "1" : "0"} className="iss-tray absolute inset-y-1 right-2 flex w-[172px] items-end justify-around overflow-hidden rounded-[10px] border border-zk-border bg-zk-surface px-1 max-md:left-14 max-md:w-auto">
+    <div role="group" aria-label="Bids on #1488" data-testid="auction" data-on={d.trayOn ? "1" : "0"} className="iss-tray absolute inset-y-1.5 right-2 flex w-[190px] items-end justify-around overflow-hidden rounded-[10px] border border-zk-border bg-zk-surface px-1 pb-1 max-md:left-14 max-md:w-auto">
       {BIDDERS.map((b, i) => {
         const win = d.awarded && b.name === winner;
         const lost = d.awarded && !win;
@@ -171,13 +171,13 @@ function Auction({ d, winner, onAward, firstRef }: { d: ReturnType<typeof derive
             style={{ ["--d" as string]: `${i * 120}ms` }}
             className="iss-bidder flex min-h-11 min-w-11 flex-col items-center rounded-md focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-zk-accent"
           >
-            <span aria-hidden="true" className={`relative inline-flex h-[15px] min-w-[44px] items-center justify-center rounded-md border px-1 font-mono text-[10px] font-semibold leading-none tabular-nums ${win ? "border-zk-ok-fg bg-zk-ok-bg text-zk-ok-fg" : "border-zk-border bg-zk-chip text-zk-text2"}`}>
+            <span aria-hidden="true" className={`relative inline-flex h-5 min-w-[54px] items-center justify-center rounded-md border px-1.5 font-mono text-xs font-bold leading-none tabular-nums ${win ? "border-zk-ok-fg bg-zk-ok-bg text-zk-ok-fg" : "border-zk-text2 bg-zk-surface text-zk-text"}`}>
               {b.offer}
-              {win ? <span className="pr-tick absolute -right-1.5 -top-1.5 flex h-3 w-3 items-center justify-center rounded-full bg-zk-ok-fg text-[8px] font-extrabold leading-none text-zk-surface">✓</span> : null}
+              {win ? <span className="pr-tick absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-zk-ok-fg text-[10px] font-extrabold leading-none text-zk-surface">✓</span> : null}
             </span>
-            <span aria-hidden="true" className="h-[3px] w-px bg-zk-muted" />
+            <span aria-hidden="true" className="h-1 w-0.5 bg-zk-text2" />
             <span className="iss-wiggle" style={{ ["--w" as string]: `${i * 260}ms` }}>
-              <PulseRobot name={b.name} mood={win ? "working" : "waiting"} size={28} badge={null} hammer={false} happy={win} />
+              <PulseRobot name={b.name} mood={win ? "working" : "waiting"} size={36} badge={null} hammer={false} happy={win} />
             </span>
           </button>
         );
@@ -186,8 +186,11 @@ function Auction({ d, winner, onAward, firstRef }: { d: ReturnType<typeof derive
   );
 }
 
-function VoteBtn({ row, count, pressed, onClick, describedBy, btnRef }: { row: Row; count: number; pressed: boolean; onClick: (e: React.MouseEvent) => void; describedBy?: string; btnRef?: React.Ref<HTMLButtonElement> }) {
+function VoteBtn({ row, count, pressed, onClick, describedBy, btnRef, nudge = false }: { row: Row; count: number; pressed: boolean; onClick: (e: React.MouseEvent) => void; describedBy?: string; btnRef?: React.Ref<HTMLButtonElement>; nudge?: boolean }) {
   return (
+    <span className="relative inline-flex">
+      {/* A gentle ring that breathes around the button the visitor is meant to press (/whimsy, before the upvote). */}
+      {nudge ? <span aria-hidden="true" data-testid="nudge" className="iss-nudge pointer-events-none absolute inset-0 rounded-[9px] border-2 border-zk-accent" /> : null}
     <button
       ref={btnRef}
       type="button"
@@ -202,6 +205,7 @@ function VoteBtn({ row, count, pressed, onClick, describedBy, btnRef }: { row: R
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m18 15-6-6-6 6" /></svg>
       <span className="tabular-nums leading-none">{count}</span>
     </button>
+    </span>
   );
 }
 
@@ -222,6 +226,8 @@ export function IssuesList({ whimsy = false }: { whimsy?: boolean }) {
 
   // Reduced motion skips "Ready for bids" and goes straight to the bids, so say both.
   const live = m.reduced && m.phase === "bidding" ? "You upvoted #1488. Ready for bids. 3 agents bid." : d.announce;
+  // On /whimsy the row to upvote is marked until it is upvoted.
+  const target = whimsy && m.phase === "idle";
   const tabs = [{ label: "Open", n: 24 }, { label: "In progress", n: 7 }, { label: "Done", n: 112 }, { label: "All", n: 143 }];
 
   return (
@@ -284,7 +290,7 @@ export function IssuesList({ whimsy = false }: { whimsy?: boolean }) {
             const pressed = isMoment ? d.votes === 3 : !!others[row.n];
             const cell = <StatusCell row={row} d={d} clock={clock} winner={m.winner} />;
             return (
-              <li key={row.n} data-testid={`row-${row.n}`} data-auction={isMoment && d.trayOn ? "1" : "0"} data-severity={row.sev} className={`iss-row relative flex min-h-[60px] items-center gap-4 px-[18px] py-[9px] hover:bg-zk-bg max-md:gap-2.5 max-md:px-2.5 max-md:py-3 ${i < ROWS.length - 1 ? "border-b border-zk-divider" : ""}`}>
+              <li key={row.n} data-testid={`row-${row.n}`} data-auction={isMoment && d.trayOn ? "1" : "0"} data-target={target && isMoment ? "1" : "0"} data-severity={row.sev} className={`iss-row relative flex ${isMoment && d.trayOn ? "min-h-[84px]" : "min-h-[60px]"} items-center gap-4 px-[18px] py-[9px] ${target && isMoment ? "bg-zk-tint" : "hover:bg-zk-bg"} max-md:gap-2.5 max-md:px-2.5 max-md:py-3 ${i < ROWS.length - 1 ? "border-b border-zk-divider" : ""}`}>
                 <div className="w-[52px] shrink-0 max-md:w-10">
                   <VoteBtn
                     row={row}
@@ -292,6 +298,7 @@ export function IssuesList({ whimsy = false }: { whimsy?: boolean }) {
                     pressed={pressed}
                     describedBy={isMoment && whimsy && d.hint ? "moment-hint" : undefined}
                     btnRef={isMoment ? voteRef : undefined}
+                    nudge={target && isMoment}
                     onClick={isMoment ? (e) => { setKeys(e.detail === 0); m.vote(); } :() => setOthers((o) => ({ ...o, [row.n]: !o[row.n] }))}
                   />
                 </div>

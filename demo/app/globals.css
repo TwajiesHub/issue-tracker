@@ -268,3 +268,6 @@ body:has([data-app-shell]) {
   .iss-pip, .iss-tray, .iss-bidder, .iss-wiggle, .iss-main { transition: none !important; }
   .iss-bidder[data-wait="1"]:hover .iss-wiggle { transform: none; }
 }
+.iss-nudge { animation: iss-nudge 1.9s ease-in-out infinite; opacity: 0; }
+@keyframes iss-nudge { 0%, 100% { opacity: 0; transform: scale(1); } 45% { opacity: 0.75; transform: scale(1.22); } }
+@media (prefers-reduced-motion: reduce) { .iss-nudge { animation: none !important; display: none; } }
