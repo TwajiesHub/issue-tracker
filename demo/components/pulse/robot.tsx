@@ -20,7 +20,7 @@ export function tapSeconds(minutesSinceCheckIn: number): number {
 }
 
 export function PulseRobot({
-  name, mood, size = 32, happy = false, nod = false, glow = false, tap = 0.9, dim = 1, droop = 0, tip, asking = false, lively = false, hop = false,
+  name, mood, size = 32, happy = false, nod = false, glow = false, tap = 0.9, dim = 1, droop = 0, tip, asking = false, lively = false, hop = false, badge, blip,
 }: {
   name: string;
   mood: RobotMood;
@@ -42,8 +42,12 @@ export function PulseRobot({
   lively?: boolean;
   /** A small hop (just answered). */
   hop?: boolean;
+  /** The small sign by the antenna. Defaults to "?" while waiting; "✓" means finished and waiting on you; null hides it. */
+  badge?: "?" | "✓" | null;
+  /** Seconds until the first heartbeat blip (a working robot's antenna blinks once every 20 s). Omit for none. */
+  blip?: number;
 }) {
-  const badge = Math.max(15, Math.round(size * 0.2));
+  const bs = Math.max(15, Math.round(size * 0.2));
   const body = colorFor(name);
   const waiting = mood === "waiting";
   const working = mood === "working";
@@ -56,6 +60,7 @@ export function PulseRobot({
           <circle className="pr-glow" cx="20" cy="6" r="5" fill={LIGHTS.working} />
           {lively && waiting ? <circle className="pr-beat" cx="20" cy="6" r="2.6" fill={LIGHTS.waiting} /> : null}
           <circle className="pr-light" cx="20" cy="6" r="2.6" fill={LIGHTS.waiting} opacity={waiting ? dim : 0} />
+          {blip !== undefined && working ? <circle className="pr-hb" cx="20" cy="6" r="2.6" fill={LIGHTS.working} style={{ animationDelay: `${blip}s` }} /> : null}
           <circle className="pr-light" cx="20" cy="6" r="2.6" fill={LIGHTS.working} opacity={working ? 1 : 0} />
           <circle className="pr-light" cx="20" cy="6" r="2.6" fill={LIGHTS.idle} opacity={mood === "idle" ? 1 : 0} />
           <rect x="9" y="12" width="22" height="17" rx="6" fill={body} />
@@ -92,10 +97,10 @@ export function PulseRobot({
       ) : null}
 
       <span
-        className={`pr-q absolute -right-1.5 -top-1.5 flex items-center justify-center rounded-full border border-zk-warn-bd bg-zk-warn-bg font-extrabold leading-none text-zk-warn-fg${lively ? " pr-bob" : ""}`}
-        style={{ width: badge, height: badge, fontSize: Math.round(badge * 0.66), opacity: waiting || asking ? 1 : 0, transform: `rotate(${droop}deg) translateY(${droop / 14}px)` }}
+        className={`pr-q absolute -right-1.5 -top-1.5 flex items-center justify-center rounded-full border font-extrabold leading-none ${badge === "✓" ? "border-zk-ok-fg/30 bg-zk-ok-bg text-zk-ok-fg" : "border-zk-warn-bd bg-zk-warn-bg text-zk-warn-fg"}${lively ? " pr-bob" : ""}`}
+        style={{ width: bs, height: bs, fontSize: Math.round(bs * 0.66), opacity: badge === null ? 0 : badge || waiting || asking ? 1 : 0, transform: `rotate(${droop}deg) translateY(${droop / 14}px)` }}
       >
-        ?
+        {badge ?? "?"}
       </span>
 
       {tip && waiting ? (

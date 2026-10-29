@@ -52,6 +52,7 @@ export function DemoPanel() {
             <>
               <p className="px-3 pb-1 pt-2 t-quiet text-xs">Moves Kite’s clock so you can see the end of the wait.</p>
               <button type="button" className={item} onClick={() => pulse.skipAhead()}>Skip ahead: almost out of time</button>
+              <button type="button" className={item} disabled={!pulse.model.kiteWaiting || pulse.stages.release > 0} onClick={() => pulse.releaseKite()}>Let Kite’s clock run out</button>
             </>
           )}
           <button type="button" className={item} onClick={() => { act.reset(); pulse.reset(); if (guardPage) router.push("/inbox"); }}>Reset</button>
