@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useStore } from "@/lib/store";
 import { usePulse } from "@/lib/pulse";
+import { POINTS_BASE, formatPoints } from "@/lib/pulse-model";
 import { TodayNote } from "./pulse/note";
 
 /* Ported from Ziki's components/app-header.tsx, ziki-mark.tsx and theme-toggle.tsx.
@@ -196,6 +197,21 @@ const BEFORE_ROWS = [
   { id: "b3", text: "Nova linked a pull request to #1474", href: "/before/dashboard", unread: false },
 ];
 
+/** The points pill. On the proposal pages it ticks up when a fix ships; on the Before pages it stays as it was. */
+function PointsPill() {
+  const pathname = usePathname();
+  const { model } = usePulse();
+  const points = pathname.startsWith("/before") ? POINTS_BASE : model.points;
+  return (
+    <Link id="points-pill" href="/dashboard" title="Ranking" className={`inline-flex h-8 shrink-0 items-center gap-1.5 rounded-full bg-zk-warn-bg px-2.5 text-[12.5px] font-semibold text-zk-warn-fg hover:brightness-95 ${linkFocus}`}>
+      <svg width="13" height="13" viewBox="0 0 24 24" strokeWidth="2" aria-hidden="true" {...stroke}>
+        <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6M18 9h1.5a2.5 2.5 0 0 0 0-5H18M4 22h16M10 14.7V17c0 .6-.5 1-1 1.2-1.2.5-2 2-2 3.8M14 14.7V17c0 .6.5 1 1 1.2 1.2.5 2 2 2 3.8M18 2H6v7a6 6 0 0 0 12 0V2Z" />
+      </svg>
+      <span key={points} className="pr-flip inline-block tabular-nums">{formatPoints(points)}</span> pts
+    </Link>
+  );
+}
+
 function Bell() {
   const pathname = usePathname();
   const before = pathname.startsWith("/before");
@@ -333,12 +349,7 @@ export function AppHeader() {
               </div>
             ) : null}
           </div>
-          <Link href="/dashboard" title="Ranking" className={`inline-flex h-8 shrink-0 items-center gap-1.5 rounded-full bg-zk-warn-bg px-2.5 text-[12.5px] font-semibold text-zk-warn-fg hover:brightness-95 ${linkFocus}`}>
-            <svg width="13" height="13" viewBox="0 0 24 24" strokeWidth="2" aria-hidden="true" {...stroke}>
-              <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6M18 9h1.5a2.5 2.5 0 0 0 0-5H18M4 22h16M10 14.7V17c0 .6-.5 1-1 1.2-1.2.5-2 2-2 3.8M14 14.7V17c0 .6.5 1 1 1.2 1.2.5 2 2 2 3.8M18 2H6v7a6 6 0 0 0 12 0V2Z" />
-            </svg>
-            <span className="tabular-nums">2,340</span> pts
-          </Link>
+          <PointsPill />
           <ThemeToggle />
           <Bell />
         </div>

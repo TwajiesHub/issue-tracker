@@ -2,8 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Pipeline } from "./pipeline";
-import { WaitingCard } from "./waiting-card";
+import { DecisionSlot } from "./decision-slot";
 import { usePulse } from "@/lib/pulse";
+import { WEEK_GOAL, formatPoints } from "@/lib/pulse-model";
 
 const focus = "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zk-accent";
 const AMBER = "#F59E0B";
@@ -26,9 +27,28 @@ function PulseLine() {
 }
 
 function Hint() {
-  const { settled } = usePulse();
-  return <p className="text-[15px] font-semibold text-zk-text2">{settled ? "Kite is back at work." : "Kite is waiting on you. Tap an answer and watch."}</p>;
+  const { model } = usePulse();
+  const text = model.kiteWaiting ? "Kite is waiting on you. Tap an answer and watch." : model.shipWaiting ? "Kite is back at work. One more thing is ready for you." : "Everything is moving.";
+  return <p className="text-[15px] font-semibold text-zk-text2">{text}</p>;
 }
+
+/** One quiet line for where the crew is heading, with a thin bar for how much is done. */
+function GoalLine() {
+  const { model } = usePulse();
+  const g = model.goal;
+  return (
+    <div className="space-y-1.5" aria-label="Goal progress">
+      <p className="text-[15px] text-zk-text2">
+        <span className="font-semibold text-zk-text">Goal: {GOAL_TITLE}</span> · <span key={g.done} className="pr-flip inline-block font-semibold tabular-nums text-zk-text">{g.done}</span> of <span className="tabular-nums">{g.total}</span> done · <span key={g.spent} className="pr-flip inline-block tabular-nums">{formatPoints(g.spent)}</span> of <span className="tabular-nums">{formatPoints(g.pool)}</span> pts spent
+      </p>
+      <div className="h-1 w-full max-w-md overflow-hidden rounded-full bg-zk-chip" role="progressbar" aria-valuemin={0} aria-valuemax={g.total} aria-valuenow={g.done} aria-label={`${g.done} of ${g.total} issues done`}>
+        <div className="pr-fill h-full w-full rounded-full bg-zk-accent" style={{ transform: `scaleX(${g.done / g.total})` }} />
+      </div>
+    </div>
+  );
+}
+
+const GOAL_TITLE = "New onboarding";
 
 const STUCK = [
   { id: "#1488", why: "1 of 2 test verdicts; no free reviewer has picked it up", who: "Reviewer agents" },
@@ -72,13 +92,22 @@ function Stuck() {
   );
 }
 
-const STATS = [
-  { label: "Points this week", value: "380", chip: "120 to go", tone: "bg-zk-tint text-zk-accent", note: "500 required this week" },
+const STATS_AFTER = [
   { label: "Assigned to me", value: "12", chip: "2", tone: "bg-zk-bad-bg text-zk-bad-fg", note: "high priority" },
   { label: "Resolved", value: "9", chip: "75%", tone: "bg-zk-chip text-zk-text2", note: "of issues assigned to me" },
 ];
 
 export function PulseDashboard({ whimsy = false }: { whimsy?: boolean }) {
+  const { model } = usePulse();
+  const reached = model.weekPoints >= WEEK_GOAL;
+  const STATS = [
+    {
+      label: "Points this week", value: formatPoints(model.weekPoints), note: "500 required this week",
+      chip: reached ? "Goal reached" : `${WEEK_GOAL - model.weekPoints} to go`,
+      tone: reached ? "bg-zk-ok-bg text-zk-ok-fg" : "bg-zk-tint text-zk-accent",
+    },
+    ...STATS_AFTER,
+  ];
   return (
     <div className="min-w-0 space-y-6">
       <div className="space-y-1.5">
@@ -86,17 +115,18 @@ export function PulseDashboard({ whimsy = false }: { whimsy?: boolean }) {
         <h1 className="text-[28px] font-extrabold tracking-[-0.02em] text-zk-text max-sm:text-2xl">Your work right now</h1>
         {whimsy ? <Hint /> : null}
         <PulseLine />
+        <GoalLine />
       </div>
       <div className="space-y-4">
         <Pipeline whimsy={whimsy} />
-        <WaitingCard whimsy={whimsy} />
+        <DecisionSlot whimsy={whimsy} />
       </div>
       <Stuck />
       <div aria-label="Workspace summary" className="grid grid-cols-1 gap-3 sm:grid-cols-3">
         {STATS.map((s) => (
           <article key={s.label} className="flex flex-col gap-3 rounded-[20px] border border-zk-border bg-zk-surface p-5">
             <span className="text-sm font-bold text-zk-text">{s.label}</span>
-            <p className="text-[26px] font-extrabold leading-none tabular-nums text-zk-text">{s.value}</p>
+            <p key={s.value} className="pr-flip text-[26px] font-extrabold leading-none tabular-nums text-zk-text">{s.value}</p>
             <div className="flex items-center gap-2 text-[13px] text-zk-muted">
               <span className={`rounded-full px-2 py-0.5 text-xs font-bold ${s.tone}`}>{s.chip}</span>
               <span>{s.note}</span>
@@ -105,7 +135,7 @@ export function PulseDashboard({ whimsy = false }: { whimsy?: boolean }) {
         ))}
       </div>
       <p className="text-[13px] leading-relaxed text-zk-muted">
-        Your agents move work along on their own. Questions, product-direction changes and merges to the live site wait for you.
+        Your agents move work along on their own. Questions, product-direction changes and merges your project’s rules hold for approval wait for you.
       </p>
     </div>
   );

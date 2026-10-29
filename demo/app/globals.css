@@ -224,3 +224,17 @@ body:has([data-app-shell]) {
   .pr-z + .pr-z { display: none; }
   .pr-lively .pr-beat { display: none; }
 }
+
+/* ---- Pulse 2: heartbeat blip, the next decision sliding in, stage sheets. transform and opacity only. ---- */
+.pr-robot .pr-hb { transform-box: fill-box; transform-origin: center; opacity: 0; animation: pr-hb 20s linear infinite; }
+@keyframes pr-hb { 0% { opacity: 0; transform: scale(1); } 1% { opacity: 0.85; transform: scale(1); } 5% { opacity: 0; transform: scale(2.4); } 100% { opacity: 0; transform: scale(2.4); } }
+.pr-in { animation: pr-in 420ms cubic-bezier(0.2, 0.7, 0.2, 1) 1 both; }
+@keyframes pr-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+.pr-sheet { animation: pr-sheet 200ms ease-out 1 both; }
+@keyframes pr-sheet { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+.pr-fill { transform-origin: left center; transition: transform 700ms cubic-bezier(0.2, 0.7, 0.2, 1); }
+@media (prefers-reduced-motion: reduce) {
+  .pr-robot .pr-hb { animation: none !important; display: none; }
+  .pr-in, .pr-sheet { animation: none !important; }
+  .pr-fill { transition: none !important; }
+}
