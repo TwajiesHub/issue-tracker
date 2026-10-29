@@ -35,7 +35,7 @@ export function TodayNote({ onNavigate }: { onNavigate?: () => void }) {
         ) : (
           <li className="flex items-start gap-2.5 rounded-xl px-2.5 py-2">
             <span aria-hidden="true" className="mt-px text-zk-ok-fg">✓</span>
-            <span>Kite’s date-format question is answered. <span className="font-semibold tabular-nums">0</span> need you.</span>
+            <span>Kite’s date-format question is answered. Nothing needs you right now.</span>
           </li>
         )}
         <li className="flex items-start gap-2.5 rounded-xl px-2.5 py-2">

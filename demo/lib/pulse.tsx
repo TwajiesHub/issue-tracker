@@ -4,6 +4,8 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 
 /** Kite's claim is released this long after it asks, if nobody answers (3 h 20 m). */
 export const TOTAL_SECONDS = 3 * 3600 + 20 * 60;
+/** The countdown bar is drawn against a 4-hour claim window, so 3h 20m reads as about 83%. */
+export const BAR_SECONDS = 4 * 3600;
 const STORAGE_KEY = "zg-pulse-v1";
 
 export type PrefKey = "question" | "direction" | "merge" | "bids" | "reviews" | "fixes";

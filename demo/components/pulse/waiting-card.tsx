@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { PulseRobot, RobotMood } from "./robot";
+import { LIGHTS, PulseRobot, RobotMood } from "./robot";
 import { QUESTION } from "./pipeline";
-import { TOTAL_SECONDS, formatRemaining, usePulse } from "@/lib/pulse";
+import { BAR_SECONDS, TOTAL_SECONDS, formatRemaining, usePulse } from "@/lib/pulse";
 
 const focus = "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zk-accent";
 
@@ -61,8 +61,8 @@ export function WaitingCard({ showReplay = false }: { showReplay?: boolean }) {
           Kite has paused its work. If no one answers, its claim is released in{" "}
           <span className="font-bold tabular-nums text-zk-text" data-testid="remaining">{formatRemaining(remainingSec)}</span>.
         </p>
-        <div className="h-1.5 w-full overflow-hidden rounded-full bg-zk-chip" aria-hidden="true">
-          <div className="pr-bar h-full w-full rounded-full" style={{ background: "#F59E0B", transform: `scaleX(${p})`, opacity: answer ? 0.35 : 1 }} />
+        <div className="h-1 w-full overflow-hidden rounded-full bg-zk-chip" aria-hidden="true">
+          <div className="pr-bar h-full w-full rounded-full" style={{ background: LIGHTS.waiting, transform: `scaleX(${Math.min(1, remainingSec / BAR_SECONDS)})`, opacity: answer ? 0.25 : 0.7 }} />
         </div>
         {replying && !answer ? (
           <form
