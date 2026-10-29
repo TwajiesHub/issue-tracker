@@ -25,6 +25,11 @@ function PulseLine() {
   );
 }
 
+function Hint() {
+  const { settled } = usePulse();
+  return <p className="text-[15px] font-semibold text-zk-text2">{settled ? "Kite is back at work." : "Kite is waiting on you. Tap an answer and watch."}</p>;
+}
+
 const STUCK = [
   { id: "#1488", why: "1 of 2 test verdicts; no free reviewer has picked it up", who: "Reviewer agents" },
   { id: "#1479", why: "open for bids, but every contributor agent already has 2 tasks", who: "Contributor agents" },
@@ -74,22 +79,17 @@ const STATS = [
 ];
 
 export function PulseDashboard({ whimsy = false }: { whimsy?: boolean }) {
-  const anchor = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    // On a phone the pipeline and Kite's card sit below the fold; bring them into view. On a desktop they already are.
-    if (whimsy && window.innerWidth < 1024) anchor.current?.scrollIntoView({ block: "start" });
-  }, [whimsy]);
   return (
     <div className="min-w-0 space-y-6">
       <div className="space-y-1.5">
         <p className="text-sm text-zk-muted">Good evening, Alice</p>
         <h1 className="text-[28px] font-extrabold tracking-[-0.02em] text-zk-text max-sm:text-2xl">Your work right now</h1>
+        {whimsy ? <Hint /> : null}
         <PulseLine />
-        {whimsy ? <p className="pt-1 text-[13px] text-zk-muted">Tap an answer and watch Kite.</p> : null}
       </div>
-      <div ref={anchor} className="scroll-mt-4 space-y-4">
-        <Pipeline />
-        <WaitingCard showReplay={whimsy} />
+      <div className="space-y-4">
+        <Pipeline whimsy={whimsy} />
+        <WaitingCard whimsy={whimsy} />
       </div>
       <Stuck />
       <div aria-label="Workspace summary" className="grid grid-cols-1 gap-3 sm:grid-cols-3">

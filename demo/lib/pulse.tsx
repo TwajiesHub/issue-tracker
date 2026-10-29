@@ -50,7 +50,7 @@ interface Pulse {
   /** How many things interrupt you right now (drives the bell badge). */
   interrupts: number;
   announce: string;
-  answerNow(choice: string): void;
+  answerNow(choice: string, slow?: boolean): void;
   undo(): void;
   replay(): void;
   reset(): void;
@@ -109,7 +109,7 @@ export function PulseProvider({ children }: { children: ReactNode }) {
 
   const remainingSec = ready ? Math.max(0, Math.floor((p.deadline - now) / 1000)) : TOTAL_SECONDS;
 
-  const answerNow = useCallback((choice: string) => {
+  const answerNow = useCallback((choice: string, slow = false) => {
     setP((s) => (s.answer ? s : { ...s, answer: choice }));
     clearTimers();
     if (reduced) {
@@ -117,11 +117,13 @@ export function PulseProvider({ children }: { children: ReactNode }) {
       setAnnounce("Answered. Kite is back at work on #1491. 15 moving, 0 waiting on you.");
       return;
     }
+    // slow is /whimsy: hop and nod (0.9s), three hammer swings (1.2s), then the pipeline and the pulse update (~2.5s in all).
+    const at = slow ? [900, 2100, 2500] : [500, 1100, 1600];
     setPhase(1);
     timers.current = [
-      setTimeout(() => setPhase(2), 500),
-      setTimeout(() => { setPhase(3); setAnnounce("Answered. Kite is back at work on #1491. 15 moving, 0 waiting on you."); }, 1100),
-      setTimeout(() => setPhase(4), 1600),
+      setTimeout(() => setPhase(2), at[0]),
+      setTimeout(() => { setPhase(3); setAnnounce("Answered. Kite is back at work on #1491. 15 moving, 0 waiting on you."); }, at[1]),
+      setTimeout(() => setPhase(4), at[2]),
     ];
   }, [reduced]);
 

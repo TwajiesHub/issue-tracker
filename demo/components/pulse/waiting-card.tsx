@@ -12,7 +12,8 @@ const focus = "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visi
  * Kite's antenna goes green, its eyes smile, it nods, picks up its hammer, the pulse updates, and the card
  * settles into one quiet line. Under reduced motion the line simply appears.
  */
-export function WaitingCard({ showReplay = false }: { showReplay?: boolean }) {
+export function WaitingCard({ whimsy = false }: { whimsy?: boolean }) {
+  const showReplay = whimsy;
   const { answer, phase, remainingSec, answerNow, undo, replay } = usePulse();
   const [replying, setReplying] = useState(false);
   const [text, setText] = useState("");
@@ -41,12 +42,12 @@ export function WaitingCard({ showReplay = false }: { showReplay?: boolean }) {
     );
   }
 
-  const send = (choice: string) => { if (!answer) answerNow(choice); };
+  const send = (choice: string) => { if (!answer) answerNow(choice, whimsy); };
 
   return (
     <section id="waiting" aria-labelledby="waiting-title" className="relative flex flex-col gap-4 rounded-[20px] border border-zk-border bg-zk-surface p-5 sm:flex-row sm:items-start sm:gap-5">
       <div className="shrink-0">
-        <PulseRobot name="Kite" mood={mood} size={64} happy={happy} nod={happy} glow={happy} tap={0.5} dim={dim} droop={droop} asking={!answer} />
+        <PulseRobot name="Kite" mood={mood} size={whimsy ? 110 : 64} happy={happy} nod={happy} glow={happy} hop={whimsy && happy} lively={whimsy} tap={whimsy ? 0.4 : 0.5} dim={dim} droop={droop} asking={!answer} />
       </div>
       <div className="flex min-w-0 flex-1 flex-col gap-3">
         <div className="flex flex-wrap items-center gap-2">

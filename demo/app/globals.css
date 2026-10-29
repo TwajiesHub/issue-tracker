@@ -196,3 +196,31 @@ body:has([data-app-shell]) {
 @keyframes overview-stat-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
 .overview-stat-card { animation: overview-stat-in 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
 @media (prefers-reduced-motion: reduce) { .overview-stat-card { animation: none !important; } }
+
+/* ---- /whimsy only: Kite and the stage robots show their idle life. transform and opacity only. ---- */
+.pr-lively .pr-eyes circle { transform-box: fill-box; transform-origin: center; animation: pr-blink 4.2s ease-in-out infinite; }
+@keyframes pr-blink { 0%, 93%, 100% { transform: none; } 96% { transform: scaleY(0.1); } }
+.pr-lively .pr-foot { transform-box: fill-box; transform-origin: center; animation: pr-foot 2.4s ease-in-out infinite; }
+@keyframes pr-foot { 0%, 30%, 100% { transform: none; } 8% { transform: translateY(-1.2px); } 16% { transform: none; } 22% { transform: translateY(-1.2px); } }
+.pr-bob { animation: pr-bob 1.8s ease-in-out infinite; }
+@keyframes pr-bob { 0%, 100% { translate: 0 0; } 50% { translate: 0 -4px; } }
+.pr-lively .pr-beat { transform-box: fill-box; transform-origin: center; animation: pr-beat 1.6s ease-out infinite; }
+@keyframes pr-beat { 0% { opacity: 0.55; transform: scale(1); } 100% { opacity: 0; transform: scale(2.6); } }
+.pr-lively[data-hop="1"] { animation: pr-hop 560ms cubic-bezier(0.3, 0.7, 0.4, 1) 1; }
+@keyframes pr-hop { 0%, 100% { transform: none; } 40% { transform: translateY(-9%); } 70% { transform: translateY(0); } 85% { transform: translateY(-2%); } }
+.pr-lively[data-nod="1"] .pr-head { animation: pr-nod-big 760ms ease-in-out 380ms 1 both; }
+@keyframes pr-nod-big { 0%, 100% { transform: none; } 30% { transform: translateY(2px) rotate(9deg); } 60% { transform: translateY(0.5px) rotate(-3deg); } 80% { transform: rotate(4deg); } }
+.pr-hammer-wrap.pr-big { width: 58%; height: 58%; }
+.pr-hammer-wrap.pr-big[data-on="1"] .pr-hammer { animation: pr-tap-big var(--tap, 0.9s) ease-in-out infinite; }
+@keyframes pr-tap-big { 0%, 100% { transform: rotate(0); } 45% { transform: rotate(-62deg); } 62% { transform: rotate(14deg); } }
+.pr-z { position: absolute; left: 0; top: 0; opacity: 0; animation: pr-z 2.7s ease-out infinite; }
+@keyframes pr-z { 0% { opacity: 0; transform: translate(0, 4px) scale(0.8); } 20% { opacity: 1; } 100% { opacity: 0; transform: translate(9px, -20px) scale(1.25); } }
+.pr-slide { animation: pr-slide 520ms cubic-bezier(0.2, 0.7, 0.2, 1) 1 both; }
+@keyframes pr-slide { from { opacity: 0.2; transform: translateX(-26px); } to { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .pr-lively .pr-eyes circle, .pr-lively .pr-foot, .pr-bob, .pr-lively .pr-beat, .pr-lively[data-hop="1"], .pr-lively[data-nod="1"] .pr-head, .pr-hammer-wrap.pr-big[data-on="1"] .pr-hammer, .pr-slide { animation: none !important; }
+  .pr-z { animation: none !important; opacity: 1; }
+  .pr-z + .pr-z { display: none; }
+  .pr-lively .pr-beat { display: none; }
+}

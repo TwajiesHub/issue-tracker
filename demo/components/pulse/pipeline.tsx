@@ -24,9 +24,10 @@ function describe(m: Mine, kiteWaiting: boolean): string {
   return `${m.name}, working, checked in ${m.minutesAgo} min ago`;
 }
 
-export function Pipeline() {
+export function Pipeline({ whimsy = false }: { whimsy?: boolean }) {
   const { phase, remainingSec, numbers, reduced } = usePulse();
-  const kiteWaiting = phase < 2;
+  // On /whimsy Kite's small robot waits until the hammer swings are done, then slides over to working.
+  const kiteWaiting = phase < (whimsy ? 3 : 2);
   const highlight = numbers.waiting > 0;
   const refs = useRef<Record<string, HTMLLIElement | null>>({});
   const strip = useRef<HTMLElement>(null);
@@ -40,7 +41,18 @@ export function Pipeline() {
   }, []);
 
   // When the cursor enters a stage, the robots there glance toward it (eyes shift 1–2px).
+  const glanceAll = (x: number | null, y: number | null) => {
+    const el = strip.current;
+    if (!el) return;
+    el.querySelectorAll<HTMLElement>("[data-robot]").forEach((r) => {
+      if (x === null || y === null || reduced) { r.style.removeProperty("--gx"); r.style.removeProperty("--gy"); return; }
+      const b = r.getBoundingClientRect();
+      r.style.setProperty("--gx", Math.max(-2.2, Math.min(2.2, (x - (b.left + b.width / 2)) / 40)).toFixed(2));
+      r.style.setProperty("--gy", Math.max(-1.6, Math.min(1.6, (y - (b.top + b.height / 2)) / 40)).toFixed(2));
+    });
+  };
   const glance = (id: string, x: number | null, y: number | null) => {
+    if (whimsy) return;
     const li = refs.current[id];
     if (!li) return;
     li.querySelectorAll<HTMLElement>("[data-robot]").forEach((r) => {
@@ -57,7 +69,13 @@ export function Pipeline() {
 
   const p = remainingSec / TOTAL_SECONDS;
   return (
-    <section ref={strip} aria-label="Pipeline" className="relative -mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0">
+    <section
+      ref={strip}
+      aria-label="Pipeline"
+      onPointerMove={whimsy ? (e) => glanceAll(e.clientX, e.clientY) : undefined}
+      onPointerLeave={whimsy ? () => glanceAll(null, null) : undefined}
+      className="relative -mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0"
+    >
       <ol className="flex min-w-[600px] gap-2.5 sm:min-w-0">
         {STAGES.map((s) => {
           const holdsQuestion = s.id === "building" && highlight;
@@ -82,12 +100,13 @@ export function Pipeline() {
                   const dim = isKite && kiteWaiting ? 0.4 + 0.6 * p : 1;
                   const droop = isKite && kiteWaiting && p < 0.2 ? ((0.2 - p) / 0.2) * 14 : 0;
                   return (
-                    <span key={m.name} className="flex flex-col items-center gap-0.5">
+                    <span key={whimsy ? `${m.name}-${mood}` : m.name} className={`flex flex-col items-center gap-0.5${whimsy && isKite && mood === "working" && phase >= 3 ? " pr-slide" : ""}`}>
                       <PulseRobot
                         name={m.name}
                         mood={mood}
                         size={36}
                         tap={isKite ? tapSeconds(0) : tapSeconds(m.minutesAgo)}
+                        lively={whimsy}
                         dim={dim}
                         droop={droop}
                         tip={isKite && kiteWaiting ? `Kite asks: ${QUESTION}` : undefined}
