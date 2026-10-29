@@ -20,7 +20,7 @@ export function tapSeconds(minutesSinceCheckIn: number): number {
 }
 
 export function PulseRobot({
-  name, mood, size = 32, happy = false, nod = false, glow = false, tap = 0.9, dim = 1, droop = 0, tip, asking = false, lively = false, hop = false, badge, blip,
+  name, mood, size = 32, happy = false, nod = false, glow = false, tap = 0.9, dim = 1, droop = 0, tip, asking = false, lively = false, hop = false, badge, blip, hammer = true,
 }: {
   name: string;
   mood: RobotMood;
@@ -28,6 +28,8 @@ export function PulseRobot({
   /** Happy eyes (just answered). */
   happy?: boolean;
   nod?: boolean;
+  /** Show the little hammer while working. Off where the real hammer icon is drawn next to it. */
+  hammer?: boolean;
   glow?: boolean;
   /** Seconds per hammer tap. */
   tap?: number;
@@ -79,7 +81,7 @@ export function PulseRobot({
         <rect className="pr-foot" x="13" y="30" width="14" height="6" rx="3" fill={body} opacity="0.75" />
       </svg>
 
-      <span className={`pr-hammer-wrap${lively ? " pr-big" : ""}`} data-on={working ? "1" : "0"} style={{ ["--tap" as string]: `${tap}s` }}>
+      <span className={`pr-hammer-wrap${lively ? " pr-big" : ""}`} data-on={working && hammer ? "1" : "0"} style={{ ["--tap" as string]: `${tap}s` }}>
         <svg viewBox="0 0 24 24" className="pr-hammer" fill="none" stroke={body} strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
           <path d="m15 12-8.4 8.4a2.1 2.1 0 1 1-3-3L12 9" />
           <path d="M17.6 15 22 10.6M20.9 11.7 12.3 3.1a1 1 0 0 0-1.4 0L9.6 4.4a1 1 0 0 0 0 1.4l8.6 8.6a1 1 0 0 0 1.4 0l1.3-1.3a1 1 0 0 0 0-1.4Z" />

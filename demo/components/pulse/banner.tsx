@@ -9,20 +9,21 @@ const focus = "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visi
 export function ProposalBanner() {
   const pathname = usePathname();
   const before = pathname.startsWith("/before");
+  // Task 2 lives on the Issues list: /whimsy (with the hint) and /issues. Task 1 keeps the Dashboard pair.
+  const moment = pathname === "/whimsy" || pathname === "/issues";
   const cls = (on: boolean) => `inline-flex min-h-8 items-center rounded-full px-2.5 text-[13px] ${focus} ${on ? "bg-zk-surface font-bold text-zk-text shadow-sm" : "font-medium text-zk-text2 hover:text-zk-text"}`;
   return (
     <div className="border-b border-zk-border bg-zk-tint">
       <div className="mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-x-4 gap-y-1.5 px-4 py-1.5 text-[13px] text-zk-text sm:px-6">
         <p className="min-w-0 font-semibold">
-          <span aria-hidden="true">✦ </span>Proposal mock-up: The pulse and the daily note
-          {pathname === "/whimsy" ? <span className="ml-2 font-normal text-zk-text2">Tap an answer and watch Kite.</span> : null}
+          <span aria-hidden="true">✦ </span>Proposal mock-up: {moment ? "The third pip" : "The pulse and the daily note"}
         </p>
         <div className="flex items-center gap-3">
-          <div role="group" aria-label="Compare" className="flex items-center rounded-full bg-zk-seg p-0.5">
+          {moment ? null : <div role="group" aria-label="Compare" className="flex items-center rounded-full bg-zk-seg p-0.5">
             <Link href="/before/dashboard" aria-current={before ? "page" : undefined} className={cls(before)}>Before</Link>
             <span aria-hidden="true" className="text-zk-border">·</span>
             <Link href="/dashboard" aria-current={!before ? "page" : undefined} className={cls(!before)}>After</Link>
-          </div>
+          </div>}
           <a href="#" className={`rounded-md font-semibold text-zk-accent hover:underline ${focus}`}>Read the proposal →</a>
         </div>
       </div>
@@ -36,7 +37,7 @@ export function SubTabs() {
   const before = pathname.startsWith("/before");
   const inProduct = pathname.startsWith("/dashboard") || pathname.startsWith("/whimsy") || pathname.startsWith("/issues") || pathname.startsWith("/before/dashboard") || pathname.startsWith("/before/inbox");
   if (!inProduct) return null;
-  const issues = pathname.startsWith("/issues") || pathname.startsWith("/before/inbox");
+  const issues = pathname.startsWith("/issues") || pathname.startsWith("/whimsy") || pathname.startsWith("/before/inbox");
   const tabs = [
     { label: "Dashboard", href: before ? "/before/dashboard" : "/dashboard", on: !issues },
     { label: "Issues", href: "/issues", on: issues },
