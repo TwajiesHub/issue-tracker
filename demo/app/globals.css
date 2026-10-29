@@ -154,3 +154,45 @@ body:has([data-app-shell]) {
 }
 .zg-fade { animation: zg-fade 180ms ease-out both; }
 @media (prefers-reduced-motion: reduce) { .zg-fade { animation: none; } }
+
+/* ---- The pulse and the daily note (demo). Ziki's own tokens and the status lights from components/agent-graphic.tsx.
+   Only transform and opacity animate. Everything below is off under prefers-reduced-motion. ---- */
+.pr-robot { display: block; overflow: visible; }
+.pr-robot .pr-eyes, .pr-robot .pr-eyes-happy { transform-box: fill-box; }
+.pr-robot .pr-eyes { transform: translate(calc(var(--gx, 0) * 1px), calc(var(--gy, 0) * 1px)); transition: transform 140ms ease-out, opacity 220ms ease-out; }
+.pr-robot .pr-eyes-happy { transition: opacity 220ms ease-out; }
+.pr-robot .pr-light { transition: opacity 400ms ease-out; }
+.pr-robot .pr-glow { transform-box: fill-box; transform-origin: center; opacity: 0; }
+.pr-robot[data-glow="1"] .pr-glow { animation: pr-glow 700ms ease-out 1 both; }
+.pr-robot .pr-head { transform-box: fill-box; transform-origin: 50% 100%; }
+.pr-robot[data-nod="1"] .pr-head { animation: pr-nod 520ms ease-in-out 1; }
+@keyframes pr-glow { 0% { opacity: 0; transform: scale(0.6); } 40% { opacity: 0.55; } 100% { opacity: 0; transform: scale(1.7); } }
+@keyframes pr-nod { 0%, 100% { transform: none; } 35% { transform: translateY(1.5px) rotate(5deg); } 70% { transform: translateY(0.5px) rotate(-2deg); } }
+
+.pr-hammer-wrap { position: absolute; right: -4px; bottom: -3px; width: 46%; height: 46%; opacity: 0; transform: translate(-2px, 3px) rotate(-60deg); transform-origin: 20% 80%; transition: opacity 300ms ease-out, transform 300ms ease-out; pointer-events: none; }
+.pr-hammer-wrap[data-on="1"] { opacity: 1; transform: none; }
+.pr-hammer { width: 100%; height: 100%; transform-origin: 20% 80%; }
+.pr-hammer-wrap[data-on="1"] .pr-hammer { animation: pr-tap var(--tap, 0.9s) ease-in-out infinite; }
+@keyframes pr-tap { 0%, 100% { transform: rotate(0); } 45% { transform: rotate(-34deg); } 62% { transform: rotate(9deg); } }
+
+.pr-q { transform-origin: 20% 100%; transition: transform 600ms ease-out, opacity 300ms ease-out; }
+.pr-tip { opacity: 0; transition: opacity 140ms ease-out; pointer-events: none; }
+.pr-has-tip:hover .pr-tip, .pr-has-tip:focus-within .pr-tip { opacity: 1; }
+.pr-tick { animation: pr-tick 300ms ease-out 1 both; }
+@keyframes pr-tick { from { opacity: 0; transform: scale(0.5); } to { opacity: 1; transform: none; } }
+.pr-fade { animation: pr-fade 240ms ease-out 1 both; }
+@keyframes pr-fade { from { opacity: 0; } to { opacity: 1; } }
+.pr-bar { transform-origin: left center; transition: transform 1s linear; }
+.pr-flip { animation: pr-flip 320ms ease-out 1 both; }
+@keyframes pr-flip { from { opacity: 0.2; transform: translateY(3px); } to { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .pr-robot .pr-light, .pr-robot .pr-eyes, .pr-robot .pr-eyes-happy, .pr-hammer-wrap, .pr-q, .pr-tip, .pr-bar { transition: none !important; }
+  .pr-robot[data-glow="1"] .pr-glow, .pr-robot[data-nod="1"] .pr-head, .pr-hammer-wrap[data-on="1"] .pr-hammer, .pr-tick, .pr-fade, .pr-flip { animation: none !important; }
+  .pr-hammer-wrap[data-on="1"] { transform: none; }
+}
+
+/* Ziki's Dashboard stat-card entrance (components/overview/overview.css), used by the Before dashboard. */
+@keyframes overview-stat-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+.overview-stat-card { animation: overview-stat-in 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+@media (prefers-reduced-motion: reduce) { .overview-stat-card { animation: none !important; } }

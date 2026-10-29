@@ -4,6 +4,8 @@ import { useEffect, useId, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useStore } from "@/lib/store";
+import { usePulse } from "@/lib/pulse";
+import { TodayNote } from "./pulse/note";
 
 /* Ported from Ziki's components/app-header.tsx, ziki-mark.tsx and theme-toggle.tsx.
    Same classes and tokens; the data comes from the demo store instead of the database. */
@@ -188,47 +190,24 @@ function AgentsMenu() {
   );
 }
 
-/** A quiet way for reviewers to compare today's Ziki with the change. Not part of Ziki. */
-function BeforeAfter() {
-  const pathname = usePathname();
-  if (pathname === "/") return null;
-  const isBefore = pathname.startsWith("/before");
-  const security = pathname.includes("security");
-  const beforeHref = security ? "/before/security" : "/before/inbox";
-  const afterHref = security ? "/security" : "/inbox";
-  const cls = (on: boolean) => `rounded-full px-2 py-1 ${linkFocus} ${on ? "font-semibold text-zk-text" : "font-medium text-zk-text2 hover:text-zk-text"}`;
-  return (
-    <div role="group" aria-label="Compare" className="flex items-center text-[13px] max-sm:hidden">
-      <Link href={beforeHref} aria-current={isBefore ? "page" : undefined} className={cls(isBefore)}>Before</Link>
-      <span aria-hidden="true" className="text-zk-border">·</span>
-      <Link href={afterHref} aria-current={!isBefore ? "page" : undefined} className={cls(!isBefore)}>After</Link>
-    </div>
-  );
-}
+const BEFORE_ROWS = [
+  { id: "b1", text: "Kite is waiting on your answer for #1491", href: "/before/dashboard", unread: true },
+  { id: "b2", text: "SpecialOne commented on T-1869", href: "/before/dashboard", unread: true },
+  { id: "b3", text: "Nova linked a pull request to #1474", href: "/before/dashboard", unread: false },
+];
 
 function Bell() {
-  const { state, needs } = useStore();
   const pathname = usePathname();
   const before = pathname.startsWith("/before");
-  const paused = needs.filter((i) => i.kind === "paused");
-  const unread = before ? 2 : paused.length + 2;
+  const { interrupts, ready } = usePulse();
+  const unread = before ? 2 : ready ? interrupts : 1;
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const btn = useRef<HTMLButtonElement>(null);
   useDismiss(open, () => setOpen(false), ref, btn);
-  const label = unread > 0 ? `Notifications, ${unread} unread` : "Notifications";
-  const rows = before
-    ? [
-        { id: "b1", text: "Kite is waiting on your answer for #1881", href: "/before/inbox", unread: true },
-        { id: "b2", text: "SpecialOne commented on T-1869", href: "/before/inbox", unread: true },
-        { id: "b3", text: "Nova linked a pull request to #1874", href: "/before/inbox", unread: false },
-      ]
-    : [
-        ...paused.map((i) => ({ id: i.id, text: `${i.agent} ${i.sentence}. Paused, nothing has run.`, href: `/inbox?item=${i.id}`, unread: true })),
-        { id: "n1", text: "SpecialOne commented on T-1869", href: "/inbox?tab=done", unread: true },
-        { id: "n2", text: "Your issue #1874 was moved to In progress", href: "/inbox?tab=done", unread: true },
-      ];
-  void state;
+  const label = before
+    ? `Notifications, ${unread} unread`
+    : unread > 0 ? `Today’s note, ${unread} needs you` : "Today’s note, nothing needs you";
   return (
     <div ref={ref} className="flex items-center sm:relative">
       <button
@@ -251,21 +230,27 @@ function Bell() {
         ) : null}
       </button>
       {open ? (
-        <div id="notification-preview" role="region" aria-label="Recent notifications" className="absolute right-4 top-full z-50 mt-2 w-[min(24rem,calc(100vw-2rem))] overflow-hidden rounded-xl border border-zk-border bg-zk-surface text-zk-text shadow-xl sm:right-0">
-          <h2 className="border-b border-zk-border px-4 py-3 text-sm font-semibold">Notifications</h2>
-          <ul className="max-h-[min(26rem,calc(100dvh-11rem))] divide-y divide-zk-divider overflow-y-auto">
-            {rows.map((r) => (
-              <li key={r.id}>
-                <Link href={r.href} onClick={() => setOpen(false)} className={`flex items-start gap-3 px-4 py-3 text-sm hover:bg-zk-chip ${linkFocus} ${r.unread ? "bg-zk-tint" : ""}`}>
-                  <span aria-hidden="true" className={`mt-1.5 h-2 w-2 shrink-0 rounded-full ${r.unread ? "bg-electric-blue" : "bg-transparent"}`} />
-                  <span className={`min-w-0 flex-1 break-words ${r.unread ? "font-medium text-zk-text" : "text-zk-text2"}`}>
-                    {r.unread ? <span className="sr-only">Unread: </span> : null}
-                    {r.text}
-                  </span>
-                </Link>
-              </li>
-            ))}
-          </ul>
+        <div id="notification-preview" role="region" aria-label={before ? "Recent notifications" : "Today’s note"} className="absolute right-4 top-full z-50 mt-2 w-[min(24rem,calc(100vw-2rem))] overflow-hidden rounded-xl border border-zk-border bg-zk-surface text-zk-text shadow-xl sm:right-0">
+          {before ? (
+            <>
+              <h2 className="border-b border-zk-border px-4 py-3 text-sm font-semibold">Notifications</h2>
+              <ul className="max-h-[min(26rem,calc(100dvh-11rem))] divide-y divide-zk-divider overflow-y-auto">
+                {BEFORE_ROWS.map((r) => (
+                  <li key={r.id}>
+                    <Link href={r.href} onClick={() => setOpen(false)} className={`flex items-start gap-3 px-4 py-3 text-sm hover:bg-zk-chip ${linkFocus} ${r.unread ? "bg-zk-tint" : ""}`}>
+                      <span aria-hidden="true" className={`mt-1.5 h-2 w-2 shrink-0 rounded-full ${r.unread ? "bg-electric-blue" : "bg-transparent"}`} />
+                      <span className={`min-w-0 flex-1 break-words ${r.unread ? "font-medium text-zk-text" : "text-zk-text2"}`}>
+                        {r.unread ? <span className="sr-only">Unread: </span> : null}
+                        {r.text}
+                      </span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </>
+          ) : (
+            <div className="max-h-[min(34rem,calc(100dvh-9rem))] overflow-y-auto"><TodayNote onNavigate={() => setOpen(false)} /></div>
+          )}
         </div>
       ) : null}
     </div>
@@ -274,7 +259,6 @@ function Bell() {
 
 export function AppHeader() {
   const pathname = usePathname();
-  const { pausedCount } = useStore();
   const before = pathname.startsWith("/before");
   const [accountOpen, setAccountOpen] = useState(false);
   const accountRef = useRef<HTMLDivElement>(null);
@@ -283,9 +267,8 @@ export function AppHeader() {
   const [lastPath, setLastPath] = useState(pathname);
   if (pathname !== lastPath) { setLastPath(pathname); setAccountOpen(false); }
 
-  const product = pathname.startsWith("/inbox") || pathname.startsWith("/before/inbox") || pathname.startsWith("/agents");
-  const security = pathname.startsWith("/security") || pathname.startsWith("/before/security");
-  const securityDot = !before && pausedCount > 0;
+  const product = pathname.startsWith("/dashboard") || pathname.startsWith("/whimsy") || pathname.startsWith("/issues") || pathname.startsWith("/before/dashboard") || pathname.startsWith("/before/inbox") || pathname.startsWith("/inbox") || pathname.startsWith("/agents") || pathname.startsWith("/settings");
+  const security = pathname.startsWith("/before/security") || pathname.startsWith("/security");
 
   return (
     <header className="relative z-40 border-b border-zk-border bg-zk-surface shadow-[0_1px_3px_rgba(0,0,0,0.04)] lg:sticky lg:top-0">
@@ -303,19 +286,18 @@ export function AppHeader() {
           aria-label="Workspace"
           className="flex items-center max-lg:fixed max-lg:inset-x-0 max-lg:bottom-0 max-lg:z-40 max-lg:justify-around max-lg:border-t max-lg:border-zk-border max-lg:bg-zk-surface max-lg:px-2 max-lg:pt-1.5 max-lg:pb-[max(0.375rem,env(safe-area-inset-bottom))] max-lg:shadow-[0_-1px_3px_rgba(0,0,0,0.04)] lg:gap-1"
         >
-          <TopNavLink href={before ? "/before/inbox" : "/inbox"} active={product} label="Product">
+          <TopNavLink href={before ? "/before/dashboard" : "/dashboard"} active={product} label="Product">
             <NavIcon><circle cx="12" cy="12" r="9" /><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none" /></NavIcon>
           </TopNavLink>
           <TopNavLink href="/marketing" active={pathname.startsWith("/marketing")} label="Marketing">
             <NavIcon><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1Z" /><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13" /></NavIcon>
           </TopNavLink>
-          <TopNavLink href={before ? "/before/security" : "/security"} active={security} label="Security" dot={securityDot}>
+          <TopNavLink href="/before/security" active={security} label="Security">
             <NavIcon><path d="M12 3 4 6v6c0 4.5 3.4 8.3 8 9 4.6-.7 8-4.5 8-9V6l-8-3Z" /><path d="m9 12 2 2 4-4" /></NavIcon>
           </TopNavLink>
         </nav>
 
         <div className="ml-auto flex min-w-0 flex-wrap items-center justify-end gap-2 max-sm:gap-1 lg:shrink-0">
-          <BeforeAfter />
           <AgentsMenu />
           <div ref={accountRef} className="relative">
             <button
@@ -343,7 +325,7 @@ export function AppHeader() {
                     <p className="mt-1 text-xs"><span className="rounded-full bg-zk-surface px-2 py-0.5 font-bold text-zk-text2">Admin</span></p>
                   </div>
                 </div>
-                {[["Profile", "/dashboard"], ["Settings", "/agents/nova"], ["Documentation", "/dashboard"]].map(([l, h]) => (
+                {[["Profile", "/dashboard"], ["Settings", "/settings/preferences"], ["Documentation", "/dashboard"]].map(([l, h]) => (
                   <Link key={l} role="menuitem" href={h} className={`flex min-h-11 items-center gap-3 rounded-xl px-3 text-sm font-semibold text-zk-text hover:bg-zk-chip ${linkFocus}`}>{l}</Link>
                 ))}
                 <div className="mx-2 h-px bg-zk-divider" />
@@ -355,7 +337,7 @@ export function AppHeader() {
             <svg width="13" height="13" viewBox="0 0 24 24" strokeWidth="2" aria-hidden="true" {...stroke}>
               <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6M18 9h1.5a2.5 2.5 0 0 0 0-5H18M4 22h16M10 14.7V17c0 .6-.5 1-1 1.2-1.2.5-2 2-2 3.8M14 14.7V17c0 .6.5 1 1 1.2 1.2.5 2 2 2 3.8M18 2H6v7a6 6 0 0 0 12 0V2Z" />
             </svg>
-            <span className="tabular-nums">128</span> pts
+            <span className="tabular-nums">2,340</span> pts
           </Link>
           <ThemeToggle />
           <Bell />
